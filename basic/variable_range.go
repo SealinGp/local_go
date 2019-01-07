@@ -1,11 +1,11 @@
-package main
+package main;
 
 import (
-  "fmt"
-)
+   "fmt"
+);
 
 /*
-range 用于 array slice channel map
+range(foreach) 用于 array slice channel map
 */
 func main() {	
 	slic_range();
@@ -15,6 +15,9 @@ func main() {
 	map_range();
 
 	str_range();
+
+//can not use it for struct
+	// struct_range();
 }
 
 func slic_range() {
@@ -46,8 +49,22 @@ func map_range() {
 //index => unicode
 func str_range() {
 	s1 := "ab";
-	for index,unicodeIndex := range s1 {
-		fmt.Println(index,unicodeIndex);
+	for index,unicode := range s1 {
+		fmt.Println(index,unicode);
 	}
 	fmt.Println("----------------");
 }
+
+
+//can not use it for struct
+func struct_range() {
+	stuc1 := stru{name:"abc",age:12};
+	for i,v := range stuc1 {
+		fmt.Println(i,v);
+	}
+	fmt.Println("----------------");
+}
+type stru struct {
+	name string
+	age int8
+}	

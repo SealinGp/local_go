@@ -1,8 +1,8 @@
-package main
+package main;
 
 import (
 	"fmt"
-)
+);
 
 func main() {
 	// if_sentences();

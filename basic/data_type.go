@@ -1,8 +1,8 @@
-package main
+package main;
 
 import(
 	"fmt"
-)
+);
 /*
 1 b(字节byte) = 8 bit(比特)
 1 Kb          = 1024 b
