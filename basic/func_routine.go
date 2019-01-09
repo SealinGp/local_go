@@ -3,6 +3,7 @@ import(
 	"fmt"
 	"sync"
 	"runtime"
+	"os"
 );
 
 /*
@@ -46,17 +47,22 @@ go 并发
   goroutine：只有三个寄存器的值修改 - PC / SP / DX.
 在网络编程中,我们可以理解为 Golang 的协程本质上其实就是对IO事件的封装,并且通过语言级的支持让异步的代码看上去像同步执行的一样
 */ 
-func main() {	
-	// gorun();	
-
-	// gorun2();
-
-	// gorun3();
-
-	gorun4();
-
-	// gorun5();
+func main() {
+	args := os.Args;	
+	execute(args[1]);
 }
+
+func execute(n string) {
+	funs := map[string]func() {
+		"gorun"  : gorun,
+		"gorun2" : gorun2,
+		"gorun3" : gorun3,
+		"gorun4" : gorun4,
+		"gorun5" : gorun5,
+	};	
+	funs[n]();		
+}
+
 
 /*
   main函数启动了5个goroutine,然后返回,
@@ -75,7 +81,7 @@ func say(msg string) {
 }
 
 /*
-常见的两种并发通信模型:共享内存和消息
+ 常见的两种并发通信模型:共享内存和消息
  共享内存:使用锁变量来同步协程,golang主要使用channel作为通信模型
  锁:共享读锁,独占写锁
 */
@@ -155,7 +161,7 @@ func gorun4() {
 }
 func Count1(chIndex chan int,index int) {
 	chIndex <- 1;
-	fmt.Println("counting index=",index);	
+	fmt.Println("counting index=",index);
 }
 
 /*
