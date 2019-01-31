@@ -3,6 +3,8 @@ import (
 	"os"
 	"fmt"
 	"time"
+	// "strconv"
+	// "reflect"
 );
 
 
@@ -24,6 +26,14 @@ func execute(n string) {
 		"channel5" : channel5,
 		"channel6" : channel6,
 		"channel7" : channel7,
+		"channel7_1" : channel7_1,
+		"channel7_2" : channel7_2,
+		"channel8" : channel8,
+		"channel8_1" : channel8_1,
+		"channel8_2" : channel8_2,
+		"channel9"  : channel9,
+		"channel10"  : channel10,
+		"channel11"  : channel11,
 	};	
 	funs[n]();
 }
@@ -182,4 +192,198 @@ func channel7() {
 	time2 := <-timer1.C;
 	
 	fmt.Println("2 second later ",time2.Format("2006-01-02 15:04:05"));	
+}
+//time.NewTimer(t int)
+func channel7_1() {
+	timer1 := time.NewTimer(time.Second * 2);
+	fmt.Println("now ",time.Now().Format("2006-01-02 15:04:05"));
+
+	//开启一个协程
+	go func() {
+		time1 := <-timer1.C;
+		fmt.Println("2s later timer1 ",time1.Format("2006-01-02 15:04:05"));
+	}();
+
+	//未等待协程/定时器完毕就中途停止了	
+	stop1 := timer1.Stop();
+	if stop1 {
+		fmt.Println("timer1 stoped ",time.Now().Format("2006-01-02 15:04:05"));
+	}
+}
+
+/*
+time.NewTicker(t int):计时器,每过t时间,就向channel发送一个时间,
+channel的接受者可以以固定的时间间隔从channel中读取事件
+*/
+func channel7_2() {
+	//每500ms发送一个时间到channel
+	ticker := time.NewTicker(time.Millisecond * 500);	
+	now("start at ",false);
+
+	go func() {		
+		for t := range ticker.C {
+			fmt.Println("tick at",t);
+		}
+	}();
+
+	now("ended at ",false);	
+}
+
+//管道关闭后,可读取数据(缓冲区读取完毕后一直读0),但不能写入数据(报panic错误),
+func channel8() {
+	c := make(chan int,10);
+	c <- 1;
+	c <- 2;
+	close(c);
+	fmt.Println(<-c);
+	fmt.Println(<-c);
+	fmt.Println(<-c);
+}
+
+//通过循环读取已关闭的管道,缓冲区读取完毕后,会跳出循环
+func channel8_1() {
+	c := make(chan int,10);
+	c <- 1;
+	c <- 2;
+	close(c);
+	for i := range c {
+		fmt.Println(i);
+	}
+}
+
+//通过i,ok := <-c 查询channel的状态,判断值是0值还是正常读取的值
+func channel8_2() {
+	c := make(chan int,10);
+	close(c);
+
+	i, ok := <-c;
+	fmt.Println(i,ok);
+}
+
+//channel 可以在gorountine(协程)之间同步(控制协程)
+func channel9() {	
+	defer now("end ",false);
+	now("start ",false);
+
+	ch := make(chan bool,1);
+
+	go channel9_work(ch);
+	
+	//等待协程将管道写入完毕
+	<-ch;
+}
+func channel9_work(ch1 chan bool) {	
+	//协程开始任务
+	time.Sleep(time.Second);
+	
+	//完成任务,管道写入数据
+	ch1<- true;
+}
+
+
+var formatTime string = "2006-01-02 15:04:05";
+func now(msg string,delTime bool) {
+	if !delTime {
+		msg = msg+time.Now().Format(formatTime);
+	}	
+	fmt.Println(msg);
+}
+
+/*
+golang中的并发限制跟超时控制
+refUrl:https://juejin.im/entry/5a7aaac26fb9a0634a38fce2
+*/
+
+/*
+无缓冲管道(通过内存共享)控制并发简单的例子
+任务无序完成(不会按照创建任务的顺序完成)
+*/
+func channel10() {
+	input     := []int{3,2,1};
+	ch 	      := make(chan string);
+	startTime := time.Now();
+    now("multi tasks start,totalNum:"+fmt.Sprintf("%d",len(input))+"\n",false);
+
+	for taskId,sleeptime := range input {
+		go channel10_run(taskId,sleeptime,ch);
+	}
+
+	//管道读取
+	for range input {
+		fmt.Println(<-ch);
+	}
+	
+	now("muti tasks ended. processTime:" + fmt.Sprintf("%s",time.Since(startTime)) + "\n",false);
+}
+func channel10_run(task_id, sleepTime int, ch chan string) {	
+	//任务开始f
+	time.Sleep(time.Duration(sleepTime) * time.Second);
+
+	//任务结束,写入管道
+	ch<-fmt.Sprintf("task id %d , sleep %d s", task_id, sleepTime);
+}
+
+/*
+有缓冲管道(通过内存共享)控制并发简单的例子
+控制任务有序完成
+*/
+func channel11() {
+	input     := []int{3,2,1};
+	//带长度为5的数组中有3个管道
+	chs	      := make([]chan string,len(input));
+	startTime := time.Now();
+    now("multi tasks start,totalNum:"+fmt.Sprintf("%d",len(input))+"\n",false);
+
+	for taskId,sleeptime := range input {
+		chs[taskId] = make(chan string);
+		go channel10_run(taskId,sleeptime,chs[taskId]);
+	}
+
+	//管道读取
+	for _,ch := range chs {
+		fmt.Println(<-ch);
+	}
+	
+	now("muti tasks ended. processTime:" + fmt.Sprintf("%s",time.Since(startTime)) + "\n",false);
+}
+func channel11_run(task_id, sleepTime int, ch chan string) {	
+	//任务开始f
+	time.Sleep(time.Duration(sleepTime) * time.Second);
+
+	//任务结束,写入管道
+	ch<-fmt.Sprintf("task id %d , sleep %d s", task_id, sleepTime);
+}
+
+/*
+超时控制
+若某个goruntine(协程)运行时间太长,会拖累其他goruntine(协程),
+因此需要超时控制
+*/
+func channel12() {
+	input     := []int{3,2,1};
+	timeout   := 2;
+	chs       := make([]chan string,len(input));
+	startTime := time.Now();
+	now("multi tasks start,totalNum:"+fmt.Sprintf("%d",len(input))+"\n",false);
+
+	for task_id,sleeptime := range input {
+		chs[task_id] = make(chan string);
+		go channel12_Run(task_id,sleeptime,chs[task_id]);
+	}
+}
+func channel12_Run(task_id, sleeptime, timeout int,ch chan string) {
+	ch_run := make(chan string);
+	go channle12_run(task_id,sleeptime,ch);
+	select {
+	case re := <-ch_run:
+		ch<- re;
+	case <-time.After(time.Duration(timeout) * time.Second):
+		re := fmt.Sprintf("task id %d, timeout",task_id);
+	}
+}
+//任务开始
+func channel12_run(task_id, sleeptime, timeout int,ch chan string) {
+	time.Sleep(time.Duration(sleeptime) * time.Second);
+
+	ch <- fmt.Sprintf("task id %d, sleep %d s",task_id,sleeptime);
 }

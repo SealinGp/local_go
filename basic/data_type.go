@@ -101,7 +101,16 @@ func other_type() {
 	s2 := stru{"v_kenqzhang1",12};
 	fmt.Println(s1,s2,s2.name);	
 
-	//channel	
+	//channel
+	//不带长度的管道
+	var ch1 chan string;
+	var ch2 chan int;
+	var chs []chan string;
+	ch4 := make(chan string);
+	ch5 := make(chan int);
+
+	//带长度的管道
+	ch6 := make([]chan string,5);
 }
 type stru struct {
 	name string

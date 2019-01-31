@@ -1,2 +1,7 @@
-now  2019-01-23 17:55:07
-2 second later  2019-01-23 17:55:09
+multi tasks start,totalNum:3
+2019-01-25 17:07:39
+task id 0 , sleep 3 s
+task id 1 , sleep 2 s
+task id 2 , sleep 1 s
+muti tasks ended. processTime:3.001529802s
+2019-01-25 17:07:42
