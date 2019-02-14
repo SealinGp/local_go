@@ -1,7 +1,7 @@
 multi tasks start,totalNum:3
-2019-01-25 17:07:39
-task id 0 , sleep 3 s
-task id 1 , sleep 2 s
-task id 2 , sleep 1 s
-muti tasks ended. processTime:3.001529802s
-2019-01-25 17:07:42
+2019-02-14 16:33:32
+task id 0,time out
+task id 1,time out
+task id 2, sleep 1 second
+muti tasks finished
+2019-02-14 16:33:37
