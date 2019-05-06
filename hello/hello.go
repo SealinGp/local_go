@@ -17,7 +17,9 @@ import (
    "math/rand"
 )
 
-
+func init() {
+  fmt.Println("Content-Type:text/plain;charset=utf-8\n\n");
+}
 
 func main () {
   //prin()
