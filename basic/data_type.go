@@ -21,7 +21,10 @@ fmt.Printf()格式字符
  %s   : 字符串输出
  %v   : 其他类型的变量
 */
-
+//执行顺序 全局变量初始化->init函数执行->main函数执行->defer函数执行
+func init() {
+  fmt.Println("Content-Type:text/plain;charset=utf-8\n\n");
+}
 func main() {
 
 	// bool_type();
@@ -61,7 +64,7 @@ func number_type() {
 	var f2 float64    = 0.2;//IEEE-754 64位虚数
 	var f3 complex64  = 0.3;//32位实数和虚数
 	var f4 complex128 = 0.4;//64位实数和虚数
-	fmt.Println(f1,f2,f3,f4);	
+	fmt.Println(f1,f2,f3,f4);
 }
 
 func bool_type() {
@@ -72,7 +75,7 @@ func bool_type() {
 		fmt.Println(b1);
 	}
 
-	if b2 {
+	if !b2 {
 		fmt.Println(b2);
 	}
 }
@@ -94,25 +97,32 @@ func other_type() {
  	
  	//array [length]type{val,...}
 	var a1 = [...]string{"a","b"};
-	fmt.Println(a1[0]);
+	for i := 0; i < len(a1); i++ {
+		fmt.Println(a1[i]);
+	}
+	
 
 	//struct
-	s1 := stru{age:12,name:"v_kenqzhang"};
-	s2 := stru{"v_kenqzhang1",12};
+	type obj struct {
+		name string
+		age int
+	}
+	s1 := obj{age:12,name:"v_kenqzhang"};
+	s2 := obj{"v_kenqzhang1",12};
 	fmt.Println(s1,s2,s2.name);	
 
 	//channel
-	//不带长度的管道
-	var ch1 chan string;
+	//不带长度的管道(双向,<-,->单向)
+	/*var ch1 chan string;
 	var ch2 chan int;
 	var chs []chan string;
 	ch4 := make(chan string);
 	ch5 := make(chan int);
+    ch1<- "1";
+    ch2<- 1;
+    chs[0]<- "1";
 
 	//带长度的管道
-	ch6 := make([]chan string,5);
+	ch6 := make([]chan string,5);*/
 }
-type stru struct {
-	name string
-	age int
-}
+

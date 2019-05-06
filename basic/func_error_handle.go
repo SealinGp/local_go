@@ -26,21 +26,28 @@ recover:
   说明:
 
 */
+func init() {
+  fmt.Println("Content-Type:text/plain;charset=utf-8\n\n");
+}
 func main() {
-	show_error();
+	// show_error();
 	
 	// throw_error("错误!");
 
-	/*Try(func() {
+	Try(func() {
 		panic("throw error!");
 	},func (e interface{}) {
 		fmt.Println(e);
-	})*/
+	})
 }
 
 func throw_error(errMsg string) {
 	//catch error msg
 	defer func(){
+		//等同于
+		//err := recover();
+		//if err != nill
+		//区别:下列err变量的作用域只存在于if语句中,而前者err作用域存在于当前函数中
 		if err := recover();err != nil {
 			fmt.Println(err);
 		}
@@ -60,6 +67,9 @@ type DivideError struct {
 	dividee int32
 	divider int32
 }
+//为类型定义函数 func (t type) 函数名(输入参数,...) 返回类型 {}
+//t.函数名() 可调用此方法
+//若type为指针,*type,则可用&t直接调用
 func (de *DivideError) Error() string {
 	str := `
 	cannot proceed,the divider is zero.
@@ -72,14 +82,14 @@ func show_error() {
 	//main函数执行完毕后被调用的函数 defer
 	defer defer_();
 
-	de := DivideError{12,123};	
+	de := DivideError{dividee:12,divider:123};	
 	fmt.Println(de);	
 	fmt.Println(&de);	
 	fmt.Println(de.Error());	
 }
 //main函数执行完毕后被调用的函数 defer
 func defer_() {
-	fmt.Println("------------");
+	fmt.Println("after main ----------");
 }
 
 /*
