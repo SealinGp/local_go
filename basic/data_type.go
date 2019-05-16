@@ -29,11 +29,11 @@ func main() {
 
 	// bool_type();
 
-	// number_type();	
+	number_type();	
 
 	// string_type();
 
-	other_type();
+	// other_type();
 }
 
 /*
@@ -52,16 +52,15 @@ func number_type() {
 	fmt.Println(i1,i2,i3,i4,i5);
 
 	var ui1 uint8  = 5; 	//0~255
-	var ui2 byte   = 5; 	//uint8
+	var ui2 byte   = 5; 	//0~255
 	var ui3 uint16 = 6; 	//0~65535
 	var ui4 uint32 = 7;		//0~4294967295
 	var ui5 rune   = 7;		//uint32
-
 	var ui6 uint64 = 8;		//0~18446744073709551615
 	fmt.Println(ui1,ui2,ui3,ui4,ui5,ui6);
 
-	var f1 float32    = 0.1;//IEEE-754 32位实数
-	var f2 float64    = 0.2;//IEEE-754 64位虚数
+	var f1 float32    = 0.1;//IEEE-754 32位实数(小数点后6位)
+	var f2 float64    = 0.2;//IEEE-754 64位虚数(小数点后15位)
 	var f3 complex64  = 0.3;//32位实数和虚数
 	var f4 complex128 = 0.4;//64位实数和虚数
 	fmt.Println(f1,f2,f3,f4);
