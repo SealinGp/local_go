@@ -28,6 +28,8 @@ func handleFunc(res http.ResponseWriter, req *http.Request) {
 	if ok {
 		args = append(args,param[0]);
 	}
+	//将错误重定向到webserver中
+	// args = append(args,"2>&1");
 
 	handler.Args = append(handler.Args, args...);
 

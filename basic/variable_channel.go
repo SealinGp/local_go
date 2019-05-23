@@ -8,12 +8,16 @@ import (
 );
 
 
+func init() {
+  fmt.Println("Content-Type:text/plain;charset=utf-8\n\n");
+}
 func main() {
-	args := os.Args;	
-	if len(args) <= 1 {
-		fmt.Println("函数名未指定");
-		return ;
-	}	
+	args := os.Args;
+    if len(args) <= 1 {
+    	fmt.Println("lack param ?func=xxx");
+    	return;
+    }
+
 	execute(args[1]);
 }
 func execute(n string) {
@@ -68,7 +72,7 @@ func channel2() {
 	c := make(chan int);
 
 	//函数执行完毕后关闭管道,将此步注释,则不会导致panic错误
-	defer close(c);
+	// defer close(c);
     
     //创建协程并调用
     go func() { c <- 3 + 4 }();

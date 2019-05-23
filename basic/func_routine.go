@@ -95,30 +95,35 @@ func say(msg string) {
 */
 
 //锁变量实现同步协程
-var counter int = 0;
-func Count(lock *sync.Mutex) {
-	lock.Lock(); //写锁
-	counter++;
-	fmt.Println("counter=",counter);
+// var counter int = 0;
+func Count(lock *sync.Mutex,c *uint8,goruntineIndex int) {
+	lock.Lock(); //写锁	
+	*c++;	
+	fmt.Println("other gorutine",goruntineIndex,"counterPointer=",*c);
 	lock.Unlock();//写解锁
 }
 func gorun2() {
 	//建立互斥锁实例 一个互斥锁只能同时被一个 goroutine 锁定,其它 goroutine 将阻塞直到互斥锁被解锁(重新争抢对互斥锁的锁定)
 	lock := &sync.Mutex{};
+    var counter uint8 = 0;
+    var counterPointer *uint8 = &counter;
+
 	//并行10个协程
 	for i := 0; i < 10; i++ {
-		go Count(lock);
+		go Count(lock,counterPointer,i);
 	}
 
 	//无限循环,控制等待上面10个协程执行结束后,释放写锁后,变量为10,跳出
 	for {
 		lock.Lock();
-		c := counter;
+		c := *counterPointer;
 		lock.Unlock();
 
+		fmt.Println("main gorutine counterPointer",c);
 		//这个函数的作用是让当前goroutine让出CPU,好让其它的goroutine获得执行的机会
 		runtime.Gosched();
 		if c >= 10 {
+			fmt.Println("main gorutine finished");
 			break;
 		}
 	}
@@ -152,7 +157,7 @@ var channelName chan Type
 	val := <-ch1;
 */
 func gorun4() { 
-	len1 := 100;
+	len1 := 10;
 	//创建一个数组channel 长度(缓冲)为10个,在缓冲区被写完之前不会阻塞
 	chs := make([] chan int,len1);
 
@@ -163,13 +168,15 @@ func gorun4() {
 	}
 
 	//按顺序读出,解除阻塞
-	for _,ch := range chs {
-		<-ch;
+	for i,ch := range chs {		
+		c := <-ch;
+		fmt.Println("read ch index=",i,"value=",c);
+		fmt.Println("---------------");
 	}
 }
 func Count1(chIndex chan int,index int) {
 	chIndex <- 1;
-	fmt.Println("counting index=",index);
+	fmt.Println("write index=",index,"value=",1);
 }
 
 /*
