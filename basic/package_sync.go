@@ -7,21 +7,31 @@ import (
 	"time"
 )
 
+func init() {
+  fmt.Println("Content-Type:text/plain;charset=utf-8\n\n");
+}
 func main() {
 	args := os.Args;
-	execute(args[1]);	
+    if len(args) <= 1 {
+    	fmt.Println("lack param ?func=xxx");
+    	return;
+    }
+
+	execute(args[1]);
 }
 func execute(n string) {
 	funs := map[string]func() {
 		"mutex_sync" : mutex_sync,
+		"sync1"      : sync1,
 	};	
-	funs[n]();
+	funs[n]();		
 }
 
 /*互斥锁,注:首次使用后不可复制,func(表示属于哪个结构体) name(输入参数)(返回参数){}
+共享资源(变量)
  Type Mutex struct {}
     func (m *Mutex)Lock()	//锁住m,若m阻塞到m解锁
-    func (m *Mutex)Unlock()//解锁m,若m未加锁会导致错误
+    func (m *Mutex)Unlock() //解锁m,若m未加锁会导致错误
  Type WaitGrout struct {}
  	添加int类型的delta到WaitGroup计数器中,
 	若计数器=0,则释放在等待时阻止的所有goroutine,
@@ -42,18 +52,16 @@ func execute(n string) {
  a := func(){}();
 */
 func mutex_sync() {
-	var mutex sync.Mutex;   //控制协程内的工作范围
-	var wait sync.WaitGroup;//控制程序等待运行结束
+	var mutex sync.Mutex;    //控制协程内的工作范围
+	var wait  sync.WaitGroup;//控制程序等待运行结束
 
 	fmt.Println("locked");
 	mutex.Lock();
 
 	for i := 1; i <= 3; i++ {
 		wait.Add(1);
-
-		fmt.Println("outside not lock:",i);
-		go func (i int) {
-			fmt.Println("inside not lock:",i);
+		
+		go func (i int) {			
 
 			//锁开始
 			mutex.Lock();
@@ -74,4 +82,41 @@ func mutex_sync() {
 	mutex.Unlock();				//等待所有协程运行完毕
 
 	wait.Wait();
+}
+
+/*
+refUrl : https://tour.go-zh.org/concurrency/9
+共享读,独占写, 写写互斥, 写读互斥, 读读不互斥
+*/
+func sync1() {
+	c := SafeCount{v:make(map[string]int)};
+	for i := 0; i < 1000; i++ {
+		go c.set("key1");
+	}
+
+	time.Sleep(time.Second);
+	fmt.Println(c.get("key1"));
+	fmt.Println("after defer");
+}
+type SafeCount struct {
+		v   map[string][]int
+		mux sync.Mutex
+}
+func (c *SafeCount) set(key string) {
+	c.mux.Lock();
+	c.v[key]++;
+	c.mux.Unlock();
+}
+func (c *SafeCount) get(key string) int {
+	c.mux.Lock();
+	defer func () {
+		fmt.Println("???");
+		c.mux.Unlock();
+	}();
+	return c.v[key];
+}
+
+func sync2() {
+	s := SafeCount{v:make(map[string][]int)};
+	fmt.Println(s);
 }

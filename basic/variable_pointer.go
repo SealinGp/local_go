@@ -1,6 +1,7 @@
 package main;
 
 import (
+	"os"
 	"fmt"
 );
 /*
@@ -13,11 +14,21 @@ func init() {
   fmt.Println("Content-Type:text/plain;charset=utf-8\n\n");
 }
 func main() {
-	// pointer1();
+	args := os.Args;
+    if len(args) <= 1 {
+    	fmt.Println("lack param ?func=xxx");
+    	return;
+    }
 
-	// pointer2();
-
-	pointer3();
+	execute(args[1]);
+}
+func execute(n string) {
+	funs := map[string]func() {
+		"pointer1" : pointer1,
+		"pointer2" : pointer2,
+		"pointer3" : pointer3,
+	};	
+	funs[n]();		
 }
 
 // pointer basic

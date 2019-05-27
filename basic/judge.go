@@ -1,15 +1,30 @@
 package main;
 
 import (
+	"os"
 	"fmt"
 );
 
-func main() {
-	// if_sentences();
-	// for_sentences();
-	switch_sentences();
+func init() {
+  fmt.Println("Content-Type:text/plain;charset=utf-8\n\n");
 }
+func main() {
+	args := os.Args;
+    if len(args) <= 1 {
+    	fmt.Println("lack param ?func=xxx");
+    	return;
+    }
 
+	execute(args[1]);
+}
+func execute(n string) {
+	funs := map[string]func() {
+		"if_sentences"     : if_sentences,
+		"for_sentences"    : for_sentences,
+		"switch_sentences" : switch_sentences,
+	};	
+	funs[n]();		
+}
 
 func if_sentences() {	
 	var b bool = true;
@@ -36,7 +51,7 @@ func for_sentences() {
 	}
 
 	//while
-	i := 10;	
+	i := 10;
 	for i>0 {
 		i--;
 		fmt.Println(i);
@@ -45,7 +60,7 @@ func for_sentences() {
 
 func switch_sentences() {
 	condition := true;	
-	switch condition != true {
+	switch !condition {
 		case false:
 			fmt.Println(false);
 		case true:
