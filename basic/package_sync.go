@@ -16,13 +16,15 @@ func main() {
     	fmt.Println("lack param ?func=xxx");
     	return;
     }
-
+    
 	execute(args[1]);
 }
 func execute(n string) {
 	funs := map[string]func() {
 		"mutex_sync" : mutex_sync,
 		"sync1"      : sync1,
+		"sync2"      : sync2,
+		"sync3"      : sync3,
 	};	
 	funs[n]();		
 }
@@ -99,7 +101,7 @@ func sync1() {
 	fmt.Println("after defer");
 }
 type SafeCount struct {
-		v   map[string][]int
+		v   map[string]int
 		mux sync.Mutex
 }
 func (c *SafeCount) set(key string) {
@@ -116,7 +118,41 @@ func (c *SafeCount) get(key string) int {
 	return c.v[key];
 }
 
-func sync2() {
-	s := SafeCount{v:make(map[string][]int)};
-	fmt.Println(s);
+func sync2() {	
+	c := SafeCount1{v:make(map[string][]int)};
+	for i := 0; i < 1000; i++ {
+		go c.set("key1",i);
+	}
+
+	time.Sleep(time.Second);//预估gorountine 执行时间,等待其执行结束
+	fmt.Println(c.get("key1"));	
+	fmt.Println("after func get defer");
+}
+type SafeCount1 struct {
+		v   map[string][]int
+		mux sync.Mutex
+}
+func (c *SafeCount1) set(key string,index int) {
+	c.mux.Lock();
+	c.v[key] = append(c.v[key],index);
+	c.mux.Unlock();
+}
+func (c *SafeCount1) get(key string) []int {
+	c.mux.Lock();
+	defer func () {
+		fmt.Println("after get");
+		c.mux.Unlock();
+	}();
+	return c.v[key];
+}
+func (c *SafeCount1) getLen(key string) int {
+	c.mux.Lock();
+	defer func () {
+		fmt.Println("???");
+		c.mux.Unlock();
+	}();
+	return len(c.v[key]);
+}
+
+func sync3() {
 }

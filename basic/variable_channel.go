@@ -50,7 +50,9 @@ func execute(n string) {
 /*
  作用:协程之间通信的方式
  定义方式
+    双向管道:
 	var ch1 chan int;    				//双向管道
+	单向管道:主要用于函数的输入参数声明,说明该函数对管道的操作
 	var ch1 chan<- int;  				//单向写
 	var ch1 <-chan int;  				//单向读
 
@@ -61,11 +63,24 @@ func execute(n string) {
 //buffered channels 缓存管道,可以避免阻塞
 func channel1() {
 	ch := make(chan int,100);
-    v  := 1;
-    ch <- v;
-    v1:= <-ch;
+
+	for i := 3; i < 5; i++ {
+		ch <- i;
+	}
+
+    v1  := make([]int,0);
+    v2  := make([]int,2);
+    for i := 0; i < 2; i++ {
+		cValue := <-ch;
+		fmt.Println(cValue);
+
+		v1    = append(v1,cValue);
+		v2[i] = cValue+1;
+	}
 
     fmt.Println(v1);
+    fmt.Println(v2);
+    fmt.Println(append(v2,v1...));
 }
 
 func channel2() {	
@@ -82,26 +97,29 @@ func channel2() {
     //报panic错误,因为管道在协程还没写入7的时候程序就结束了,管道关闭,导致panic错误
 }
 
-//blocking 阻塞
+//blocking 阻塞(平行goroutine(协程) 的执行顺序是不可预测的)
 func channel3() {
 	s := []int{7,2,8,-9,4,0};
 	c := make(chan int);
 
 	//入栈7+2+8=17
-	go channle3_sum(s[0:len(s)/2],c);
+	go channle3_sum(s[0:len(s)/2],c,0);
+	// go channle3_sum(s[:len(s)/2],c);
+
 	//入栈-9+4+0=-5
-	go channle3_sum(s[len(s)/2:len(s)],c);
+	go channle3_sum(s[len(s)/2:len(s)],c,1);
+	// go channle3_sum(s[len(s)/2:],c);
 
 	//出栈 -5,17 等待管道写入数据后(等待协程执行结束),读取出来
 	x, y := <-c, <-c;
-	fmt.Println(x, y, x+y);
+	fmt.Println(x, y);
 }
-
-func channle3_sum(a []int,c chan int) {
+func channle3_sum(a []int,c chan int,index int) {
 	sum := 0;
 	for _,v := range a {
 		sum += v;
 	}
+	fmt.Println(index);
 	c <- sum;
 }
 
@@ -114,12 +132,15 @@ func channel4() {
 	c := make(chan int);
 
 	go func() {
+		//若在管道写入完毕后不关闭管道,则程序会一直阻塞在for..range
+		defer close(c);
+
 		for i := 0; i < 10; i++ {
 			c <- i;
 		}
 
-		//若在管道写入完毕后不关闭管道,则程序会一直阻塞在for..range
-		close(c);
+		// //若在管道写入完毕后不关闭管道,则程序会一直阻塞在for..range
+		// close(c);
 	}();
 
 	for i := range c {
@@ -131,7 +152,7 @@ func channel4() {
 
 //select 处理channel
 func channel5() {
-	c := make(chan int);
+	c    := make(chan int);
 	quit := make(chan int);
 
 	go func() {
@@ -167,6 +188,7 @@ func channel5_fibonacci(c,quit chan int) {
 }
 
 /*
+带超时机制
 timeout
 time.After(t int) 在时间t后返回一个单向可读的channel
 */
@@ -186,6 +208,7 @@ func channel6() {
 }
 
 /*
+超时管道
 time.NewTimer和ticker
 time.NewTimer(t int):定时器,在t时间后返回一个单向读时间channel
 */
@@ -200,7 +223,11 @@ func channel7() {
 	
 	fmt.Println("2 second later ",time2.Format("2006-01-02 15:04:05"));	
 }
-//time.NewTimer(t int)
+/*
+超时管道
+提前停止
+time.NewTimer(t int)
+*/
 func channel7_1() {
 	timer1 := time.NewTimer(time.Second * 2);
 	fmt.Println("now ",time.Now().Format("2006-01-02 15:04:05"));
@@ -227,7 +254,7 @@ func channel7_2() {
 	ticker := time.NewTicker(time.Millisecond * 500);	
 	now("start at ",false);
 
-	go func() {		
+	go func() {
 		for t := range ticker.C {
 			fmt.Println("tick at",t);
 		}
@@ -274,13 +301,17 @@ func channel9() {
 
 	ch := make(chan bool,1);
 
-	go channel9_work(ch);
+	go channel9_work(ch,1);
+	go channel9_work(ch,2);	
 	
 	//等待协程将管道写入完毕
-	<-ch;
+	for c := range ch {
+		fmt.Println(c);
+	}
 }
-func channel9_work(ch1 chan bool) {	
+func channel9_work(ch1 chan bool,index int) {	
 	//协程开始任务
+	fmt.Println(index);
 	time.Sleep(time.Second);
 	
 	//完成任务,管道写入数据
@@ -291,7 +322,7 @@ func channel9_work(ch1 chan bool) {
 var formatTime string = "2006-01-02 15:04:05";
 func now(msg string,delTime bool) {
 	if !delTime {
-		msg = msg+time.Now().Format(formatTime);
+		msg = msg + time.Now().Format(formatTime);
 	}	
 	fmt.Println(msg);
 }
@@ -322,7 +353,7 @@ func channel10() {
 	
 	now("muti tasks ended. processTime:" + fmt.Sprintf("%s",time.Since(startTime)) + "\n",false);
 }
-func channel10_run(task_id, sleepTime int, ch chan string) {	
+func channel10_run(task_id, sleepTime int, ch chan<- string) {	
 	//任务开始f
 	time.Sleep(time.Duration(sleepTime) * time.Second);
 
@@ -392,11 +423,11 @@ func channel12_Run(task_id, sleeptime, timeout int,ch chan string) {
 	go channel12_run(task_id,sleeptime,ch);	
 	select {
 	case re := <-ch_run:
-		ch<- re;
+		ch <- re;
 	case <-time.After(time.Duration(timeout) * time.Second):
 		re := fmt.Sprintf("task id %d, timeout",task_id);
 		ch <- re;
-	}	
+	}
 }
 //协程执行耗时
 func channel12_run(task_id, sleeptime int, ch chan string) {
@@ -417,7 +448,7 @@ func channel13() {
 
 	//这个goruntine被阻塞了,后面的程序没有执行
 	ch <- "123";
-
+	
 	now(<-ch,true);
 }
 

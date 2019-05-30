@@ -29,8 +29,8 @@ func create_slice() {
 	var sli2 = sli1[0:2]; //startIndex:length
 	var sli21= sli1[:2];  //不填写为下限
 	var sli22= sli1[0:];  //不填写为上限
-	var sli23= sli1[:];  //不填写为上限
-	sli2[0] = 3;	
+	var sli23= sli1[:];   //不填写为上限
+	sli2[0]  = 3;	
 	fmt.Println(sli1);
 	fmt.Println(sli2);
 	fmt.Println(sli21);
