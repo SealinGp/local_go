@@ -4,21 +4,34 @@ import (
    "fmt"
 );
 
+
+func init() {
+  fmt.Println("Content-Type:text/plain;charset=utf-8\n\n");
+}
+func main() {
+	args := os.Args;
+    if len(args) <= 1 {
+    	fmt.Println("lack param ?func=xxx");
+    	return;
+    }
+
+	execute(args[1]);
+}
+func execute(n string) {
+	funs := map[string]func() {
+		"slic_range" : slic_range,
+		"arr_range"  : arr_range,
+		"map_range"  : map_range,
+		"str_range"  : str_range,
+	};	
+	funs[n]();		
+}
+
 /*
 range(foreach) 用于 array slice channel map
+can not use it for struct
+	struct_range();
 */
-func main() {	
-	slic_range();
-
-	arr_range();
-	
-	map_range();
-
-	str_range();
-
-//can not use it for struct
-	// struct_range();
-}
 
 func slic_range() {
 	var sli1 = make([]string,2,5);

@@ -1315,3 +1315,242 @@ package /root/www/sea/local_go/favicon.ico: import "/root/www/sea/local_go/favic
 [run /root/www/sea/local_go/favicon.ico]
 package /root/www/sea/local_go/favicon.ico: import "/root/www/sea/local_go/favicon.ico": cannot import absolute path
 2019/05/30 17:53:30 cgi: no headers
+/usr/local/go/bin/go
+[run /root/www/sea/local_go/basic/package_sync.go sync2]
+/usr/local/go/bin/go
+[run /root/www/sea/local_go/basic/variable_map.go create_map]
+# command-line-arguments
+/root/www/sea/local_go/basic/variable_map.go:37:25: syntax error: unexpected newline, expecting comma or }
+2019/05/31 09:41:55 cgi: no headers
+/usr/local/go/bin/go
+[run /root/www/sea/local_go/basic/variable_map.go create_map]
+/usr/local/go/bin/go
+[run /root/www/sea/local_go/favicon.ico]
+package /root/www/sea/local_go/favicon.ico: import "/root/www/sea/local_go/favicon.ico": cannot import absolute path
+2019/05/31 09:42:39 cgi: no headers
+/usr/local/go/bin/go
+[run /root/www/sea/local_go/basic/variable_map.go create_map]
+panic: assignment to entry in nil map
+
+goroutine 1 [running]:
+main.create_map()
+	/root/www/sea/local_go/basic/variable_map.go:33 +0xb9
+main.execute(0x7fffcc7166df, 0xa)
+	/root/www/sea/local_go/basic/variable_map.go:26 +0x19a
+main.main()
+	/root/www/sea/local_go/basic/variable_map.go:18 +0x92
+exit status 2
+/usr/local/go/bin/go
+[run /root/www/sea/local_go/favicon.ico]
+package /root/www/sea/local_go/favicon.ico: import "/root/www/sea/local_go/favicon.ico": cannot import absolute path
+2019/05/31 09:44:07 cgi: no headers
+/usr/local/go/bin/go
+[run /root/www/sea/local_go/basic/variable_map.go create_map]
+# command-line-arguments
+/root/www/sea/local_go/basic/variable_map.go:31:28: syntax error: unexpected { at end of statement
+/root/www/sea/local_go/basic/variable_map.go:34:2: syntax error: non-declaration statement outside function body
+2019/05/31 09:44:54 cgi: no headers
+/usr/local/go/bin/go
+[run /root/www/sea/local_go/basic/variable_map.go create_map]
+# command-line-arguments
+/root/www/sea/local_go/basic/variable_map.go:31:28: syntax error: unexpected { at end of statement
+/root/www/sea/local_go/basic/variable_map.go:34:2: syntax error: non-declaration statement outside function body
+2019/05/31 09:45:06 cgi: no headers
+/usr/local/go/bin/go
+[run /root/www/sea/local_go/basic/variable_map.go create_map]
+/usr/local/go/bin/go
+[run /root/www/sea/local_go/favicon.ico]
+package /root/www/sea/local_go/favicon.ico: import "/root/www/sea/local_go/favicon.ico": cannot import absolute path
+2019/05/31 09:45:19 cgi: no headers
+/usr/local/go/bin/go
+[run /root/www/sea/local_go/basic/variable_map.go for_map]
+/usr/local/go/bin/go
+[run /root/www/sea/local_go/favicon.ico]
+package /root/www/sea/local_go/favicon.ico: import "/root/www/sea/local_go/favicon.ico": cannot import absolute path
+2019/05/31 09:53:05 cgi: no headers
+/usr/local/go/bin/go
+[run /root/www/sea/local_go/basic/variable_map.go for_map]
+/usr/local/go/bin/go
+[run /root/www/sea/local_go/favicon.ico]
+package /root/www/sea/local_go/favicon.ico: import "/root/www/sea/local_go/favicon.ico": cannot import absolute path
+2019/05/31 09:53:37 cgi: no headers
+/usr/local/go/bin/go
+[run /root/www/sea/local_go/basic/variable_map.go fun_map]
+/usr/local/go/bin/go
+[run /root/www/sea/local_go/favicon.ico]
+package /root/www/sea/local_go/favicon.ico: import "/root/www/sea/local_go/favicon.ico": cannot import absolute path
+2019/05/31 09:54:33 cgi: no headers
+/usr/local/go/bin/go
+[run /root/www/sea/local_go/basic/variable_map.go fun_map]
+/usr/local/go/bin/go
+[run /root/www/sea/local_go/favicon.ico]
+package /root/www/sea/local_go/favicon.ico: import "/root/www/sea/local_go/favicon.ico": cannot import absolute path
+2019/05/31 09:55:32 cgi: no headers
+/usr/local/go/bin/go
+[run /root/www/sea/local_go/basic/variable_map.go fun_map]
+# command-line-arguments
+/root/www/sea/local_go/basic/variable_map.go:77:23: invalid operation: m1["a1"] == nil (mismatched types string and nil)
+2019/05/31 09:56:34 cgi: no headers
+/usr/local/go/bin/go
+[run /root/www/sea/local_go/basic/variable_map.go fun_map]
+/usr/local/go/bin/go
+[run /root/www/sea/local_go/favicon.ico]
+package /root/www/sea/local_go/favicon.ico: import "/root/www/sea/local_go/favicon.ico": cannot import absolute path
+2019/05/31 09:59:42 cgi: no headers
+/usr/local/go/bin/go
+[run /root/www/sea/local_go/basic/variable_map.go fun_map]
+/usr/local/go/bin/go
+[run /root/www/sea/local_go/favicon.ico]
+package /root/www/sea/local_go/favicon.ico: import "/root/www/sea/local_go/favicon.ico": cannot import absolute path
+2019/05/31 09:59:54 cgi: no headers
+/usr/local/go/bin/go
+[run /root/www/sea/local_go/basic/variable_map.go fun_map]
+# command-line-arguments
+/root/www/sea/local_go/basic/variable_map.go:81:2: v declared and not used
+2019/05/31 11:11:16 cgi: no headers
+/usr/local/go/bin/go
+[run /root/www/sea/local_go/basic/variable_map.go fun_map]
+# command-line-arguments
+/root/www/sea/local_go/basic/variable_map.go:84:14: undefined: ok
+2019/05/31 11:11:35 cgi: no headers
+/usr/local/go/bin/go
+[run /root/www/sea/local_go/basic/variable_map.go fun_map]
+/usr/local/go/bin/go
+[run /root/www/sea/local_go/favicon.ico]
+package /root/www/sea/local_go/favicon.ico: import "/root/www/sea/local_go/favicon.ico": cannot import absolute path
+2019/05/31 11:11:38 cgi: no headers
+/usr/local/go/bin/go
+[run /root/www/sea/local_go/basic/variable_map.go fun_map]
+/usr/local/go/bin/go
+[run /root/www/sea/local_go/favicon.ico]
+package /root/www/sea/local_go/favicon.ico: import "/root/www/sea/local_go/favicon.ico": cannot import absolute path
+2019/05/31 11:11:53 cgi: no headers
+/usr/local/go/bin/go
+[run /root/www/sea/local_go/basic/variable_pointer pointer1]
+package /root/www/sea/local_go/basic/variable_pointer: import "/root/www/sea/local_go/basic/variable_pointer": cannot import absolute path
+2019/05/31 11:27:28 cgi: no headers
+/usr/local/go/bin/go
+[run /root/www/sea/local_go/basic/variable_pointer.go pointer1]
+/usr/local/go/bin/go
+[run /root/www/sea/local_go/favicon.ico]
+package /root/www/sea/local_go/favicon.ico: import "/root/www/sea/local_go/favicon.ico": cannot import absolute path
+2019/05/31 11:28:12 cgi: no headers
+/usr/local/go/bin/go
+[run /root/www/sea/local_go/basic/variable_pointer.go pointer1]
+/usr/local/go/bin/go
+[run /root/www/sea/local_go/favicon.ico]
+package /root/www/sea/local_go/favicon.ico: import "/root/www/sea/local_go/favicon.ico": cannot import absolute path
+2019/05/31 11:30:02 cgi: no headers
+/usr/local/go/bin/go
+[run /root/www/sea/local_go/basic/variable_pointer.go pointer1]
+/usr/local/go/bin/go
+[run /root/www/sea/local_go/favicon.ico]
+package /root/www/sea/local_go/favicon.ico: import "/root/www/sea/local_go/favicon.ico": cannot import absolute path
+2019/05/31 11:30:06 cgi: no headers
+/usr/local/go/bin/go
+[run /root/www/sea/local_go/basic/variable_pointer.go pointer1]
+# command-line-arguments
+/root/www/sea/local_go/basic/variable_pointer.go:66:15: no new variables on left side of :=
+/root/www/sea/local_go/basic/variable_pointer.go:66:15: type stru1 is not an expression
+/root/www/sea/local_go/basic/variable_pointer.go:66:31: cannot use "v_kenqzhang" (type string) as type *string in field value
+2019/05/31 11:34:20 cgi: no headers
+/usr/local/go/bin/go
+[run /root/www/sea/local_go/basic/variable_pointer.go pointer1]
+# command-line-arguments
+/root/www/sea/local_go/basic/variable_pointer.go:66:15: no new variables on left side of :=
+/root/www/sea/local_go/basic/variable_pointer.go:66:15: type stru1 is not an expression
+/root/www/sea/local_go/basic/variable_pointer.go:66:31: cannot use "v_kenqzhang" (type string) as type *string in field value
+2019/05/31 11:34:29 cgi: no headers
+/usr/local/go/bin/go
+[run /root/www/sea/local_go/basic/variable_pointer.go pointer1]
+# command-line-arguments
+/root/www/sea/local_go/basic/variable_pointer.go:66:32: cannot use "v_kenqzhang" (type string) as type *string in field value
+2019/05/31 11:35:31 cgi: no headers
+/usr/local/go/bin/go
+[run /root/www/sea/local_go/basic/variable_pointer.go pointer1]
+# command-line-arguments
+/root/www/sea/local_go/basic/variable_pointer.go:67:32: invalid indirect of str (type string)
+2019/05/31 11:35:57 cgi: no headers
+/usr/local/go/bin/go
+[run /root/www/sea/local_go/basic/variable_pointer.go pointer1]
+/usr/local/go/bin/go
+[run /root/www/sea/local_go/favicon.ico]
+package /root/www/sea/local_go/favicon.ico: import "/root/www/sea/local_go/favicon.ico": cannot import absolute path
+2019/05/31 11:36:09 cgi: no headers
+/usr/local/go/bin/go
+[run /root/www/sea/local_go/basic/variable_pointer.go pointer1]
+# command-line-arguments
+/root/www/sea/local_go/basic/variable_pointer.go:68:15: type stru1 is not an expression
+2019/05/31 11:37:18 cgi: no headers
+/usr/local/go/bin/go
+[run /root/www/sea/local_go/basic/variable_pointer.go pointer1]
+/usr/local/go/bin/go
+[run /root/www/sea/local_go/favicon.ico]
+package /root/www/sea/local_go/favicon.ico: import "/root/www/sea/local_go/favicon.ico": cannot import absolute path
+2019/05/31 11:37:27 cgi: no headers
+/usr/local/go/bin/go
+[run /root/www/sea/local_go/basic/variable_pointer.go pointer1]
+# command-line-arguments
+/root/www/sea/local_go/basic/variable_pointer.go:71:16: cannot use "v_sshyu" (type string) as type *string in assignment
+2019/05/31 11:38:02 cgi: no headers
+/usr/local/go/bin/go
+[run /root/www/sea/local_go/basic/variable_pointer.go pointer1]
+# command-line-arguments
+/root/www/sea/local_go/basic/variable_pointer.go:72:42: syntax error: unexpected *, expecting name or (
+2019/05/31 11:38:08 cgi: no headers
+/usr/local/go/bin/go
+[run /root/www/sea/local_go/basic/variable_pointer.go pointer1]
+# command-line-arguments
+/root/www/sea/local_go/basic/variable_pointer.go:71:16: cannot use "v_sshyu" (type string) as type *string in assignment
+2019/05/31 11:38:10 cgi: no headers
+/usr/local/go/bin/go
+[run /root/www/sea/local_go/basic/variable_pointer.go pointer1]
+# command-line-arguments
+/root/www/sea/local_go/basic/variable_pointer.go:71:16: cannot use "v_sshyu" (type string) as type *string in assignment
+2019/05/31 11:38:15 cgi: no headers
+/usr/local/go/bin/go
+[run /root/www/sea/local_go/basic/variable_pointer.go pointer1]
+/usr/local/go/bin/go
+[run /root/www/sea/local_go/favicon.ico]
+package /root/www/sea/local_go/favicon.ico: import "/root/www/sea/local_go/favicon.ico": cannot import absolute path
+2019/05/31 11:38:22 cgi: no headers
+/usr/local/go/bin/go
+[run /root/www/sea/local_go/basic/variable_pointer.go pointer1]
+# command-line-arguments
+/root/www/sea/local_go/basic/variable_pointer.go:71:42: syntax error: unexpected *, expecting name or (
+2019/05/31 11:38:26 cgi: no headers
+/usr/local/go/bin/go
+[run /root/www/sea/local_go/basic/variable_pointer.go pointer1]
+/usr/local/go/bin/go
+[run /root/www/sea/local_go/favicon.ico]
+package /root/www/sea/local_go/favicon.ico: import "/root/www/sea/local_go/favicon.ico": cannot import absolute path
+2019/05/31 11:38:30 cgi: no headers
+/usr/local/go/bin/go
+[run /root/www/sea/local_go/basic/variable_pointer.go pointer1]
+# command-line-arguments
+/root/www/sea/local_go/basic/variable_pointer.go:71:16: cannot use "v_sshyu" (type string) as type *string in assignment
+2019/05/31 11:38:55 cgi: no headers
+/usr/local/go/bin/go
+[run /root/www/sea/local_go/basic/variable_pointer.go pointer1]
+/usr/local/go/bin/go
+[run /root/www/sea/local_go/favicon.ico]
+package /root/www/sea/local_go/favicon.ico: import "/root/www/sea/local_go/favicon.ico": cannot import absolute path
+2019/05/31 11:39:01 cgi: no headers
+/usr/local/go/bin/go
+[run /root/www/sea/local_go/basic/variable_pointer.go pointer1]
+/usr/local/go/bin/go
+[run /root/www/sea/local_go/favicon.ico]
+package /root/www/sea/local_go/favicon.ico: import "/root/www/sea/local_go/favicon.ico": cannot import absolute path
+2019/05/31 11:39:17 cgi: no headers
+/usr/local/go/bin/go
+[run /root/www/sea/local_go/basic/variable_pointer.go pointer2]
+/usr/local/go/bin/go
+[run /root/www/sea/local_go/favicon.ico]
+package /root/www/sea/local_go/favicon.ico: import "/root/www/sea/local_go/favicon.ico": cannot import absolute path
+2019/05/31 11:56:27 cgi: no headers
+/usr/local/go/bin/go
+[run /root/www/sea/local_go/basic/variable_pointer.go pointer3]
+/usr/local/go/bin/go
+[run /root/www/sea/local_go/favicon.ico]
+package /root/www/sea/local_go/favicon.ico: import "/root/www/sea/local_go/favicon.ico": cannot import absolute path
+2019/05/31 11:56:57 cgi: no headers

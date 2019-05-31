@@ -56,7 +56,20 @@ func pointer1() {
 	fmt.Println("struPointer:",struPointer);
 	fmt.Println("struPointer.name:",struPointer.name);
 	struPointer.name = "v_sshyu";
-	fmt.Println("*struPointer:",*struPointer);	
+	fmt.Println("*struPointer:",*struPointer);
+	fmt.Println("stru:",stru);
+
+	type stru1_1 struct {
+		name *string
+		age uint8
+	}
+	str          := "v_kenqzhang";
+	stru1_       := stru1_1{name:&str,age:22};
+	stru1Pointer := stru1_;
+	fmt.Println("stru1_",stru1_);	
+	fmt.Println("stru1Pointer",stru1Pointer);	
+	*stru1_.name = "v_sshyu";
+	fmt.Println("stru1Pointer.name",*stru1Pointer.name);
 }
 
 
