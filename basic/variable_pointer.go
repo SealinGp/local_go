@@ -1,6 +1,7 @@
 package main;
 
 import (
+	"os"
 	"fmt"
 );
 /*
@@ -13,11 +14,21 @@ func init() {
   fmt.Println("Content-Type:text/plain;charset=utf-8\n\n");
 }
 func main() {
-	// pointer1();
+	args := os.Args;
+    if len(args) <= 1 {
+    	fmt.Println("lack param ?func=xxx");
+    	return;
+    }
 
-	// pointer2();
-
-	pointer3();
+	execute(args[1]);
+}
+func execute(n string) {
+	funs := map[string]func() {
+		"pointer1" : pointer1,
+		"pointer2" : pointer2,
+		"pointer3" : pointer3,
+	};	
+	funs[n]();		
 }
 
 // pointer basic
@@ -45,7 +56,20 @@ func pointer1() {
 	fmt.Println("struPointer:",struPointer);
 	fmt.Println("struPointer.name:",struPointer.name);
 	struPointer.name = "v_sshyu";
-	fmt.Println("*struPointer:",*struPointer);	
+	fmt.Println("*struPointer:",*struPointer);
+	fmt.Println("stru:",stru);
+
+	type stru1_1 struct {
+		name *string
+		age uint8
+	}
+	str          := "v_kenqzhang";
+	stru1_       := stru1_1{name:&str,age:22};
+	stru1Pointer := stru1_;
+	fmt.Println("stru1_",stru1_);	
+	fmt.Println("stru1Pointer",stru1Pointer);	
+	*stru1_.name = "v_sshyu";
+	fmt.Println("stru1Pointer.name",*stru1Pointer.name);
 }
 
 

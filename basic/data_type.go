@@ -94,11 +94,14 @@ func other_type() {
 	var i int = 1;
 	fmt.Println(&i);
  	
- 	//array [length]type{val,...}
+ 	//array [length]type{val,...} 数组长度不可变,不可追加元素(不可使用append())
 	var a1 = [...]string{"a","b"};
 	for i := 0; i < len(a1); i++ {
 		fmt.Println(a1[i]);
 	}
+
+	//slice 切片(长度可变的数组)
+	//见variable_slice.go
 	
 
 	//struct

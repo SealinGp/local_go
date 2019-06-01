@@ -3,7 +3,7 @@ import (
 	"os"
 	"fmt"
 	"time"
-	// "strconv"
+	"strconv"
 	// "reflect"
 );
 
@@ -50,7 +50,9 @@ func execute(n string) {
 /*
  作用:协程之间通信的方式
  定义方式
+    双向管道:
 	var ch1 chan int;    				//双向管道
+	单向管道:主要用于函数的输入参数声明,说明该函数对管道的操作
 	var ch1 chan<- int;  				//单向写
 	var ch1 <-chan int;  				//单向读
 
@@ -61,11 +63,25 @@ func execute(n string) {
 //buffered channels 缓存管道,可以避免阻塞
 func channel1() {
 	ch := make(chan int,100);
-    v  := 1;
-    ch <- v;
-    v1:= <-ch;
+
+
+	for i := 3; i < 5; i++ {
+		ch <- i;
+	}
+
+    v1  := make([]int,0);
+    v2  := make([]int,2);
+    for i := 0; i < 2; i++ {
+		cValue := <-ch;
+		fmt.Println(cValue);
+
+		v1    = append(v1,cValue);
+		v2[i] = cValue+1;
+	}
 
     fmt.Println(v1);
+    fmt.Println(v2);
+    fmt.Println(append(v2,v1...));
 }
 
 func channel2() {	
@@ -82,26 +98,30 @@ func channel2() {
     //报panic错误,因为管道在协程还没写入7的时候程序就结束了,管道关闭,导致panic错误
 }
 
-//blocking 阻塞
+
+//blocking 阻塞(平行goroutine(协程) 的执行顺序是不可预测的)
 func channel3() {
 	s := []int{7,2,8,-9,4,0};
 	c := make(chan int);
 
 	//入栈7+2+8=17
-	go channle3_sum(s[0:len(s)/2],c);
+	go channle3_sum(s[0:len(s)/2],c,0);
+	// go channle3_sum(s[:len(s)/2],c);
+
 	//入栈-9+4+0=-5
-	go channle3_sum(s[len(s)/2:len(s)],c);
+	go channle3_sum(s[len(s)/2:len(s)],c,1);
+	// go channle3_sum(s[len(s)/2:],c);
 
 	//出栈 -5,17 等待管道写入数据后(等待协程执行结束),读取出来
 	x, y := <-c, <-c;
-	fmt.Println(x, y, x+y);
+	fmt.Println(x, y);
 }
-
-func channle3_sum(a []int,c chan int) {
+func channle3_sum(a []int,c chan int,index int) {
 	sum := 0;
 	for _,v := range a {
 		sum += v;
 	}
+	fmt.Println(index);
 	c <- sum;
 }
 
@@ -114,12 +134,15 @@ func channel4() {
 	c := make(chan int);
 
 	go func() {
+		//若在管道写入完毕后不关闭管道,则程序会一直阻塞在for..range
+		defer close(c);
+
 		for i := 0; i < 10; i++ {
 			c <- i;
 		}
 
-		//若在管道写入完毕后不关闭管道,则程序会一直阻塞在for..range
-		close(c);
+		// //若在管道写入完毕后不关闭管道,则程序会一直阻塞在for..range
+		// close(c);
 	}();
 
 	for i := range c {
@@ -131,7 +154,7 @@ func channel4() {
 
 //select 处理channel
 func channel5() {
-	c := make(chan int);
+	c    := make(chan int);
 	quit := make(chan int);
 
 	go func() {
@@ -167,6 +190,8 @@ func channel5_fibonacci(c,quit chan int) {
 }
 
 /*
+
+带超时机制
 timeout
 time.After(t int) 在时间t后返回一个单向可读的channel
 */
@@ -186,6 +211,7 @@ func channel6() {
 }
 
 /*
+超时管道
 time.NewTimer和ticker
 time.NewTimer(t int):定时器,在t时间后返回一个单向读时间channel
 */
@@ -200,7 +226,12 @@ func channel7() {
 	
 	fmt.Println("2 second later ",time2.Format("2006-01-02 15:04:05"));	
 }
-//time.NewTimer(t int)
+
+/*
+超时管道
+提前停止
+time.NewTimer(t int)
+*/
 func channel7_1() {
 	timer1 := time.NewTimer(time.Second * 2);
 	fmt.Println("now ",time.Now().Format("2006-01-02 15:04:05"));
@@ -227,7 +258,8 @@ func channel7_2() {
 	ticker := time.NewTicker(time.Millisecond * 500);	
 	now("start at ",false);
 
-	go func() {		
+
+	go func() {
 		for t := range ticker.C {
 			fmt.Println("tick at",t);
 		}
@@ -274,13 +306,17 @@ func channel9() {
 
 	ch := make(chan bool,1);
 
-	go channel9_work(ch);
+	go channel9_work(ch,1);
+	go channel9_work(ch,2);	
 	
 	//等待协程将管道写入完毕
-	<-ch;
+	for c := range ch {
+		fmt.Println(c);
+	}
 }
-func channel9_work(ch1 chan bool) {	
+func channel9_work(ch1 chan bool,index int) {	
 	//协程开始任务
+	fmt.Println(index);
 	time.Sleep(time.Second);
 	
 	//完成任务,管道写入数据
@@ -291,7 +327,7 @@ func channel9_work(ch1 chan bool) {
 var formatTime string = "2006-01-02 15:04:05";
 func now(msg string,delTime bool) {
 	if !delTime {
-		msg = msg+time.Now().Format(formatTime);
+		msg = msg + time.Now().Format(formatTime);
 	}	
 	fmt.Println(msg);
 }
@@ -322,7 +358,8 @@ func channel10() {
 	
 	now("muti tasks ended. processTime:" + fmt.Sprintf("%s",time.Since(startTime)) + "\n",false);
 }
-func channel10_run(task_id, sleepTime int, ch chan string) {	
+
+func channel10_run(task_id, sleepTime int, ch chan<- string) {	
 	//任务开始f
 	time.Sleep(time.Duration(sleepTime) * time.Second);
 
@@ -335,25 +372,28 @@ func channel10_run(task_id, sleepTime int, ch chan string) {
 控制任务有序完成
 */
 func channel11() {
-	input     := []int{3,2,1};
+	tasks     := []int{3,2,1};
+	
 	//带长度为5的数组中有3个管道
-	chs	      := make([]chan string,len(input));
-	startTime := time.Now();
-    now("multi tasks start,totalNum:"+fmt.Sprintf("%d",len(input))+"\n",false);
+	chs	      := make([]chan string,len(tasks));
+	startTime := time.Now();	
+	len       := strconv.Itoa(len(tasks));
+    now("multi tasks start,totalNum:"+len+"\n",false);
 
-	for taskId,sleeptime := range input {
+	for taskId,sleeptime := range tasks {
 		chs[taskId] = make(chan string);
-		go channel10_run(taskId,sleeptime,chs[taskId]);
+		go channel11_run(taskId,sleeptime,chs[taskId]);
 	}
 
 	//管道读取
 	for _,ch := range chs {
 		fmt.Println(<-ch);
 	}
-	
-	now("muti tasks ended. processTime:" + fmt.Sprintf("%s",time.Since(startTime)) + "\n",false);
+
+	processTime := time.Since(startTime).String();
+	now("muti tasks ended. processTime:" + processTime + "\n",false);
 }
-func channel11_run(task_id, sleepTime int, ch chan string) {	
+func channel11_run(task_id, sleepTime int, ch chan<- string) {	
 	//任务开始f
 	time.Sleep(time.Duration(sleepTime) * time.Second);
 
@@ -367,12 +407,15 @@ func channel11_run(task_id, sleepTime int, ch chan string) {
 因此需要超时控制
 */
 func channel12() {
-	input     := []int{3,2,1};//协程运行时间3s,2s,1s,因此会有1/2个超时的协程
-	timeout   := 2;
-	chs       := make([]chan string,len(input));	
-	now("multi tasks start,totalNum:"+fmt.Sprintf("%d",len(input))+"\n",false);
 
-	for task_id,sleeptime := range input {
+	tasks     := []int{3,2,1};//协程运行时间3s,2s,1s,因此会有1/2个超时的协程
+	timeout   := 2;
+	chs       := make([]chan string,len(tasks));
+	len       := strconv.Itoa(len(tasks));
+	startTime := time.Now();
+	now("multi tasks start,totalNum:" + len + "\n",false);
+
+	for task_id,sleeptime := range tasks {
 		chs[task_id] = make(chan string);
 		go channel12_Run(task_id,sleeptime,timeout,chs[task_id]);
 	}
@@ -380,26 +423,30 @@ func channel12() {
 	for _, ch := range chs {
 		fmt.Println(<-ch);
 	}
-	now("muti tasks finished.\n",false);
+
+	processTime := time.Since(startTime).String();
+	now("muti tasks ended. processTime:" + processTime + "\n",false);
 }
 /*
 通过select 和 time.After来判断超时(是指协程在2s后仍然没有完成任务)
 sleeptime 协程耗时长
 timeout   设定的超时时间
 */
-func channel12_Run(task_id, sleeptime, timeout int,ch chan string) {
-	ch_run := make(chan string);	
+func channel12_Run(task_id, sleeptime, timeout int,ch chan<- string) {
+	ch_run := make(<-chan string);	
 	go channel12_run(task_id,sleeptime,ch);	
+
+	timeOut := time.After(time.Duration(timeout) * time.Second);
 	select {
 	case re := <-ch_run:
-		ch<- re;
-	case <-time.After(time.Duration(timeout) * time.Second):
+		ch <- re;
+	case <-timeOut:
 		re := fmt.Sprintf("task id %d, timeout",task_id);
 		ch <- re;
-	}	
+	}
 }
 //协程执行耗时
-func channel12_run(task_id, sleeptime int, ch chan string) {
+func channel12_run(task_id, sleeptime int, ch chan<- string) {
 	//假设执行时间
 	time.Sleep(time.Duration(sleeptime) * time.Second);
 
@@ -431,15 +478,17 @@ func channel13_1() {
 }
 
 /*
-使用带缓冲的管道限制并发数量
+缓冲管道限制并发数量(控制同时运行的协程数量)
+控制执行顺序
 */
 func channel13_2() {
-	input   := []int{3,2,1};
-	timeout := 2;	
-	chs     := make([]chan string,len(input));
-
+	tasks     := []int{3,2,1};
+	tasksLen  := len(tasks);
+	timeout   := 2;	
+	chs       := make([]chan string,tasksLen);
+	startTime := time.Now();
 	/*
-	创建一个缓冲管道,作为并发限制的计数器
+	创建一个缓冲管道(chs),作为并发限制的计数器
 	1为并发限制,表示限制并发数为1,
 
 	则任务0 超时2s ,运行任务1 超时2s,任务3,耗时1s,
@@ -449,19 +498,21 @@ func channel13_2() {
 	任务0和任务1并发运行,超时2s,任务2 耗时1s	
 	总耗时 2+1 = 3s
 	*/
-	chLimit := make(chan bool,1);	
 
-	limitFunc := func(chLimit chan bool,ch chan string,task_id,sleeptime,timeout int) {
+	chLimit   := make(chan bool,2);	
+	limitFunc := func(chLimit <-chan bool,ch chan string,task_id,sleeptime,timeout int) {
+		//阻塞等待
 		channel13_2_Run(task_id,sleeptime,timeout,ch);
 
 		//在缓冲为1的chLimit,等待1个任务channel13_2_Run执行完毕
 		//在缓冲为2的chLimit,等待2个任务channel13_2_RUn执行完毕
 		<-chLimit;
-	}
+	}	
+	now("multi tasks start,totalNum:"+ strconv.Itoa(tasksLen) + "\n",false);
 
-	now("multi tasks start,totalNum:"+fmt.Sprintf("%d",len(input))+"\n",false);
-	for i, sleeptime := range input {
+	for i, sleeptime := range tasks {
 		chs[i] = make(chan string,1);
+		//在前面的一个未读出时阻塞
 		chLimit <- true;
 		go limitFunc(chLimit,chs[i],i,sleeptime,timeout);
 	}
@@ -470,10 +521,11 @@ func channel13_2() {
 		now(<-ch,true);
 	}
 
-	now("muti tasks finished\n",false);
+	processTime := time.Since(startTime).String();
+	now("muti tasks ended. processTime:" + processTime + "\n",false);
 }
 
-func channel13_2_Run(task_id,sleeptime,timeout int ,ch chan string) {
+func channel13_2_Run(task_id,sleeptime,timeout int ,ch chan<- string) {
 	ch_run := make(chan string);
 
 	go channel13_2_run(task_id,sleeptime,ch_run);
@@ -491,7 +543,8 @@ func channel13_2_Run(task_id,sleeptime,timeout int ,ch chan string) {
 	}
 }
 
-func channel13_2_run(task_id,sleeptime int ,ch chan string) {
+
+func channel13_2_run(task_id,sleeptime int ,ch chan<- string) {
 	time.Sleep(time.Duration(sleeptime) * time.Second);
 
 	ch <- fmt.Sprintf("task id %d, sleep %d second", task_id,sleeptime);
