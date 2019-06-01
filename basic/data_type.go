@@ -26,7 +26,7 @@ func init() {
   fmt.Println("Content-Type:text/plain;charset=utf-8\n\n");
 }
 func main() {
-
+    
 	// bool_type();
 
 	number_type();	

@@ -5,9 +5,14 @@ import (
 	"os"
 	"sync"
 	"time"
+
+	// "path/filepath"
 )
 
 func main() {
+	gocache := os.Getenv("XDG_CACHE_HOME");	
+	fmt.Println(gocache);
+	return;
 	args := os.Args;
 	execute(args[1]);	
 }
