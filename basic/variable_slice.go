@@ -2,22 +2,40 @@ package main
 
 import (
 	"fmt"
+	"os"
 )
 
+func init() {
+  fmt.Println("Content-Type:text/plain;charset=utf-8\n\n");
+}
+func main() {
+	args := os.Args;
+    if len(args) <= 1 {
+    	fmt.Println("lack param ?func=xxx");
+    	return;
+    }
+
+	execute(args[1]);
+}
+func execute(n string) {
+	funs := map[string]func() {
+		"create_slice" : create_slice,
+		"for_slice"  : for_slice,
+		"fun_slice"  : fun_slice,
+	};	
+	funs[n]();		
+}
+func test() int {
+	var ret int;	
+	return ret;
+}
+var a int;
 /*
 slice:
  切片 = 动态数组(长度可变)
 */
-func main() {
-	// create_slice();
-
-	// for_slice();
-
-	fun_slice();
-}
-
 //声明切片
-func create_slice() {
+func create_slice() {	
 	//直接创建数组切片 []type,length,capability(maxLength) 长度 容量(最大长度(可选))
 	var sli3 = make([]int,5,10);
 	sli3[1]  = 3;

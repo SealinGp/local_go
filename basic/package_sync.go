@@ -12,10 +12,7 @@ import (
 func init() {
   fmt.Println("Content-Type:text/plain;charset=utf-8\n\n");
 }
-func main() {
-	gocache := os.Getenv("XDG_CACHE_HOME");	
-	fmt.Println(gocache);
-	return;
+func main() {		
 	args := os.Args;
     if len(args) <= 1 {
     	fmt.Println("lack param ?func=xxx");
