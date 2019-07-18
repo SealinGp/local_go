@@ -86,3 +86,7 @@ func in_slice(sliceElement int,intSlice []int) (int,bool) {
 	}
 	return findIndex,find;
 }
+
+func twoAdd() {
+	
+}
