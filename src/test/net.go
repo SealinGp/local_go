@@ -11,6 +11,10 @@ import(
    "reflect"
    "strings"
    // "log"
+
+//net5
+   // "database/sql"
+   // _ "github.com/go-sql-driver/mysql"
 )
 
 func init() {
@@ -54,6 +58,7 @@ func net1() {
 }
 
 /*
+https://www.infoq.cn/article/golang-standard-library-part02
 CGI服务器
 */
 func net2() {
@@ -90,7 +95,9 @@ http 服务器
 func net4() {
 	http.HandleFunc("/hello",hello);
 	http.Handle("/handle/",http.HandlerFunc(say));
-	http.ListenAndServe(":8081",nil);
+	
+	http.ListenAndServe(":8989",nil);
+	select{};//阻塞进程
 }
 
 func hello(w http.ResponseWriter,req *http.Request) {
@@ -130,14 +137,10 @@ func say(w http.ResponseWriter,req *http.Request) {
 	method.Call([]reflect.Value{wr,r});
 }
 
-type sr struct {
-	a string
-}
+
+
 func net5() {
-	s := &sr{a:"abc"};
-	a := reflect.ValueOf(s);
-	fmt.Println(a);
-}
-func (s *sr)sr1() {
-	fmt.Println("123");
+	fmt.Println("net5 func");
+	fmt.Println(os.Getenv("GOPATH"));
+	fmt.Println("after go PATH");
 }

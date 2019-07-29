@@ -27,14 +27,12 @@ func main() {
 }
 /*
 type ResponseWriter
-
 type Handler stuct {
 	Path string //path to the CGI executable
 	Root string //root URI prefix of handler or empty for "/"
 	Dir  string //CGI working directory
 }
 */
-
 func handleFunc(res http.ResponseWriter, req *http.Request) {
 	if req.RequestURI == "/favicon.ico" {
 		return;
@@ -64,10 +62,10 @@ func handleFunc(res http.ResponseWriter, req *http.Request) {
 	if ok {
 		args = append(args,param[0]);
 	}	
-
 	handler.Args = append(handler.Args, args...);
 
 	fmt.Println(handler.Path,handler.Args);
+	fmt.Println(os.Getenv("GOPATH"),"after GOPATH");	
 	fmt.Println("---------------------------------------------");
 	handler.ServeHTTP(res, req);
 }
