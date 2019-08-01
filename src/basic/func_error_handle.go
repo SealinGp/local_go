@@ -1,5 +1,6 @@
-package main;
-import(
+package main
+
+import (
 	"fmt"
 )
 
@@ -27,34 +28,34 @@ recover:
 
 */
 func init() {
-  fmt.Println("Content-Type:text/plain;charset=utf-8\n\n");
+	fmt.Println("Content-Type:text/plain;charset=utf-8\n\n")
 }
 func main() {
 	// show_error();
-	
+
 	// throw_error("错误!");
 
 	Try(func() {
-		panic("throw error!");
-	},func (e interface{}) {
-		fmt.Println(e);
+		panic("throw error!")
+	}, func(e interface{}) {
+		fmt.Println(e)
 	})
 }
 
 func throw_error(errMsg string) {
 	//catch error msg
-	defer func(){
+	defer func() {
 		//等同于
 		//err := recover();
 		//if err != nill
 		//区别:下列err变量的作用域只存在于if语句中,而前者err作用域存在于当前函数中
-		if err := recover();err != nil {
-			fmt.Println(err);
+		if err := recover(); err != nil {
+			fmt.Println(err)
 		}
 	}()
 
 	//throw error msg
-	panic(errMsg);
+	panic(errMsg)
 }
 
 /*
@@ -67,6 +68,7 @@ type DivideError struct {
 	dividee int32
 	divider int32
 }
+
 //为类型定义函数 func (t type) 函数名(输入参数,...) 返回类型 {}
 //t.函数名() 可调用此方法
 //若type为指针,*type,则可用&t直接调用
@@ -75,31 +77,32 @@ func (de *DivideError) Error() string {
 	cannot proceed,the divider is zero.
 	dividee: %d
 	divider: %d
-`;
-	return fmt.Sprintf(str,de.dividee,de.divider);
+`
+	return fmt.Sprintf(str, de.dividee, de.divider)
 }
 func show_error() {
 	//main函数执行完毕后被调用的函数 defer
-	defer defer_();
+	defer defer_()
 
-	de := DivideError{dividee:12,divider:123};	
-	fmt.Println(de);	
-	fmt.Println(&de);	
-	fmt.Println(de.Error());	
+	de := DivideError{dividee: 12, divider: 123}
+	fmt.Println(de)
+	fmt.Println(&de)
+	fmt.Println(de.Error())
 }
+
 //main函数执行完毕后被调用的函数 defer
 func defer_() {
-	fmt.Println("after main ----------");
+	fmt.Println("after main ----------")
 }
 
 /*
 	golang中实现try...catch...用法
 */
-func Try(fun func(),handler func(interface{})) {
+func Try(fun func(), handler func(interface{})) {
 	defer func() {
 		if err := recover(); err != nil {
-            handler(err)
-        }
-	}();
-	fun();
+			handler(err)
+		}
+	}()
+	fun()
 }

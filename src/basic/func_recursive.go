@@ -1,32 +1,33 @@
-package main;
+package main
 
 import (
 	"fmt"
-);
+)
 
 func init() {
-  fmt.Println("Content-Type:text/plain;charset=utf-8\n\n");
+	fmt.Println("Content-Type:text/plain;charset=utf-8\n\n")
 }
-func main() {	
-	u1 := multiply_self(2,4,true);
+func main() {
+	u1 := multiply_self(2, 4, true)
 
-	fmt.Println(u1);
+	fmt.Println(u1)
 }
 
-var u uint64;
+var u uint64
 
 //计算u1的m1次幂 u1^m1,(注:golang不支持默认参数)
-func multiply_self(u1 uint64,m1 uint8,first bool) (uint64) {
+func multiply_self(u1 uint64, m1 uint8, first bool) uint64 {
 	if m1 <= 1 {
-		return u1;
-	}
-	
-	if first {
-		u = u1;
+		return u1
 	}
 
-	return multiply_self(u1*u,m1-1,false);
+	if first {
+		u = u1
+	}
+
+	return multiply_self(u1*u, m1-1, false)
 }
+
 /*
 
 默认函数参数,其实并不是一个很好的行为.我认为代码,

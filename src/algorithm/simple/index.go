@@ -2,35 +2,36 @@ package main
 
 import (
 	"fmt"
-	"time"
 	"os"
+	"time"
 )
 
 func init() {
-  fmt.Println("Content-Type:text/plain;charset=utf-8\n\n");
+	fmt.Println("Content-Type:text/plain;charset=utf-8\n\n")
 }
 func main() {
-	startTime := time.Now();
-	args      := os.Args;
-    if len(args) <= 1 {
-    	fmt.Println("lack param ?func=xxx");
-    	echoTime(startTime);
-    	return;
-    }
+	startTime := time.Now()
+	args := os.Args
+	if len(args) <= 1 {
+		fmt.Println("lack param ?func=xxx")
+		echoTime(startTime)
+		return
+	}
 
-	execute(args[1]);
-	echoTime(startTime);
+	execute(args[1])
+	echoTime(startTime)
 }
 func execute(n string) {
-	funs := map[string]func() {
-		"twoSum" : twoSum,
-	};		
-	funs[n]();		
+	funs := map[string]func(){
+		"twoSum": twoSum,
+	}
+	funs[n]()
 }
 func echoTime(startTime time.Time) {
-	since := time.Since(startTime).String();
-    fmt.Println("processTime:",since);
+	since := time.Since(startTime).String()
+	fmt.Println("processTime:", since)
 }
+
 /*
 给定一个整数数组 nums 和一个目标值 target，请你在该数组中找出和为目标值的那 两个 整数，并返回他们的数组下标。
 你可以假设每种输入只会对应一个答案。不能重复利用这个数组中同样的元素。
@@ -56,37 +57,37 @@ O(n) = n + n +.... n;
 O(n) = n;
 */
 func twoSum() {
-	nums      := []int{2,7,11,15};
-	target    := 9;
-	numIndex  := make([]int,0);		
-	valueLeft := 0;
+	nums := []int{2, 7, 11, 15}
+	target := 9
+	numIndex := make([]int, 0)
+	valueLeft := 0
 
-	for index,value := range nums {
-		valueLeft = target - value;
-		sli       := nums[index+1:];
+	for index, value := range nums {
+		valueLeft = target - value
+		sli := nums[index+1:]
 
-		index2,find := in_slice(valueLeft,sli);
-		if find {			
-			numIndex = append(numIndex,index,index2+(index+1));			
-		}		
-	}
-
-	fmt.Println(numIndex);
-}
-
-func in_slice(sliceElement int,intSlice []int) (int,bool) {
-	find      := false;
-	findIndex := 0;
-	for index,element := range intSlice {
-		if element == sliceElement {
-			find      = true;
-			findIndex = index;
-			break;
+		index2, find := in_slice(valueLeft, sli)
+		if find {
+			numIndex = append(numIndex, index, index2+(index+1))
 		}
 	}
-	return findIndex,find;
+
+	fmt.Println(numIndex)
+}
+
+func in_slice(sliceElement int, intSlice []int) (int, bool) {
+	find := false
+	findIndex := 0
+	for index, element := range intSlice {
+		if element == sliceElement {
+			find = true
+			findIndex = index
+			break
+		}
+	}
+	return findIndex, find
 }
 
 func twoAdd() {
-	
+
 }

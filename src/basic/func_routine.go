@@ -1,10 +1,11 @@
-package main;
-import(
+package main
+
+import (
 	"fmt"
-	"sync"
-	"runtime"
 	"os"
-);
+	"runtime"
+	"sync"
+)
 
 /*
 
@@ -20,7 +21,7 @@ import(
  多条线程共享该进程中的资源(如虚拟地址空间,文件描述符?).
  文件描述符:索引值,当程序打开一个现有文件或者创建一个新文件时,内核向进程返回一个文件描述符
 协程:
- 程序组件(子例程也是),协程比子例程更灵活,源于Simula和Modula-2语言,应用:多任务,迭代器,无限列表,管道pipe 
+ 程序组件(子例程也是),协程比子例程更灵活,源于Simula和Modula-2语言,应用:多任务,迭代器,无限列表,管道pipe
  轻量级的线程(用户级线程,子程序,函数),对内核透明(系统并不知道有协程的存在),完全由用户自己的程序进行调度,
  因为是由用户程序自己控制,那么就很难像抢占式调度那样做到强制的 CPU 控制权切换到其他进程/线程,通常只能进
  行协作式调度,需要协程自己主动把控制权转让出去之后,其他协程才能被执行到
@@ -39,38 +40,37 @@ go 并发
 线程和协程比较
  内存消耗:
   每个 goroutine(协程)默认占用内存远比Java,C的线程少
-  goroutine：2KB 
+  goroutine：2KB
 　线程：8MB
  切换调度开销方面:
   goroutine远比线程小
   线程：涉及模式切换(从用户态切换到内核态),16个寄存器,PC,SP...等寄存器的刷新等
   goroutine：只有三个寄存器的值修改 - PC / SP / DX.
 在网络编程中,我们可以理解为 Golang 的协程本质上其实就是对IO事件的封装,并且通过语言级的支持让异步的代码看上去像同步执行的一样
-*/ 
+*/
 func init() {
-  fmt.Println("Content-Type:text/plain;charset=utf-8\n\n");
+	fmt.Println("Content-Type:text/plain;charset=utf-8\n\n")
 }
 func main() {
-	args := os.Args;
-    if len(args) <= 1 {
-    	fmt.Println("lack param ?func=xxx");
-    	return;
-    }
+	args := os.Args
+	if len(args) <= 1 {
+		fmt.Println("lack param ?func=xxx")
+		return
+	}
 
-	execute(args[1]);
+	execute(args[1])
 }
 
 func execute(n string) {
-	funs := map[string]func() {
-		"gorun"  : gorun,
-		"gorun2" : gorun2,
-		"gorun3" : gorun3,
-		"gorun4" : gorun4,
-		"gorun5" : gorun5,
-	};	
-	funs[n]();		
+	funs := map[string]func(){
+		"gorun":  gorun,
+		"gorun2": gorun2,
+		"gorun3": gorun3,
+		"gorun4": gorun4,
+		"gorun5": gorun5,
+	}
+	funs[n]()
 }
-
 
 /*
   main函数启动了5个goroutine,然后返回,
@@ -81,11 +81,11 @@ func execute(n string) {
 */
 func gorun() {
 	for i := 0; i < 5; i++ {
-	  go say("hello ");		
+		go say("hello ")
 	}
 }
 func say(msg string) {
-	fmt.Println(msg);
+	fmt.Println(msg)
 }
 
 /*
@@ -96,49 +96,50 @@ func say(msg string) {
 
 //锁变量实现同步协程
 // var counter int = 0;
-func Count(lock *sync.Mutex,c *uint8,goruntineIndex int) {
-	lock.Lock(); //写锁	
-	*c++;	
-	fmt.Println("other gorutine",goruntineIndex,"counterPointer=",*c);
-	lock.Unlock();//写解锁
+func Count(lock *sync.Mutex, c *uint8, goruntineIndex int) {
+	lock.Lock() //写锁
+	*c++
+	fmt.Println("other gorutine", goruntineIndex, "counterPointer=", *c)
+	lock.Unlock() //写解锁
 }
 func gorun2() {
 	//建立互斥锁实例 一个互斥锁只能同时被一个 goroutine 锁定,其它 goroutine 将阻塞直到互斥锁被解锁(重新争抢对互斥锁的锁定)
-	lock := &sync.Mutex{};
-    var counter uint8 = 0;
-    var counterPointer *uint8 = &counter;
+	lock := &sync.Mutex{}
+	var counter uint8 = 0
+	var counterPointer *uint8 = &counter
 
 	//并行10个协程
 	for i := 0; i < 10; i++ {
-		go Count(lock,counterPointer,i);
+		go Count(lock, counterPointer, i)
 	}
 
 	//无限循环,控制等待上面10个协程执行结束后,释放写锁后,变量为10,跳出
 	for {
-		lock.Lock();
-		c := *counterPointer;
-		lock.Unlock();
+		lock.Lock()
+		c := *counterPointer
+		lock.Unlock()
 
-		fmt.Println("main gorutine counterPointer",c);
+		fmt.Println("main gorutine counterPointer", c)
 		//这个函数的作用是让当前goroutine让出CPU,好让其它的goroutine获得执行的机会
-		runtime.Gosched();
+		runtime.Gosched()
 		if c >= 10 {
-			fmt.Println("main gorutine finished");
-			break;
+			fmt.Println("main gorutine finished")
+			break
 		}
 	}
 }
+
 //runtime.Gosched作用:停留给协程执行的一个机会/最后一个协程优先执行完毕 9 0~8
 func gorun3() {
 	for i := 0; i < 10; i++ {
-        go show(i);
-    }
+		go show(i)
+	}
 
-    runtime.Gosched();
-    fmt.Println("end");
+	runtime.Gosched()
+	fmt.Println("end")
 }
 func show(i int) {
-	fmt.Println(i);
+	fmt.Println(i)
 }
 
 /*
@@ -156,27 +157,27 @@ var channelName chan Type
 	//从channel中读取数据,如果channel中没有写入数据,则阻塞,直到channel被写入数据为止
 	val := <-ch1;
 */
-func gorun4() { 
-	len1 := 10;
+func gorun4() {
+	len1 := 10
 	//创建一个数组channel 长度(缓冲)为10个,在缓冲区被写完之前不会阻塞
-	chs := make([] chan int,len1);
+	chs := make([]chan int, len1)
 
 	//同时写入10个channel,写完后然后开始阻塞,等待读解除阻塞
-	for i := 0; i < len1; i++ {		
-		chs[i] = make(chan int);
-		go Count1(chs[i],i);
+	for i := 0; i < len1; i++ {
+		chs[i] = make(chan int)
+		go Count1(chs[i], i)
 	}
 
 	//按顺序读出,解除阻塞
-	for i,ch := range chs {		
-		c := <-ch;
-		fmt.Println("read ch index=",i,"value=",c);
-		fmt.Println("---------------");
+	for i, ch := range chs {
+		c := <-ch
+		fmt.Println("read ch index=", i, "value=", c)
+		fmt.Println("---------------")
 	}
 }
-func Count1(chIndex chan int,index int) {
-	chIndex <- 1;
-	fmt.Println("write index=",index,"value=",1);
+func Count1(chIndex chan int, index int) {
+	chIndex <- 1
+	fmt.Println("write index=", index, "value=", 1)
 }
 
 /*
@@ -196,14 +197,13 @@ select
  		default:
  	}
 */
- func gorun5() {
- 	for i := 0; i < 5; i++ {
- 		go test(i);
- 	}
+func gorun5() {
+	for i := 0; i < 5; i++ {
+		go test(i)
+	}
 
- 	select{};
- }
- func test(i int) {
- 	fmt.Println(i);
- }
-
+	select {}
+}
+func test(i int) {
+	fmt.Println(i)
+}

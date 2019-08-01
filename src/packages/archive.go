@@ -1,89 +1,89 @@
-package main;
+package main
 
-import(
+import (
 	"fmt"
-	"os"	
+	"os"
 
 	"archive/tar"
-	"bytes"	
+	"bytes"
 	"io"
-	"log"	
-);
+	"log"
+)
 
 /*
 tar打包文件
 */
 func init() {
-  fmt.Println("Content-Type:text/plain;charset=utf-8\n\n");
+	fmt.Println("Content-Type:text/plain;charset=utf-8\n\n")
 }
 func main() {
-	args := os.Args;
-    if len(args) <= 1 {
-    	fmt.Println("lack param ?func=xxx");
-    	return;
-    }
+	args := os.Args
+	if len(args) <= 1 {
+		fmt.Println("lack param ?func=xxx")
+		return
+	}
 
-	execute(args[1]);
+	execute(args[1])
 }
 
 func execute(n string) {
-	funs := map[string]func() {
-		"tar1" : tar1,
-		"Buffer" : Buffer,
-		"test" : test,
-	};	
-	funs[n]();		
+	funs := map[string]func(){
+		"tar1":   tar1,
+		"Buffer": Buffer,
+		"test":   test,
+	}
+	funs[n]()
 }
 
-type file struct{
+type file struct {
 	Name string
 	Body string
-};
+}
 
 /*
 ref:https://golang.org/pkg/bytes/
 bytes.Buffer类型是一个可变大小的字节缓冲区,有Read,Write方法
 */
 func Buffer() {
-	var b bytes.Buffer;
-	b.Write([]byte("Hello "));
-	fmt.Fprintf(&b,"word!");
-	b.WriteTo(os.Stdout);	
+	var b bytes.Buffer
+	b.Write([]byte("Hello "))
+	fmt.Fprintf(&b, "word!")
+	b.WriteTo(os.Stdout)
 }
 
 func test() {
-	a := "abc";		
-	fmt.Println([]byte(a));
+	a := "abc"
+	fmt.Println([]byte(a))
 }
 
 /*
 例子:https://golang.org/pkg/archive/tar/
 */
-func tar1()  {
+func tar1() {
 	/*
-	https://golang.org/pkg/bytes/
-	bytes.Buffer:
-	type Buffer 
-	    func (b *Buffer) Write(p []bype) (n int, err error);
-	*/ 
-	var buf bytes.Buffer;
-
-	//tar.NewWriter(w io.Writer) *Writer 
-	/*
-	io.Writer :
-	type Writer interface {
-	   Write(p []byte) (n int, err error)
-	}
+		https://golang.org/pkg/bytes/
+		bytes.Buffer:
+		type Buffer
+		    func (b *Buffer) Write(p []bype) (n int, err error);
 	*/
-	tw := tar.NewWriter(&buf);
+	var buf bytes.Buffer
 
-	files := []file {
+	//tar.NewWriter(w io.Writer) *Writer
+	/*
+		io.Writer :
+		type Writer interface {
+		   Write(p []byte) (n int, err error)
+		}
+	*/
+	tw := tar.NewWriter(&buf)
+
+	files := []file{
 		{"readme.txt", "This archive contains some text files."},
 		{"gopher.txt", "Gopher names:\nGeorge\nGeoffrey\nGonzo"},
 		{"todo.txt", "Get animal handling license."},
-	};
+	}
 
-    //文件写入
+	//文件写入
 	for _, file := range files {
 		hdr := &tar.Header{
 			Name: file.Name,
@@ -120,5 +120,5 @@ func tar1()  {
 }
 
 func tar2() {
-	
+
 }

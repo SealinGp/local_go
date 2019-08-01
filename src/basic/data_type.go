@@ -1,9 +1,10 @@
-package main;
+package main
 
-import(
+import (
 	"fmt"
 	"os"
-);
+)
+
 /*
 1 b(字节byte) = 8 bit(比特)
 1 Kb          = 1024 b
@@ -21,121 +22,174 @@ fmt.Printf()格式字符
  %c   : 单个字符输出
  %s   : 字符串输出
  %v   : 其他类型的变量
+
+= 深拷贝
+
+引用变量
+值类型(int,float,bool,string,slice,struct)的变量的值存储在栈中
+go中,指针属于引用类型,被引用的变量会存储在堆中,便于垃圾回收,且内存空间比
+栈更大
+
+_ 的作用 (https://github.com/unknwon/the-way-to-go_ZH_CN/blob/master/eBook/04.4.md)
+_ 用于抛弃值,如5在 _, b = 5, 7 中被抛弃,实际上他是一个只写变量,不可读取到他的值
+
+init 函数
+在每个包完成初始化后自动执行,优先级>main
+
+位运算
+
+二元运算符
+只可用于整数类型的变量,需要他们拥有等长位模式时
+与 & : 将与计算的结果,true 转为1, false转为0
+  1 & 1  true   1
+  1 & 0  false  0
+  0 & 1  false  0
+  0 & 0  false  0
+或 | : 将或计算的结果,true 转为1, false转为0
+  1 | 1  true  1
+  1 | 0  true  1
+  0 | 1  true  1
+  0 | 0  false 0
+异或 ^ : 不同为1,相同为0
+  1 ^ 1 0
+  1 ^ 0 1
+  0 ^ 1 1
+  0 ^ 0 0
+位清除 &^ : 将指定位置上的值设置为0
+
+一元运算符
+https://github.com/unknwon/the-way-to-go_ZH_CN/blob/master/eBook/04.5.md
+
+按位补足 ^
+^10 = -01 ^ 10 = -11
+
+位左移 << :
+
+优先级  运算符
+ 7     ^ !
+ 6     * / % << >> & &^
+ 5     + - | ^
+ 4     == != < <= >= >
+ 3     <-
+ 2     &&
+ 1     ||
+
+转义字符:
+\n : 换行
+\r : 回车
+\t : tab键
 */
 //执行顺序 全局变量初始化->init函数执行->main函数执行->defer函数执行
 func init() {
-  fmt.Println("Content-Type:text/plain;charset=utf-8\n\n");
+	fmt.Println("Content-Type:text/plain;charset=utf-8\n\n")
 }
 
 func main() {
-	args := os.Args;
-    if len(args) <= 1 {
-    	fmt.Println("lack param ?func=xxx");
-    	return;
-    }
+	args := os.Args
+	if len(args) <= 1 {
+		fmt.Println("lack param ?func=xxx")
+		return
+	}
 
-	execute(args[1]);
+	execute(args[1])
 }
 func execute(n string) {
-	funs := map[string]func() {
-		"bool_type" : bool_type,
-		"number_type" : number_type,
-		"string_type" : string_type,
-		"other_type" : other_type,		
-	};	
-	funs[n]();		
+	funs := map[string]func(){
+		"bool_type":   bool_type,
+		"number_type": number_type,
+		"string_type": string_type,
+		"other_type":  other_type,
+	}
+	funs[n]()
 }
 
 /*
 	int int8 int16 int32 int64
 
-	uint8(byte) uint16 uint32(rune) uint64	
+	uint8(byte) uint16 uint32(rune) uint64
 
 	float32 float64 complex64 complex128
 */
-func number_type() {	
-	var i1 int   = 1;		//int32
-	var i2 int8  = 2;		//-128~127
-	var i3 int16 = 3;   	//-32768~32767
-	var i4 int32 = 3;		//-2147483648~2147483647
-	var i5 int64 = 4;		//-9223372036854775808~9223372036854775807	
-	fmt.Println(i1,i2,i3,i4,i5);
+func number_type() {
+	var i1 int = 1   //int32
+	var i2 int8 = 2  //-128~127
+	var i3 int16 = 3 //-32768~32767
+	var i4 int32 = 3 //-2147483648~2147483647
+	var i5 int64 = 4 //-9223372036854775808~9223372036854775807
+	fmt.Println(i1, i2, i3, i4, i5)
 
-	var ui1 uint8  = 5; 	//0~255
-	var ui2 byte   = 5; 	//0~255
-	var ui3 uint16 = 6; 	//0~65535
-	var ui4 uint32 = 7;		//0~4294967295
-	var ui5 rune   = 7;		//uint32
-	var ui6 uint64 = 8;		//0~18446744073709551615
-	fmt.Println(ui1,ui2,ui3,ui4,ui5,ui6);
+	var ui1 uint8 = 5  //0~255
+	var ui2 byte = 5   //0~255
+	var ui3 uint16 = 6 //0~65535
+	var ui4 uint32 = 7 //0~4294967295
+	var ui5 rune = 7   //uint32
+	var ui6 uint64 = 8 //0~18446744073709551615
+	fmt.Println(ui1, ui2, ui3, ui4, ui5, ui6)
 
-	var f1 float32    = 0.1;//IEEE-754 32位实数(小数点后6位)
-	var f2 float64    = 0.2;//IEEE-754 64位虚数(小数点后15位)
-	var f3 complex64  = 0.3;//32位实数和虚数
-	var f4 complex128 = 0.4;//64位实数和虚数
-	fmt.Println(f1,f2,f3,f4);
+	var f1 float32 = 0.1    //IEEE-754 32位实数(小数点后6位)
+	var f2 float64 = 0.2    //IEEE-754 64位虚数(小数点后15位)
+	var f3 complex64 = 0.3  //32位实数和虚数
+	var f4 complex128 = 0.4 //64位实数和虚数
+	fmt.Println(f1, f2, f3, f4)
 }
 
 func bool_type() {
-	var b1 bool = true;
-	var b2 bool = false;
+	var b1 bool = true
+	var b2 bool = false
 
 	if b1 {
-		fmt.Println(b1);
+		fmt.Println(b1)
 	}
 
 	if !b2 {
-		fmt.Println(b2);
+		fmt.Println(b2)
 	}
 }
 
-func string_type() {	
-	var s1 string = "string1";
-	fmt.Println(s1);
+func string_type() {
+	var s1 string = "string1"
+	fmt.Println(s1)
 }
 
-
 /*
-	 pointer,array,struct,
-	 channel,函数类型,切片类型,interface,map	 
+ pointer,array,struct,
+ channel,函数类型,切片类型,interface,map
 */
 func other_type() {
 	//pointer details see variable_pointer.go for reference
-	var i int = 1;
-	fmt.Println(&i);
- 	
- 	//array [length]type{val,...} 数组长度不可变,不可追加元素(不可使用append())
-	var a1 = [...]string{"a","b"};
+	var i int = 1
+	fmt.Println(&i)
+
+	//array [length]type{val,...} 数组长度不可变,不可追加元素(不可使用append())
+	var a1 = [...]string{"a", "b"}
 	for i := 0; i < len(a1); i++ {
-		fmt.Println(a1[i]);
+		fmt.Println(a1[i])
 	}
 
 	//slice 切片(长度可变的数组)
 	//见variable_slice.go
-	
 
 	//struct
 	type obj struct {
 		name string
-		age int
+		age  int
 	}
-	var s3 obj = obj{"candyxu",40};
-	s1 := obj{age:12,name:"v_kenqzhang"};
-	s2 := obj{"v_kenqzhang1",12};
-	fmt.Println(s1,s2,s2.name,s3);	
+	var s3 obj = obj{"candyxu", 40}
+	s1 := obj{age: 12, name: "v_kenqzhang"}
+	s2 := obj{"v_kenqzhang1", 12}
+	fmt.Println(s1, s2, s2.name, s3)
 
 	//channel
 	//不带长度的管道(双向,<-,->单向)
 	/*var ch1 chan string;
-	var ch2 chan int;
-	var chs []chan string;
-	ch4 := make(chan string);
-	ch5 := make(chan int);
-    ch1<- "1";
-    ch2<- 1;
-    chs[0]<- "1";
+		var ch2 chan int;
+		var chs []chan string;
+		ch4 := make(chan string);
+		ch5 := make(chan int);
+	    ch1<- "1";
+	    ch2<- 1;
+	    chs[0]<- "1";
 
-	//带长度的管道
-	ch6 := make([]chan string,5);*/
+		//带长度的管道
+		ch6 := make([]chan string,5);*/
 }
-
