@@ -77,6 +77,8 @@ func conv()  {
 	//string -> int
 	if sN, err := strconv.Atoi(s1);err != nil {
 		fmt.Println(err)
+		//终止程序的执行
+		os.Exit(-1)
 	} else {
 		fmt.Println(sN)
 	}

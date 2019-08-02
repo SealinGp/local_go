@@ -3,14 +3,6 @@ package main
 import (
 	"fmt"
 	"os"
-	"strings"
-
-	//"strconv"
-	"time"
-)
-
-const (
-	timeLayOut = "2006:01:02:15:04:05"
 )
 
 /*
@@ -30,16 +22,36 @@ func main() {
 }
 func execute(funcN string)  {
 	funcMap := map[string]func(){
-		"time1" : time1,
-		"time2" : time2,
+		"switch1" : switch1,
+		"switch2" : switch2,
 	}
 	funcMap[funcN]()
 }
-func time1()  {
-	now := time.Now()
-	fmt.Println(
-		strings.Split(now.Format(timeLayOut),":"),
-	)
+
+//fallthrough 找到符合的条件,该条件后面的一个case会执行
+func switch1()  {
+	k := 6
+	switch k {
+	case 4:
+		fmt.Println("was <= 4")
+		fallthrough
+	case 5:
+		fmt.Println("was <= 5")
+		fallthrough
+	case 6:
+		fmt.Println("was <= 6")
+		fallthrough
+	case 7:
+		fmt.Println("was <= 7")
+	case 8:
+		fmt.Println("was <= 8")
+		fallthrough
+	default:
+		fmt.Println("default case")
+	}
+}
+
+func switch2()  {
 	a := 5
 	switch a  {
 	case 5:
@@ -49,13 +61,4 @@ func time1()  {
 	default:
 		fmt.Println("a = none")
 	}
-
-	/*a1 := []uint8{5,6,7}
-	var c,d uint8
-	switch c,d = a1[0],a1[1] {
-	case c == 5:
-		fmt.Println(a1[0])
-	case d == 6:
-		fmt.Println(a1[1])
-	}*/
 }
