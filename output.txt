@@ -330,3 +330,31 @@ exit status 2
 /usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/recursive.go rec1]
 /root/www/sea/local_go/ after GOPATH
 ---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/func.go func3]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/strings.go str2]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+stat /root/www/sea/local_go/src/practice/strings.go: no such file or directory
+2019/08/02 17:24:07 cgi: no headers
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/package/strings.go str2]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+stat /root/www/sea/local_go/src/package/strings.go: no such file or directory
+2019/08/02 17:24:34 cgi: no headers
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/packages/strings.go str2]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/packages/strings.go str2]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/packages/strings.go str2]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/packages/strings.go str2]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/packages/strings.go str2]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------

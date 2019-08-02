@@ -27,6 +27,7 @@ func execute(n string) {
 	funs := map[string]func(){
 		"str1" : str1,
 		"conv" : conv,
+		"str2" : str2,
 	}
 	funs[n]()
 }
@@ -91,4 +92,22 @@ func conv()  {
 	} else {
 		fmt.Println(sN1)
 	}
+}
+
+func str2()  {
+	a := 'A'
+	var b rune = 'Z'
+	var c rune = '哈'
+	fmt.Println(a,b,c,len([]rune{c}))
+
+	//rot13 := func(r rune) rune {
+	//	switch {
+	//	case r >= 'A' && r <= 'Z':
+	//		return 'A' + (r-'A'+13)%26
+	//	case r >= 'a' && r <= 'z':
+	//		return 'a' + (r-'a'+13)%26
+	//	}
+	//	return r
+	//}
+	//fmt.Println(strings.Map(rot13, "'Twas brillig and the slithy gopher..."))
 }

@@ -21,6 +21,7 @@ func execute(funcN string)  {
 	funcMap := map[string]func(){
 		"func1":func1,
 		"func2":func2,
+		"func3":func3,
 	}
 	funcMap[funcN]()
 }
@@ -51,4 +52,16 @@ func func2() ()  {
 }
 func func2_1(s2 ...string)  {
 	fmt.Println(s2)
+}
+
+//call back
+func func3() {
+	func3_2(1,2,func3_1)
+}
+func func3_1(a,b int) (int) {
+	fmt.Println(a,b,a + b)
+	return a
+}
+func func3_2(a,b int,f func(int,int) (int))  {
+	f(a,b)
 }

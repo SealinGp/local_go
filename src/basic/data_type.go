@@ -6,6 +6,15 @@ import (
 )
 
 /*
+1 bit(二进制位) 一个二进制位,一个二进制位 表示两种状态,0或1
+8 bit 00000000 ~ 11111111
+
+ASCII   : 英语字符 和 二进制位 的映射
+
+http://www.ruanyifeng.com/blog/2007/10/ascii_unicode_and_utf-8.html
+Unicode : 这是一种所有符号的编码,Unicode 只是一个符号集,它只规定了符号的二进制代码,却没有规定这个二进制代码应该如何存储
+UTF-8 就是在互联网上使用最广的一种 Unicode 的实现方式
+
 1 b(字节byte) = 8 bit(比特)
 1 Kb          = 1024 b
 1 Mb          = 1024 Kb
@@ -99,16 +108,25 @@ func execute(n string) {
 		"number_type": number_type,
 		"string_type": string_type,
 		"other_type":  other_type,
+		"type1":  type1,
 	}
 	funs[n]()
 }
 
 /*
-	int int8 int16 int32 int64
+	int int8 int16 int32(rune) int64
 
-	uint8(byte) uint16 uint32(rune) uint64
+	uint8(byte) uint16 uint32 uint64
 
 	float32 float64 complex64 complex128
+
+    rune:
+		unicode code point
+		(表示unicode编码的int值,相当于java中的char,go本身是utf-8编码的,1个unicode=2个字节),
+		alias for int32
+		[]rune(s string) 可以将s转为 unicode code point
+    byte:
+		raw data, alias for uint8
 */
 func number_type() {
 	var i1 int = 1   //int32
@@ -122,7 +140,7 @@ func number_type() {
 	var ui2 byte = 5   //0~255
 	var ui3 uint16 = 6 //0~65535
 	var ui4 uint32 = 7 //0~4294967295
-	var ui5 rune = 7   //uint32
+	var ui5 rune = 7   //int32
 	var ui6 uint64 = 8 //0~18446744073709551615
 	fmt.Println(ui1, ui2, ui3, ui4, ui5, ui6)
 
@@ -192,4 +210,18 @@ func other_type() {
 
 		//带长度的管道
 		ch6 := make([]chan string,5);*/
+}
+
+func type1()  {
+	s := "中文检查"
+	rs := []rune(s)
+	fmt.Println(
+		len(rs),
+		string(rs[:2]),
+	) //2 中文
+
+	fmt.Println(
+		len(s),
+		s[:2],
+	) //12(3*4) ??
 }
