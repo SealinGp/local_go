@@ -8,7 +8,7 @@ import (
 )
 
 /*
-tar打包文件
+string package
 */
 func init() {
 	fmt.Println("Content-Type:text/plain;charset=utf-8\n\n")
@@ -95,19 +95,18 @@ func conv()  {
 }
 
 func str2()  {
-	a := 'A'
-	var b rune = 'Z'
-	var c rune = '哈'
-	fmt.Println(a,b,c,len([]rune{c}))
-
-	//rot13 := func(r rune) rune {
-	//	switch {
-	//	case r >= 'A' && r <= 'Z':
-	//		return 'A' + (r-'A'+13)%26
-	//	case r >= 'a' && r <= 'z':
-	//		return 'a' + (r-'a'+13)%26
-	//	}
-	//	return r
-	//}
-	//fmt.Println(strings.Map(rot13, "'Twas brillig and the slithy gopher..."))
+	//当前字母往后推,第14位
+	rot13 := func(r rune) rune {
+		var r1 rune
+		switch {
+			case r >= 'A' && r <= 'Z':
+				r1 = 'A' + (r-'A'+13)%26
+			case r >= 'a' && r <= 'z':
+				r1 = 'a' + (r-'a'+13)%26
+			default:
+				r1 = r
+		}
+		return r1
+	}
+	fmt.Println(strings.Map(rot13, "Twas brillig and the slithy gopher..."))
 }

@@ -14,7 +14,7 @@ const (
 )
 
 /*
-tar打包文件
+time packages
 */
 func init() {
 	fmt.Println("Content-Type:text/plain;charset=utf-8\n\n")

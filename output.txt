@@ -358,3 +358,362 @@ stat /root/www/sea/local_go/src/package/strings.go: no such file or directory
 /usr/local/go/bin/go [run /root/www/sea/local_go/src/packages/strings.go str2]
 /root/www/sea/local_go/ after GOPATH
 ---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/packages/strings.go str2]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/packages/strings.go str2]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/packages/strings.go str2]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/packages/strings.go str2]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/packages/strings.go str2]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/packages/strings.go str2]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/packages/strings.go str2]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/noneFunc.go noneFunc1]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/noneFunc.go noneFunc1]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/noneFunc.go noneFunc1]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/noneFunc.go noneFunc2]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+panic: runtime error: invalid memory address or nil pointer dereference
+[signal SIGSEGV: segmentation violation code=0x1 addr=0x0 pc=0x48570b]
+
+goroutine 1 [running]:
+main.execute(0x7fffb685bafe, 0x9)
+	/root/www/sea/local_go/src/practice/noneFunc.go:28 +0xfb
+main.main()
+	/root/www/sea/local_go/src/practice/noneFunc.go:21 +0x92
+exit status 2
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/noneFunc.go noneFunc2]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/noneFunc.go noneFunc3]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+panic: runtime error: invalid memory address or nil pointer dereference
+[signal SIGSEGV: segmentation violation code=0x1 addr=0x0 pc=0x485758]
+
+goroutine 1 [running]:
+main.execute(0x7fff58bb0afe, 0x9)
+	/root/www/sea/local_go/src/practice/noneFunc.go:29 +0x148
+main.main()
+	/root/www/sea/local_go/src/practice/noneFunc.go:21 +0x92
+exit status 2
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/noneFunc.go noneFunc3]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/recurisive.go rec1]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+stat /root/www/sea/local_go/src/practice/recurisive.go: no such file or directory
+2019/08/05 11:47:06 cgi: no headers
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/recursive.go rec1]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/recursive.go rec2]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/recursive.go rec2]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/recursive.go rec2]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/recursive.go rec2]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/recursive.go rec2]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/noneFunc.go noneFunc3]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/recursive.go rec2]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/recursive.go rec2]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+panic: runtime error: index out of range
+
+goroutine 1 [running]:
+main.fib2.func1(0x1, 0x2f0824175214c801)
+	/root/www/sea/local_go/src/practice/recursive.go:67 +0x110
+main.rec2()
+	/root/www/sea/local_go/src/practice/recursive.go:54 +0xaf
+main.execute(0x7fff4cf8aaed, 0x4)
+	/root/www/sea/local_go/src/practice/recursive.go:25 +0x14d
+main.main()
+	/root/www/sea/local_go/src/practice/recursive.go:18 +0x92
+exit status 2
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/recursive.go rec2]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/recursive.go rec2]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/recursive.go rec2]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+panic: runtime error: index out of range
+
+goroutine 1 [running]:
+main.fib2.func1(0x1, 0x17a376171378c101)
+	/root/www/sea/local_go/src/practice/recursive.go:73 +0x11e
+main.rec2()
+	/root/www/sea/local_go/src/practice/recursive.go:60 +0xaf
+main.execute(0x7fffb8132aed, 0x4)
+	/root/www/sea/local_go/src/practice/recursive.go:25 +0x14d
+main.main()
+	/root/www/sea/local_go/src/practice/recursive.go:18 +0x92
+exit status 2
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/recursive.go rec2]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+panic: runtime error: index out of range
+
+goroutine 1 [running]:
+main.fib2.func1(0x1, 0x7fffdaf7baed)
+	/root/www/sea/local_go/src/practice/recursive.go:75 +0x11e
+main.rec2()
+	/root/www/sea/local_go/src/practice/recursive.go:60 +0xc0
+main.execute(0x7fffdaf7baed, 0x4)
+	/root/www/sea/local_go/src/practice/recursive.go:25 +0x14d
+main.main()
+	/root/www/sea/local_go/src/practice/recursive.go:18 +0x92
+exit status 2
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/recursive.go rec2]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+panic: runtime error: index out of range
+
+goroutine 1 [running]:
+main.fib2.func1(0x1, 0x7fff2380aaed)
+	/root/www/sea/local_go/src/practice/recursive.go:75 +0x1a5
+main.rec2()
+	/root/www/sea/local_go/src/practice/recursive.go:60 +0xc0
+main.execute(0x7fff2380aaed, 0x4)
+	/root/www/sea/local_go/src/practice/recursive.go:25 +0x14d
+main.main()
+	/root/www/sea/local_go/src/practice/recursive.go:18 +0x92
+exit status 2
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/recursive.go rec2]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/noneFunc.go noneFunc4]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+# command-line-arguments
+/root/www/sea/local_go/src/practice/noneFunc.go:5:2: imported and not used: "log"
+2019/08/05 14:43:31 cgi: no headers
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/noneFunc.go noneFunc4]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/noneFunc.go noneFunc4]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/noneFunc.go noneFunc4]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/noneFunc.go noneFunc4]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/noneFunc.go noneFunc4]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/noneFunc.go noneFunc4]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/noneFunc.go noneFunc4]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/noneFunc.go noneFunc4]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/noneFunc.go noneFunc4]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/noneFunc.go noneFunc4]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/noneFunc.go noneFunc4]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/recursive.go rec1]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/recursive.go rec1]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/recursive.go rec2]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/recursive.go rec1]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/recursive.go rec2]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/recursive.go rec2]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/recursive.go rec3]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+# command-line-arguments
+/root/www/sea/local_go/src/practice/recursive.go:103:9: undefined: fibonacci
+2019/08/05 15:24:52 cgi: no headers
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/recursive.go rec3]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+panic: runtime error: invalid memory address or nil pointer dereference
+[signal SIGSEGV: segmentation violation code=0x1 addr=0x0 pc=0x48ebf8]
+
+goroutine 1 [running]:
+main.execute(0x7fff127ecaed, 0x4)
+	/root/www/sea/local_go/src/practice/recursive.go:26 +0x148
+main.main()
+	/root/www/sea/local_go/src/practice/recursive.go:19 +0x92
+exit status 2
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/recursive.go rec3]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+panic: runtime error: invalid memory address or nil pointer dereference
+[signal SIGSEGV: segmentation violation code=0x1 addr=0x0 pc=0x48ebf8]
+
+goroutine 1 [running]:
+main.execute(0x7fff7044daed, 0x4)
+	/root/www/sea/local_go/src/practice/recursive.go:26 +0x148
+main.main()
+	/root/www/sea/local_go/src/practice/recursive.go:19 +0x92
+exit status 2
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/recursive.go rec3]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/recursive.go rec2]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/recursive.go rec3]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/recursive.go rec3]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/recursive.go rec2]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/recursive.go rec3]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/recursive.go rec2]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/recursive.go rec3]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/recursive.go rec2]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/recursive.go rec3]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/noneFunc.go noneFunc5]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/noneFunc.go noneFunc6]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/noneFunc.go noneFunc6]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/noneFunc.go noneFunc7]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/array.go slice1]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/array.go slice1]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/array.go slice1]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/array.go slice1]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/array.go slice1]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/array.go slice1]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/array.go slice1]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/array.go slice1]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/array.go slice1]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/array.go slice1]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/array.go slice1]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/array.go slice1]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/array.go slice1]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/array.go slice1]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/array.go slice1]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/array.go slice1]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/array.go slice1]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/array.go slice1]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+# command-line-arguments
+/root/www/sea/local_go/src/practice/array.go:6:2: imported and not used: "go/types"
+2019/08/05 17:05:39 cgi: no headers
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/array.go slice1]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/array.go ny1]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+panic: runtime error: invalid memory address or nil pointer dereference
+[signal SIGSEGV: segmentation violation code=0x1 addr=0x0 pc=0x485a8f]
+
+goroutine 1 [running]:
+main.execute(0x7fff47213b19, 0x3)
+	/root/www/sea/local_go/src/practice/array.go:33 +0x22f
+main.main()
+	/root/www/sea/local_go/src/practice/array.go:22 +0x92
+exit status 2

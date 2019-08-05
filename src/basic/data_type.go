@@ -87,6 +87,14 @@ https://github.com/unknwon/the-way-to-go_ZH_CN/blob/master/eBook/04.5.md
 \n : 换行
 \r : 回车
 \t : tab键
+
+rune类型中,一个中文占一个字节(相当于java中的char类型),
+ascii 对应的转换为
+rune -> string  65 -> 'A'
+r1 := 'A'
+r1Str := string(r1)
+
+string类型中,一个中文占3个字节
 */
 //执行顺序 全局变量初始化->init函数执行->main函数执行->defer函数执行
 func init() {
