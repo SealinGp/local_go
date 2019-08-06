@@ -3,11 +3,12 @@ package main
 import (
 	"bytes"
 	"fmt"
+	"math"
 	"os"
 )
 
 /*
-array
+7.array slice []bytes string
 */
 func init() {
 	fmt.Println("Content-Type:text/plain;charset=utf-8\n\n")
@@ -30,6 +31,11 @@ func execute(n string) {
 		"by1" : by1,
 		"slice2" : slice2,
 		"slice3" : slice3,
+		"slice4" : slice4,
+		"slice5" : slice5,
+		"app1" : app1,
+		"slice6" : slice6,
+		"slice7" : slice7,
 	}
 	if nil == funs[n] {
 		fmt.Println("func",n,"unregistered")
@@ -161,11 +167,135 @@ func slice2()  {
 	fmt.Println(sum(f))
 }
 
-//切片重组(reslice) [indexStart:indexEnd] len = indexEnd - indexStart
-func slice3()  {
+//切片重组(reslice) 左闭右开[)[indexStart:indexEnd] len = indexEnd - indexStart
+ func slice3()  {
 	a := [5]int{9,8,7,6}
 	a1 := a[2:3]
 	fmt.Println(a1)
 	a1 = a[2:4]
 	fmt.Println(a1)
+}
+
+/*
+切片复制
+copy(dst,src) 将 src切片 复制到 dst切片 上(对应位置),
+返回复制的数量
+*/
+func slice4()  {
+	sl_from := []int{1,2,3,4}
+	sl_to   := make([]int,10)
+	n := copy(sl_to,sl_from)
+	fmt.Println(sl_to,n,len(sl_to))
+}
+
+/*
+https://github.com/unknwon/the-way-to-go_ZH_CN/blob/master/eBook/07.5.md
+切片append扩容
+*/
+func AppendByte(slice []byte,data ...byte) ([]byte) {
+	sLen := len(slice)
+	totalLen := sLen + len(data)
+	//扩容,新建一个内存
+	if totalLen > cap(slice) {
+		//扩容的长度为原本长度+要推进去的切片的长度
+		newSlice := make([]byte,(totalLen+1)*2)
+		copy(newSlice,slice)
+		slice = newSlice
+	}
+	slice = slice[0:totalLen]
+	copy(slice[sLen:totalLen],data)
+	return slice
+}
+
+//过滤出偶数的切片
+func slice5()  {
+	s  := []int{1,2,3,4}
+	fn := func(i int) (ou bool) {
+		if i%2 == 0 {
+			ou = true
+		}
+		return
+	}
+	a := Filter(s,fn)
+	fmt.Println(a)
+}
+func Filter(s []int,fn func(int) bool) (s1 []int) {
+	for _,si := range s  {
+		if fn(si) {
+			s1 = append(s1,si)
+		}
+	}
+	return
+}
+
+//https://github.com/unknwon/the-way-to-go_ZH_CN/blob/master/eBook/07.6.md
+//append函数用法
+func app1() {
+	//1.切片追加
+	s1 := make([]int, 0)
+	s2 := []int{1, 2, 3}
+	s1 = append(s1, s2...) //<=> append(s1,s2[0],s2[1],s2[2])
+	fmt.Println(s1)
+
+	//2.复制
+	s3 := make([]int, len(s1)*2)
+	copy(s3[len(s1)-1:], s1)
+	fmt.Println(s3)
+
+	//3.删除位于索引i的元素
+	i := 2
+	s3 = append(s3[:i], s3[i+1:]...)
+	fmt.Println(s3)
+
+	//4.i~j 切除
+	j := 3
+	s3 = append(s3[:i], s3[j:]...)
+	fmt.Println(s3)
+
+	//5.切片拓展
+	s3 = append(s3, make([]int, 3)...)
+	fmt.Println(s3)
+
+	//6.索引i插入元素
+	s3 = append(s3[:i-1], 3)
+	fmt.Println(s3)
+
+	//7.索引i追加长度为j的新切片
+	s3 = append(s3[:i], []int{1, 3, 4}...)
+	fmt.Println(s3)
+
+	//切片和垃圾回收
+	//https://github.com/unknwon/the-way-to-go_ZH_CN/blob/master/eBook/07.6.md
+}
+
+func slice6()  {
+	str := "abcdefgf"
+	//efgf + abcd
+	a   := str[len(str)/2:] + str[:len(str)/2]
+	fmt.Println(str[len(str)/2:],str[:len(str)/2],a)
+	fmt.Println(str[len(str)/2:len(str)])
+}
+
+//翻转slice []byte string
+func slice7()  {
+	str    := "Google"
+	strSli := []byte(str)
+	L      := len(strSli)
+	half   := 0
+	//长度为奇数需要处理一下,中间的那个数不需要翻转
+	if L%2 != 0 {
+		half = int(math.Ceil(float64(L/2)))
+	} else {
+		half = L/2
+	}
+	j      := L-1
+	var a byte
+	for i := range strSli[:half]  {
+		a = strSli[i]
+		strSli[i] = strSli[j]
+		strSli[j] = a
+		j--
+	}
+	str = string(strSli)
+	fmt.Println(str)
 }

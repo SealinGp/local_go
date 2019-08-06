@@ -31,7 +31,6 @@ func main() {
 func execute(funcN string)  {
 	funcMap := map[string]func(){
 		"time1" : time1,
-		"time2" : time2,
 	}
 	funcMap[funcN]()
 }

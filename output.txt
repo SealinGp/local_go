@@ -717,3 +717,332 @@ main.execute(0x7fff47213b19, 0x3)
 main.main()
 	/root/www/sea/local_go/src/practice/array.go:22 +0x92
 exit status 2
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/array.go ny1]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/array.go ny1]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/array.go ny1]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/array.go by1]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/array.go by1]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/array.go by1]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/array.go by1]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/array.go by1]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/array.go by1]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/array.go by1]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/array.go by1]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/array.go by1]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/array.go slice2]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/array.go slice2]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/array.go slice2]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/array.go slice2]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/array.go slice2]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/func.go func2]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/array.go slice3]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/array.go slice3]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/array.go slice3]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+# command-line-arguments
+/root/www/sea/local_go/src/practice/array.go:167:9: invalid slice index: 2 > 1
+2019/08/05 17:50:03 cgi: no headers
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/array.go slice3]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/array.go slice3]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/array.go slice3]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/array.go slice3]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/array.go slice3]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/array.go slice3]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/array.go slice4]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/array.go slice4]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/array.go slice4]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/array.go slice4]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/array.go slice4]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/array.go slice5]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/array.go slice5]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/array.go app1]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/array.go app1]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/array.go app1]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/array.go app1]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/array.go app1]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/array.go app1]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/array.go app1]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/array.go app1]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/array.go app1]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/array.go app1]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/array.go app1]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/array.go app1]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/array.go slice6]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/array.go slice6]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/array.go slice6]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/array.go slice7]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/array.go slice7]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/array.go slice7]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/array.go slice7]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/array.go slice7]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/array.go slice7]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/array.go slice7]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+exit status 1
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/array.go slice7]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+exit status 1
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/array.go slice7]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+exit status 1
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/array.go slice7]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+exit status 1
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/array.go slice7]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+exit status 1
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/array.go slice7]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+exit status 1
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/array.go slice7]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+exit status 1
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/array.go slice7]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+exit status 1
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/array.go slice7]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+exit status 1
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/array.go slice7]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+exit status 1
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/array.go slice7]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+exit status 1
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/array.go slice7]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+exit status 1
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/array.go slice7]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/array.go slice7]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+exit status 1
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/array.go slice7]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+exit status 1
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/array.go slice7]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+exit status 1
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/array.go slice7]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+exit status 1
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/array.go slice7]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/array.go slice7]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/array.go slice7]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+exit status 1
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/array.go slice7]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/array.go slice7]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+exit status 1
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/array.go slice7]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+exit status 1
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/array.go slice7]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/array.go slice7]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/map.go map1]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+# command-line-arguments
+/root/www/sea/local_go/src/practice/map.go:4:2: imported and not used: "bytes"
+/root/www/sea/local_go/src/practice/map.go:6:2: imported and not used: "math"
+2019/08/06 15:14:02 cgi: no headers
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/map.go map1]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/map.go map1]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/map.go map1]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/map.go map1]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/map.go map2]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/map.go map2]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/map.go map2]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+panic: assignment to entry in nil map
+
+goroutine 1 [running]:
+main.map2.func1(0xc000052150, 0xc000052150)
+	/root/www/sea/local_go/src/practice/map.go:61 +0xcf
+main.map2()
+	/root/www/sea/local_go/src/practice/map.go:71 +0x138
+main.execute(0x7fff9ea74aff, 0x4)
+	/root/www/sea/local_go/src/practice/map.go:33 +0x196
+main.main()
+	/root/www/sea/local_go/src/practice/map.go:22 +0x92
+exit status 2
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/map.go map2]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+# command-line-arguments
+/root/www/sea/local_go/src/practice/map.go:59:2: reverse declared and not used
+2019/08/06 15:31:04 cgi: no headers
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/map.go map2]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/map.go map2]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+panic: assignment to entry in nil map
+
+goroutine 1 [running]:
+main.map2.func1(0xc000052150, 0xc000052150)
+	/root/www/sea/local_go/src/practice/map.go:61 +0xcf
+main.map2()
+	/root/www/sea/local_go/src/practice/map.go:71 +0x138
+main.execute(0x7fffc3e5aaff, 0x4)
+	/root/www/sea/local_go/src/practice/map.go:33 +0x196
+main.main()
+	/root/www/sea/local_go/src/practice/map.go:22 +0x92
+exit status 2
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/map.go map2]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
