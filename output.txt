@@ -1046,3 +1046,65 @@ exit status 2
 /usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/map.go map2]
 /root/www/sea/local_go/ after GOPATH
 ---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/struct.go struct1]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+# command-line-arguments
+/root/www/sea/local_go/src/practice/struct.go:6:2: imported and not used: "runtime"
+/root/www/sea/local_go/src/practice/struct.go:7:2: imported and not used: "time"
+2019/08/07 10:11:07 cgi: no headers
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/struct.go struct1]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/struct.go struct2]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/struct.go struct2]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/struct.go struct3]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/struct.go struct3]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/struct.go struct3]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/struct.go struct4]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/interface.go int2]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/interface.go int2]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/interface.go int2]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+exit status 1
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/interface.go int2]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+exit status 1
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/interface.go int2]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+# command-line-arguments
+/root/www/sea/local_go/src/practice/interface.go:73:9: cannot use S (type Simple) as type Simpler in argument to m1:
+	Simple does not implement Simpler (Get method has pointer receiver)
+2019/08/07 15:01:31 cgi: no headers
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/interface.go int2]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+exit status 1
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/interface.go int2]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/interface.go int2]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
+/usr/local/go/bin/go [run /root/www/sea/local_go/src/practice/interface.go int2]
+/root/www/sea/local_go/ after GOPATH
+---------------------------------------------
