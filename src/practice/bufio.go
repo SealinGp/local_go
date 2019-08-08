@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"io"
 	"os"
 	"strings"
 )
@@ -29,6 +30,7 @@ func execute(n string) {
 		"buf1" : buf1,
 		"buf2" : buf2,
 		"buf3" : buf3,
+		"buf4" : buf4,
 	}
 	if nil == funs[n] {
 		fmt.Println("func",n,"unregistered")
@@ -99,4 +101,33 @@ func buf3()  {
 	fmt.Println("words len:",len(words),words)
 
 	fmt.Println("lines len:",strings.Count(input,"\n") + 1)
+}
+
+/*
+文件读取
+
+文件句柄 os.File{}
+标准输入 os.Stdin
+标准输出 os.Stdout
+*/
+func buf4()  {
+	//打开文件句柄 inputF 为 *os.File
+	inputF,inputErr := os.Open("array.go")
+	if inputErr != nil {
+		fmt.Println(inputErr)
+		return
+	}
+	defer inputF.Close()
+
+	inputRe := bufio.NewReader(inputF)
+	for {
+		//碰到'\n'(回车符)为标识符,算一行
+		inputStr,readErr := inputRe.ReadString('\n')
+		fmt.Println(inputStr)
+
+		//判断读到文件末尾跳出
+		if readErr == io.EOF {
+			break
+		}
+	}
 }
