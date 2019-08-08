@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"os"
 	"strings"
 )
@@ -31,6 +32,8 @@ func execute(n string) {
 		"buf2" : buf2,
 		"buf3" : buf3,
 		"buf4" : buf4,
+		"buf5" : buf5,
+		"buf6" : buf6,
 	}
 	if nil == funs[n] {
 		fmt.Println("func",n,"unregistered")
@@ -129,5 +132,45 @@ func buf4()  {
 		if readErr == io.EOF {
 			break
 		}
+	}
+}
+//带缓冲的读取
+func buf5()  {
+	inputF,inputErr := os.Open("array.go")
+	if inputErr != nil {
+		fmt.Println(inputErr)
+		return
+	}
+	defer inputF.Close()
+
+	inputRe := bufio.NewReader(inputF)
+	buf := make([]byte,2048)
+	for {
+		n,err := inputRe.Read(buf)
+		//当读取到末尾的时候,err会为EOF 并且 n 为 0
+		if err != nil && err != io.EOF {
+			fmt.Println("error:",err)
+			break;
+		}
+		if n == 0 {
+			break;
+		}
+	}
+	
+	//读取出来的顺序是乱的
+	fmt.Println(string(buf))
+}
+func buf6()  {
+	//读取
+	buf,err := ioutil.ReadFile("array.go")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	//写出到其他文件
+	err = ioutil.WriteFile("a.go",buf,0644)
+	if err != nil {
+		fmt.Println(err)
 	}
 }
