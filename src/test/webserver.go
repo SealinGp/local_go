@@ -6,8 +6,12 @@ import (
 	"net/http"
 	"net/http/cgi"
 	"os"
+	"time"
 )
 
+const (
+	timeLayOut = "2006/01/02 15:04:05"
+)
 /*
 how to run webserver.go
 one way:
@@ -16,7 +20,7 @@ one way:
 
 another way:
 [~/local_go/src]  local_go_pwd=$(pwd)
-[~/local_go/src]  go run test/webserver.go $local_go_pwd >>../output.txt 2>&1 &
+[~/local_go/src]  go run test/webserver.go $local_go_pwd >>../debugger.log 2>&1 &
 
 another way:
 change the variable ` pwdDir = "/root/www/local_go" ` to your relevant directory(~/local_go)
@@ -67,8 +71,8 @@ func handleFunc(res http.ResponseWriter, req *http.Request) {
 	}
 	handler.Args = append(handler.Args, args...)
 
+	fmt.Println("--------------------------------------")
+	fmt.Println(time.Now().Format(timeLayOut))
 	fmt.Println(handler.Path, handler.Args)
-	fmt.Println(os.Getenv("GOPATH"), "after GOPATH")
-	fmt.Println("---------------------------------------------")
 	handler.ServeHTTP(res, req)
 }

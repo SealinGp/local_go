@@ -1,0 +1,102 @@
+package main
+
+import (
+	"bufio"
+	"fmt"
+	"os"
+	"strings"
+)
+
+/*
+https://github.com/unknwon/the-way-to-go_ZH_CN/blob/master/eBook/12.0.md
+读写数据
+*/
+func init() {
+	fmt.Println("Content-Type:text/plain;charset=utf-8\n\n")
+}
+func main() {
+	args := os.Args
+	if len(args) <= 1 {
+		fmt.Println("lack param ?func=xxx")
+		return
+	}
+
+	execute(args[1])
+}
+
+func execute(n string) {
+	funs := map[string]func(){
+		"buf1" : buf1,
+		"buf2" : buf2,
+		"buf3" : buf3,
+	}
+	if nil == funs[n] {
+		fmt.Println("func",n,"unregistered")
+		return
+	}
+	funs[n]()
+}
+
+//读取用户输入方法1
+func buf1()  {
+	var (
+		firstName,lastName,s string
+		i int
+		f32 float32
+		input  = "56.12 / 5212 / Go"
+		format = "%f / %d / %s"
+	)
+
+	fmt.Println("enter full name:")
+	//扫描来自标准输入的文本,将空格分隔的值一次存放到后续的参数内,直到碰到换行
+	fmt.Scanln(&firstName,&lastName)
+
+	fmt.Println("hi",firstName,lastName)
+
+	//?
+	fmt.Sscanf(input,format,&f32,&i,&s)
+	fmt.Println(f32,i,s)
+}
+//读取用户输入方法2:缓冲读取
+func buf2()  {
+	var (
+		inputReader *bufio.Reader
+		input string
+		err error
+	)
+	inputReader = bufio.NewReader(os.Stdin)
+	fmt.Println("enter some input:")
+	input,err = inputReader.ReadString('\n')
+	if err == nil {
+		fmt.Println("input is",input)
+	}
+}
+
+func buf3()  {
+	/*
+	linux下
+	\n : 换行(回车)
+	\r : 空格
+	*/
+	inputReader := bufio.NewReader(os.Stdin)
+	fmt.Println("enter input:")
+	input,err := inputReader.ReadString('S')
+
+	if err != nil {
+		fmt.Println("sry,procedure error!msg:",err)
+		return
+	}
+
+	fmt.Println("input len:",len(input) - strings.Count(input,"\r") - strings.Count(input,"\n"))
+
+	//计算每一行 以空格分隔的有多少个单词
+	a := strings.Split(input,"\n")
+	words := make([]string,0)
+	for _,v := range a {
+		word := strings.Split(v," ")
+		words = append(words, word...)
+	}
+	fmt.Println("words len:",len(words),words)
+
+	fmt.Println("lines len:",strings.Count(input,"\n") + 1)
+}
