@@ -6,12 +6,13 @@ import (
 	"io"
 	"io/ioutil"
 	"os"
+	"strconv"
 	"strings"
 )
 
 /*
-https://github.com/unknwon/the-way-to-go_ZH_CN/blob/master/eBook/12.0.md
-读写数据
+https://github.com/unknwon/the-way-to-go_ZH_CN/blob/master/eBook/12.2.md
+缓冲 读写数据(包含命令行,文件读写)
 */
 func init() {
 	fmt.Println("Content-Type:text/plain;charset=utf-8\n\n")
@@ -34,6 +35,7 @@ func execute(n string) {
 		"buf4" : buf4,
 		"buf5" : buf5,
 		"buf6" : buf6,
+		"buf7" : buf7,
 	}
 	if nil == funs[n] {
 		fmt.Println("func",n,"unregistered")
@@ -160,6 +162,7 @@ func buf5()  {
 	//读取出来的顺序是乱的
 	fmt.Println(string(buf))
 }
+//整个读取出来
 func buf6()  {
 	//读取
 	buf,err := ioutil.ReadFile("array.go")
@@ -173,4 +176,49 @@ func buf6()  {
 	if err != nil {
 		fmt.Println(err)
 	}
+}
+
+// https://github.com/unknwon/the-way-to-go_ZH_CN/blob/master/eBook/12.2.md
+// csv文件读取
+// 练习
+func buf7()  {
+	file,err := os.Open("product.txt")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	defer file.Close()
+
+	reader := bufio.NewReader(file)
+	type product struct {
+		title string
+		price float64
+		quantity int
+	}
+	var products []product
+	for  {
+		rowString,err := reader.ReadString('\n')
+		pro := product{}
+		str := strings.Split(rowString,";")
+		if len(str) >= 3 {
+			pro.title    = str[0]
+			if v,er := strconv.ParseFloat(str[1],64);er == nil {
+				pro.price = v
+			}
+			if v,er := strconv.Atoi(str[2]);er == nil {
+				pro.quantity = v
+			}
+		}
+
+		products = append(products,pro)
+		if err != nil && err != io.EOF {
+			fmt.Println("error:",err)
+			break
+		}
+		if err == io.EOF {
+			break
+		}
+	}
+
+	fmt.Println(products)
 }

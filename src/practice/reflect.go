@@ -27,6 +27,7 @@ func execute(n string) {
 	funs := map[string]func(){
 		"ref1" : ref1,
 		"ref2" : ref2,
+		"ref3" : ref3,
 	}
 	if nil == funs[n] {
 		fmt.Println("func",n,"unregistered")
@@ -82,4 +83,25 @@ func ref2()  {
 	res := value.MethodByName("String").Call([]reflect.Value{sv1,sv2})
 	//res := value.Method(0).Call([]reflect.Value{sv})
 	fmt.Println(res)
+}
+
+//通过反射设置值
+func ref3()  {
+	//普通值
+	a  := 123
+	av := reflect.ValueOf(&a).Elem()
+	av.SetInt(456)
+	fmt.Println(a)
+
+	//结构值(属性名必须大写(public),否则不可设置)
+	type s struct {
+		Name string
+		Age uint8
+	}
+	b := s{}
+	bv := reflect.ValueOf(&b).Elem()
+	bv.Field(0).SetString("abc")
+	var ua uint8 = 12
+	bv.Field(1).Set(reflect.ValueOf(ua))
+	fmt.Println(b)
 }
