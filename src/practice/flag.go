@@ -10,7 +10,7 @@ import (
 
 /*
 https://github.com/unknwon/the-way-to-go_ZH_CN/blob/master/eBook/12.4.md
-解析命令行
+解析命令行,获取参数,生成使用文档
 */
 func init() {
 	//fmt.Println("Content-Type:text/plain;charset=utf-8\n\n")
@@ -29,6 +29,8 @@ func execute(n string) {
 	funs := map[string]func(){
 		"flag1" : flag1,
 		"flag2" : flag2,
+		"flag3" : flag3,
+		"flag4" : flag4,
 	}
 	if nil == funs[n] {
 		fmt.Println("func",n,"unregistered")
@@ -105,7 +107,12 @@ func cat(r *bufio.Reader)  {
 //https://github.com/unknwon/the-way-to-go_ZH_CN/blob/master/eBook/12.6.md
 //用切片读写文件
 func flag3()  {
-
+	file,err := os.Open("a.txt")
+	if err != nil {
+		//os.Stdout.WriteString(err.Error())
+		return
+	}
+	cat2(file)
 }
 func cat2(file *os.File)  {
 	const NBUF  = 512
@@ -113,15 +120,54 @@ func cat2(file *os.File)  {
 	var buf [NBUF]byte
 	for {
 		switch nr,err := file.Read(buf[:]);true {
-		case nr < 0:
+		case nr < 0:  //err != os.EOF && err != nil
 			os.Stderr.WriteString("cat: error reading: " + err.Error())
 			os.Exit(1)
-		case nr == 0: //EOF
+		case nr == 0: //err = os.EOF
 			return
-		case nr > 0:
+		case nr > 0: //err = nil
+			buf[nr-1] = '\n'
 			if nw, ew := os.Stdout.Write(buf[0:nr]); nw != nr {
 				os.Stderr.WriteString("cat: error writing: " + ew.Error())
 			}
-		}		
+		}
+	}
+}
+//用切片读取文件2
+func flag4()  {
+	flag.Parse()
+	if flag.NArg() <= 1 {
+		fmt.Println("no file")
+		return
+	}
+	for i := 0; i < flag.NArg(); i++ {
+		if i == 0 {
+			continue
+		}
+		f,err := os.Open(flag.Arg(i))
+		if f == nil {
+			os.Stderr.WriteString(err.Error())
+			os.Exit(1)
+		}
+		cat3(f)
+		f.Close()
+	}
+}
+func cat3(file *os.File)  {
+	const NBUF  = 512
+	var buf [NBUF]byte
+	for {
+		switch nr,err := file.Read(buf[:]);true {
+		case nr < 0 :
+			os.Stderr.WriteString("cat: error reading: " + err.Error())
+			os.Exit(1)
+		case nr == 0 :
+			return
+		case nr > 0 :
+			buf[nr-1] = '\n'
+			if nw, ew := os.Stdout.Write(buf[0:nr]); nw != nr {
+				os.Stderr.WriteString("cat: error writing: " + ew.Error())
+			}
+		}
 	}
 }
