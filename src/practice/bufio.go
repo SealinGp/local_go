@@ -13,6 +13,31 @@ import (
 /*
 https://github.com/unknwon/the-way-to-go_ZH_CN/blob/master/eBook/12.2.md
 缓冲 读写数据(包含命令行,文件读写)
+写文件
+ 程序->内存缓冲->文件
+读文件
+ 程序<-内存缓冲<-文件
+
+from:https://zhuanlan.zhihu.com/p/73690883
+bufio是通过缓冲来提高效率,bufio提供了缓冲区(分配一块内存),
+读写均在缓冲区中,最后在读写文件,降低访问本地磁盘的次数,提高效率
+
+程序读取的内容大小:B1 bytes
+缓冲区大小:B2 bytes
+文件大小:B3 bytes
+读:
+ B2 >= B1时:
+ 文件->缓冲区(读取B2大小的内容)->程序(接收B1大小的内容)
+ 缓冲区剩余:(B2-B1)bytes
+ B2 < B1时:
+ 文件->程序(读取B1大小的内容)
+
+程序写入的内容大小:B1 bytes
+写:
+ B2 >= B1时:
+ 程序->缓冲区(写入B1大小的内容)->文件(写入B1大小的内容)
+ B2 < B1时:
+ 程序->文件(写入B1大小内容)
 */
 func init() {
 	fmt.Println("Content-Type:text/plain;charset=utf-8\n\n")
@@ -138,7 +163,7 @@ func buf4()  {
 }
 //带缓冲的读取
 func buf5()  {
-	inputF,inputErr := os.Open("array.go")
+	inputF,inputErr := os.Open("a.txt")
 	if inputErr != nil {
 		fmt.Println(inputErr)
 		return
@@ -146,6 +171,7 @@ func buf5()  {
 	defer inputF.Close()
 
 	inputRe := bufio.NewReader(inputF)
+	return
 	buf := make([]byte,2048)
 	for {
 		n,err := inputRe.Read(buf)

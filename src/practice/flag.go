@@ -31,6 +31,8 @@ func execute(n string) {
 		"flag2" : flag2,
 		"flag3" : flag3,
 		"flag4" : flag4,
+		"flag5" : flag5,
+		"flag6" : flag6,
 	}
 	if nil == funs[n] {
 		fmt.Println("func",n,"unregistered")
@@ -170,4 +172,67 @@ func cat3(file *os.File)  {
 			}
 		}
 	}
+}
+
+/*
+fmt.Fprintf 写入内容到输出
+数据I/O的模型,3个文件描述符
+os.Stdout 标准输出流
+os.Stderr 标准错误流
+os.Stdin  标准输入流
+*/
+func flag5()  {
+	fmt.Fprintf(os.Stdout,"%s\n","-- unbuffered")
+	buf := bufio.NewWriter(os.Stdout)
+	fmt.Fprintf(buf,"%s\n","buffered")
+
+	buf.Flush()
+}
+
+/*
+练习
+https://github.com/unknwon/the-way-to-go_ZH_CN/blob/master/eBook/12.8.md
+*/
+func flag6()  {
+	inputFile, _  := os.OpenFile("a.txt",os.O_WRONLY,0666)
+	//先写入需要读取的数据
+	str := "ab123asfasfas\ngh456fasgsdsdgash\ngh789jklfjklahjkjk"
+	bw  := bufio.NewWriter(inputFile)
+	bw.WriteString(str)
+	bw.Flush()
+	inputFile.Close()
+
+	inputFile,_   = os.Open("a.txt")
+	outputFile,_ := os.OpenFile("a1.txt",os.O_WRONLY|os.O_CREATE,0666)
+	defer inputFile.Close()
+	defer outputFile.Close()
+
+	inputReader  := bufio.NewReader(inputFile)
+	outputWriter := bufio.NewWriter(outputFile)
+	for {
+		inputString , _, readerError := inputReader.ReadLine()
+		if readerError == io.EOF {
+			fmt.Println("end")
+			break
+		} else if readerError != nil {
+			fmt.Println(readerError)
+			return
+		}
+
+		//第3~第5 [3-1,5-1+1) 左闭右开
+		outputString := string(inputString[2:5]) + "\n"
+		_, err := outputWriter.WriteString(outputString)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+	}
+
+	//缓冲流写入需要刷新
+	e := outputWriter.Flush()
+	if e != nil {
+		fmt.Println(e.Error())
+		return
+	}
+	fmt.Println("Conversion done")
 }
