@@ -48,7 +48,7 @@ func com1()  {
 	os.O_CREATE : 文件不存在则创建
 	os.O_TRUNC :  文件若存在则将该文件长度截为0
 	*/
-	outputF,err := os.OpenFile("output.txt",os.O_WRONLY|os.O_CREATE,0666)
+	outputF,err := os.OpenFile("output.deb",os.O_WRONLY|os.O_CREATE,0666)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -70,7 +70,7 @@ func com1()  {
 
 //不使用缓冲写入内容到文件
 func com2()  {
-	f, _ := os.OpenFile("test.txt",os.O_CREATE|os.O_WRONLY,0666)
+	f, _ := os.OpenFile("test.deb",os.O_CREATE|os.O_WRONLY,0666)
 	defer f.Close()
 	f.WriteString("abc")
 }
@@ -108,7 +108,7 @@ func (page *Page)load()  {
 }
 func com3()  {
 	p := Page{
-		Title: "a.txt",
+		Title: "a.deb",
 		Body:  []byte("adasfafsagd"),
 	}
 
@@ -118,7 +118,7 @@ func com3()  {
 
 //文件拷贝
 func com4()  {
-	w,err := copyF("b.txt","a.txt")
+	w,err := copyF("b.deb","a.deb")
 	if err != nil {
 		fmt.Println(err)
 	}

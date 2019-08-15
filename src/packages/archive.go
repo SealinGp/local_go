@@ -78,9 +78,9 @@ func tar1() {
 	tw := tar.NewWriter(&buf)
 
 	files := []file{
-		{"readme.txt", "This archive contains some text files."},
-		{"gopher.txt", "Gopher names:\nGeorge\nGeoffrey\nGonzo"},
-		{"todo.txt", "Get animal handling license."},
+		{"readme.deb", "This archive contains some text files."},
+		{"gopher.deb", "Gopher names:\nGeorge\nGeoffrey\nGonzo"},
+		{"todo.deb", "Get animal handling license."},
 	}
 
 	//文件写入

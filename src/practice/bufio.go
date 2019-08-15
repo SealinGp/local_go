@@ -163,7 +163,7 @@ func buf4()  {
 }
 //带缓冲的读取
 func buf5()  {
-	inputF,inputErr := os.Open("a.txt")
+	inputF,inputErr := os.Open("a.deb")
 	if inputErr != nil {
 		fmt.Println(inputErr)
 		return
@@ -208,7 +208,7 @@ func buf6()  {
 // csv文件读取
 // 练习
 func buf7()  {
-	file,err := os.Open("product.txt")
+	file,err := os.Open("product.deb")
 	if err != nil {
 		fmt.Println(err)
 		return

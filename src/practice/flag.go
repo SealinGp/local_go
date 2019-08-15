@@ -109,7 +109,7 @@ func cat(r *bufio.Reader)  {
 //https://github.com/unknwon/the-way-to-go_ZH_CN/blob/master/eBook/12.6.md
 //用切片读写文件
 func flag3()  {
-	file,err := os.Open("a.txt")
+	file,err := os.Open("a.deb")
 	if err != nil {
 		//os.Stdout.WriteString(err.Error())
 		return
@@ -194,7 +194,7 @@ func flag5()  {
 https://github.com/unknwon/the-way-to-go_ZH_CN/blob/master/eBook/12.8.md
 */
 func flag6()  {
-	inputFile, _  := os.OpenFile("a.txt",os.O_WRONLY,0666)
+	inputFile, _  := os.OpenFile("a.deb",os.O_WRONLY,0666)
 	//先写入需要读取的数据
 	str := "ab123asfasfas\ngh456fasgsdsdgash\ngh789jklfjklahjkjk"
 	bw  := bufio.NewWriter(inputFile)
@@ -202,8 +202,8 @@ func flag6()  {
 	bw.Flush()
 	inputFile.Close()
 
-	inputFile,_   = os.Open("a.txt")
-	outputFile,_ := os.OpenFile("a1.txt",os.O_WRONLY|os.O_CREATE,0666)
+	inputFile,_   = os.Open("a.deb")
+	outputFile,_ := os.OpenFile("a1.deb",os.O_WRONLY|os.O_CREATE,0666)
 	defer inputFile.Close()
 	defer outputFile.Close()
 

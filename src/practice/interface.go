@@ -104,7 +104,7 @@ func int3()  {
 	var sh Shaper
 	sh = sq1
 
-	//判断该接口变量的类型 t,ok := 接口变量.(*结构变量)
+	//判断该接口变量的类型 t,ok := 接口变量.(结构变量)
 	if t,ok := sh.(*Square);ok {
 		fmt.Println(t,"square")
 	}
