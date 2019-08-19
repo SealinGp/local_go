@@ -46,7 +46,7 @@ var (
 	x = "<Person a='abc'>" +
 		"<FirstName>" + "Laura" + "</FirstName>" +
 		"<LastName>" + "Lynn" +"</LastName>" +
-		"<LN>" + "LN" +"</LN>" +
+		"<LN>" + "LN123" +"</LN>" +
 		"</Persion>"
 )
 func xml1()  {
