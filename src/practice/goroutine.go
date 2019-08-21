@@ -84,6 +84,8 @@ func execute(n string) {
 		"gor7" : gor7,
 		"gor8" : gor8,
 		"gor9" : gor9,
+		"gor10" : gor10,
+		"gor11" : gor11,
 	}
 	if nil == funs[n] {
 		fmt.Println("func",n,"unregistered")
@@ -302,11 +304,12 @@ func gor8_1(c chan<- int,num,step int)  {
 	close(c)
 }
 func gor8_2(c <-chan int,done chan<- bool)  {
+	//它从指定通道中读取数据直到通道关闭，才继续执行下边的代码
 	for n := range c {
 		fmt.Println(n)
 	}
 
-	//当c所有的值都被接收了,则 ok = false
+	//当c所有的值都被接收了(即通道关闭了),则 ok = false
 	k,ok := <-c
 	fmt.Println(k,ok)
 	done <- true
@@ -315,8 +318,11 @@ func gor8_2(c <-chan int,done chan<- bool)  {
 //通道工厂模式
 func gor9()  {
 	ch := make(chan bool)
+
 	stream := gor9_1(3)
 	go gor9_2(stream,ch)
+
+	//go gor9_2(gor9_1(3),ch)
 
 	<-ch
 }
@@ -328,6 +334,8 @@ func gor9_1(n int) chan int  {
 			ch <- i
 			fmt.Println("write",i,"end")
 		}
+
+		//一次向通道内写入超过通道缓存的数量,那么在写入完后需要关闭通道
 		close(ch)
 	}()
 	return ch
@@ -342,5 +350,102 @@ func gor9_2(ch chan int,c chan<- bool)  {
 		}
 		fmt.Println(r)
 		fmt.Println("read 2")
+	}
+}
+
+//通道迭代模式 = 生产者-消费者模式
+//https://github.com/unknwon/the-way-to-go_ZH_CN/blob/master/eBook/14.2.md
+type item string
+type container struct {
+	items []item
+}
+func gor10()  {
+	//确定是否读完
+	done := make(chan bool)
+	con := &container{
+		items:[]item{"abc","def"},
+	}
+	go gor10_2(con,done)
+
+	<-done
+}
+//生产者
+func (c *container)gor10_1() <- chan item  {
+	ch := make(chan item)
+	go func() {
+		for i := 0; i < len(c.items) ; i++ {
+			ch <- c.items[i]
+		}
+		close(ch)
+	}()
+	return ch
+}
+//消费者
+func gor10_2(con *container,d chan<- bool)  {
+	for x := range con.gor10_1()  {
+		fmt.Println(x)
+	}
+
+	d <- true
+}
+
+/*
+管道和选择器模式
+例子:筛选
+*/
+func gor11()  {
+	//main goroutine
+	ch := make(chan int)
+	t := time.Now()
+
+	//write goroutine1
+	go gor11_write(ch)
+	for {
+		//1: 停住
+		//3: 继续 ch=2 prime=2
+
+		//4: 停住
+		prime := <- ch
+
+		//fmt.Println(prime)
+		ch1 := make(chan int)
+
+		//3: 开启一个 filter goroutine ch=0 ch1=0 prime=2
+		go gor11_filter(ch,ch1,prime)
+
+		//3: ch1=0 ch=0
+		ch = ch1
+
+		//3: false
+		//周期后结束
+		if time.Since(t) > time.Millisecond*1 {
+			return
+		}
+	}
+
+}
+func gor11_write(ch chan<- int)  {
+	for i:= 2; ; i++ {
+		//2: i=2 ch=2
+		//5: i=3 ch=3
+		ch <- i
+	}
+
+}
+func gor11_filter(ch <-chan int,ch1 chan<- int,prime int)  {
+	for {
+		//4:停住 ch=0 ch1=0 prime=2
+		//6: 继续 ch=3 i=3
+
+		//7: 停住 ch = 0
+		i := <-ch
+
+		//6: prime=2 i=3
+		fmt.Println(prime,i)
+
+		//6: 3%2 = 1 ch1 = 3
+		if i % prime != 0 {
+			ch1 <- i
+		}
 	}
 }
