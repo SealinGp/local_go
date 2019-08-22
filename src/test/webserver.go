@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"net/http/cgi"
 	"os"
+	"strings"
 	"time"
 )
 
@@ -13,6 +14,9 @@ const (
 	timeLayOut = "2006/01/02 15:04:05"
 )
 /*
+go environment explain (such as $GOXXX)
+https://github.com/unknwon/the-way-to-go_ZH_CN/blob/master/eBook/02.2.md
+
 how to run webserver.go
 one way:
 [/]          cd ~/local_go/src             #your git clone directory
@@ -20,7 +24,7 @@ one way:
 
 another way:
 [~/local_go/src]  local_go_pwd=$(pwd)
-[~/local_go/src]  go run test/webserver.go $local_go_pwd >>../debugger.log 2>&1 &
+[~/local_go/src]  go run test/webserver.go $local_go_pwd $GOBIN/go >>../debugger.log 2>&1 &
 
 another way:
 change the variable ` pwdDir = "/root/www/local_go" ` to your relevant directory(~/local_go)
@@ -46,20 +50,39 @@ func handleFunc(res http.ResponseWriter, req *http.Request) {
 	}
 	handler := new(cgi.Handler)
 
+	envs := map[string]string{
+		"HOME"    : os.Getenv("HOME"),
+		"GOCACHE" : os.Getenv("GOCACHE"),
+	}
+	for key,val := range envs {
+		en := strings.Join([]string{key,val},"=")
+		handler.Env = append(handler.Env,en)
+	}
+
 	//path to the CGI executable
 	handler.Path = "/usr/local/go/bin/go"
 
 	//go运行的文件所在的目录
 	osArgs := os.Args
 	var pwdDir string
+	var goSrciptPath string
 	if len(osArgs) > 1 {
-		pwdDir = osArgs[1]
+		pwdDir       = osArgs[1]
+	}
+	if len(osArgs) > 2 {
+		goSrciptPath = osArgs[2]
 	}
 	if pwdDir == "" {
 		panic("lack work directory")
 	}
+	if goSrciptPath != "" {
+		handler.Path = goSrciptPath
+	}
+
+	//~/local_go/src
 	handler.Dir = pwdDir
 
+	//~/local_go/src/practice/array.go
 	script := handler.Dir + req.URL.Path
 	args := []string{"run", script}
 
