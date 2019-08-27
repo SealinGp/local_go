@@ -86,6 +86,9 @@ func execute(n string) {
 		"gor9" : gor9,
 		"gor10" : gor10,
 		"gor11" : gor11,
+		"gor12" : gor12,
+		"gor13" : gor13,
+		"gor14" : gor14,
 	}
 	if nil == funs[n] {
 		fmt.Println("func",n,"unregistered")
@@ -304,7 +307,10 @@ func gor8_1(c chan<- int,num,step int)  {
 	close(c)
 }
 func gor8_2(c <-chan int,done chan<- bool)  {
-	//它从指定通道中读取数据直到通道关闭，才继续执行下边的代码
+	/*
+      它从指定通道中读取数据直到通道关闭，才继续执行下边的代码
+	  使用for-range语句来读取通道是更好的办法,因为会自动检测通道是否关闭
+	*/
 	for n := range c {
 		fmt.Println(n)
 	}
@@ -448,4 +454,108 @@ func gor11_filter(ch <-chan int,ch1 chan<- int,prime int)  {
 			ch1 <- i
 		}
 	}
+}
+
+/*
+https://github.com/unknwon/the-way-to-go_ZH_CN/blob/master/eBook/14.3.md
+协程同步,管道关闭,一般使用defer关闭
+
+https://github.com/unknwon/the-way-to-go_ZH_CN/blob/master/eBook/14.4.md
+使用select切换协程
+select监听进入通道的数据,也可以是用通道发送值的时候
+fallthrough是不允许的
+
+select作用:
+选择处理列出的多个通信情况中的一个
+如果都阻塞了,会等待知道其中一个可以处理
+如果没阻塞,那么随机选择一个
+如果没有通道操作可以处理了(都关闭了),并且写了default语句,那么执行default语句
+若在select中使用发送操作(chan1 <- xxx),有default可以确保发送不被阻塞,如果没有default,select就会一直阻塞
+*/
+
+//生产者-消费者,select例子
+func gor12() {
+	d   := make(chan bool)
+	dll := make(chan bool)
+	ch1,ch2  := make(chan int),make(chan int)
+	go gor12_write(ch1,d)
+	go gor12_write1(ch2,d)
+	go gor12_read(ch1,ch2,dll)
+	time.Sleep(time.Second*1)
+}
+func gor12_write(ch chan<- int)  {
+    for i := 0; ; i++ {
+       ch <- i * 10
+	}
+}
+func gor12_write1(ch chan<- int)  {
+	for i := 0; ; i++ {
+		ch <- i * 100
+	}
+}
+func gor12_read(ch1,ch2 <-chan int)  {
+    for {
+		select {
+		case v := <-ch1:
+			fmt.Println(v,"ch1")
+		case v := <-ch2:
+			fmt.Println(v,"ch2")
+	   }
+	}
+}
+
+func gor13()  {
+	//练习5.4
+	n := 15
+	for i := 0;i < n;i++ {
+		fmt.Println(i)
+	}
+
+	i := 0
+	FOR:
+		if i < n {
+			fmt.Println(i)
+			i++
+			goto FOR
+		}
+}
+func gor14()  {
+	done := make(chan bool)
+	ch := make(chan int)
+	go tel(ch,5,done)
+
+	//方法1
+	//for a := range ch  {
+	//	fmt.Println(a)
+	//}
+
+	//方法2
+	//for {
+	//	i,ok := <- ch
+	//	if !ok {
+	//		break;
+	//	}
+	//	fmt.Println(i)
+	//}
+
+	//方法3
+	for {
+		select {
+		case v := <-ch:
+			fmt.Println(v)
+		case v := <-done:
+			fmt.Println(v)
+			return
+		}
+	}
+	//方法3
+}
+func tel(ch chan<- int,num int,d chan<- bool)  {
+	for i := 0; i < num; i++ {
+		ch <- i
+	}
+	d <- true
+
+	//方法2|方法1 需要打开
+	//close(ch)
 }

@@ -42,6 +42,7 @@ type Handler stuct {
 	Path string //path to the CGI executable
 	Root string //root URI prefix of handler or empty for "/"
 	Dir  string //CGI working directory
+	Env  string[] //环境变量配置,[]string{"key=value"}
 }
 */
 func handleFunc(res http.ResponseWriter, req *http.Request) {
@@ -73,7 +74,8 @@ func handleFunc(res http.ResponseWriter, req *http.Request) {
 		goSrciptPath = osArgs[2]
 	}
 	if pwdDir == "" {
-		panic("lack work directory")
+		fmt.Println("lack work directory")
+		os.Exit(1)
 	}
 	if goSrciptPath != "" {
 		handler.Path = goSrciptPath
