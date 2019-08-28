@@ -475,12 +475,10 @@ select作用:
 
 //生产者-消费者,select例子
 func gor12() {
-	d   := make(chan bool)
-	dll := make(chan bool)
 	ch1,ch2  := make(chan int),make(chan int)
-	go gor12_write(ch1,d)
-	go gor12_write1(ch2,d)
-	go gor12_read(ch1,ch2,dll)
+	go gor12_write(ch1)
+	go gor12_write1(ch2)
+	go gor12_read(ch1,ch2)
 	time.Sleep(time.Second*1)
 }
 func gor12_write(ch chan<- int)  {
@@ -548,7 +546,6 @@ func gor14()  {
 			return
 		}
 	}
-	//方法3
 }
 func tel(ch chan<- int,num int,d chan<- bool)  {
 	for i := 0; i < num; i++ {
