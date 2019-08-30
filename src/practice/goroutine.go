@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"math"
 	"os"
 	"runtime"
 	"time"
@@ -89,6 +90,12 @@ func execute(n string) {
 		"gor12" : gor12,
 		"gor13" : gor13,
 		"gor14" : gor14,
+		"gor15" : gor15,
+		"gor16" : gor16,
+		"gor17" : gor17,
+		"gor18" : gor18,
+		"gor19" : gor19,
+		"gor20" : gor20,
 	}
 	if nil == funs[n] {
 		fmt.Println("func",n,"unregistered")
@@ -555,4 +562,199 @@ func tel(ch chan<- int,num int,d chan<- bool)  {
 
 	//方法2|方法1 需要打开
 	//close(ch)
+}
+
+//练习14.8 fib使用通道channel,速度最快
+func gor15()  {
+	term := 25
+	i    := 0
+	c    := make(chan int)
+
+	go gor15_1(term,c)
+	start := time.Now()
+	for {
+		if result, ok := <-c ; ok {
+			fmt.Println(i,result)
+			i++
+		} else {
+			fmt.Println(time.Since(start))
+			return
+		}
+	}
+}
+func gor15_1(l int,c chan int)  {
+	f := gor15_2()
+	for i := 0; i < l; i++ {
+		a := i
+		if i <= 2 {
+			a = 1
+		}
+		c <- f(a)
+	}
+	close(c)
+}
+func gor15_2() (func(int) int) {
+	var red []int
+	return func(i int) int {
+		if l := len(red); l >= 2 {
+			i = red[l-1] + red[l-2]
+		}
+		red = append(red,i)
+		return red[len(red) - 1]
+	}
+}
+
+//练习14.8的改良版(两者速度差不多,但内存肯定是这个用的少,因为少用了一个缓冲数组)
+func gor16()  {
+	start := time.Now()
+	le    := 25
+	done  := make(chan int)
+	go gor16_1(le,done)
+	i := 0
+	for d := range done  {
+		fmt.Println(i,d)
+		i++
+	}
+
+	fmt.Println(time.Since(start))
+}
+func gor16_1(n int,c chan int)  {
+	x,y := 1,1
+	for i := 0; i < n; i++ {
+		c <- x
+		x, y = y, x+y
+	}
+	close(c)
+}
+
+//练习14.8.1 fib使用通道channel 和 select 让通道退出
+func gor17()  {
+	start := time.Now()
+	ch := make(chan int)
+	done := make(chan bool)
+	le := 25
+
+	go gor17_1(le,ch,done)
+
+	i := 0
+	for {
+		select {
+		case v := <- ch:
+			fmt.Println(i,v)
+			i++
+		case v := <- done:
+			fmt.Println(v)
+			fmt.Println(time.Since(start))
+			return
+		}
+	}
+}
+func gor17_1(n int,c chan int,done chan bool)  {
+	x, y := 1,1
+	for i := 0; i < n; i++ {
+		c <- x
+		x, y = y, x+y
+	}
+	done <- true
+}
+
+//2个协程????
+func gor18()  {
+	start := time.Now()
+	x     := gor18_1()
+	le    := 25
+	for i := 0; i < le; i++ {
+		fmt.Println(<-x)
+	}
+
+	fmt.Println(time.Since(start))
+}
+func gor18_1() (<-chan int) {
+	d := make(chan int,2)
+	a,b,out := gor18_2(d)
+	go func() {
+		d<- 0
+		d<- 1
+
+		<-a
+		for {
+			d <- (<-a + <-b)
+		}
+	}()
+	<-out
+	return out
+}
+func gor18_2(in <-chan int) (<-chan int,<-chan int,<-chan int) {
+	a, b, c := make(chan int,2),make(chan int,2),make(chan int,2)
+	go func() {
+		for {
+			o := <-in // x = 0
+			a <- o
+			b <- o
+			c <- o
+		}
+	}()
+	return a,b,c
+}
+
+//提供总数量为num的 随机 0|1 的协程
+func gor19()  {
+	start    := time.Now()
+	num := 25
+	c := make(chan int)
+	go func() {
+		for {
+			fmt.Println(<-c," ")
+		}
+	}()
+
+	for {
+		if num <= 0 {
+			fmt.Println(time.Since(start))
+			return
+		}
+		num--
+		select {
+		case c<-0:
+		case c<-1:
+		}
+	}
+}
+
+//练习14.10 直角坐标系又叫笛卡尔坐标系 channel1 极坐标,channel 笛卡尔坐标
+
+//极坐标
+type JI struct {
+	le     float64 "OP长度,极径"
+	corner float64 "OP与OX的夹角,极角.单位:度数"
+}
+type ZJ struct {
+	x float64  "X轴长度"
+	y float64  "Y轴长度"
+}
+func gor20()  {
+	ji        := new(JI)
+	ji.le     = 3
+	ji.corner = 60
+	channel1 := make(chan *JI) //极坐标
+	channel2 := make(chan *ZJ) //笛卡尔坐标 [x,y]
+	go func() {
+		//读取极坐标
+		ji1  := <-channel1
+
+		//计算笛卡尔坐标
+		zji1 := new(ZJ)
+		zji1.calculate(ji1)
+		channel2<-zji1
+	}()
+	//写入极坐标
+	channel1<- ji
+
+	//读取笛卡尔坐标
+	zj := <-channel2
+	fmt.Println(zj.x,zj.y)
+}
+func (z *ZJ)calculate(J *JI) {
+	z.y = J.le * math.Sin(J.corner)
+	z.x = math.Sqrt(J.le*J.le - z.y*z.y)
 }
