@@ -420,7 +420,7 @@ func gor11()  {
 		//4: 停住
 		prime := <- ch
 
-		//fmt.Println(prime)
+		//fmt.Println(prime)plugplug
 		ch1 := make(chan int)
 
 		//3: 开启一个 filter goroutine ch=0 ch1=0 prime=2
