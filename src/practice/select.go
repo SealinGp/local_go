@@ -31,6 +31,8 @@ func execute(n string) {
 		"sel1" : sel1,
 		"sel2" : sel2,
 		"sel3" : sel3,
+		"sel4" : sel4,
+		"sel5" : sel5,
 	}
 	if nil == funs[n] {
 		fmt.Println("func",n,"unregistered")
@@ -160,5 +162,51 @@ func sel3()  {
 
 //第三种形式
 func sel4()  {
+	/**
+	假设程序从多个复制的数据库同时读取,只需要一个答案,需要接收首先到达的答案,Query 函数获取数据的连接切片
+	并请求,并行请求每一个数据库并返回收到的第一个响应
+	func Query(conns []Conn,query string) Result {
+		ch := make(chan Result,1)
+		for _, conn := range conns {
+			go func(c Conn) {
+				select {
+					case ch <- c.DoQuery(query):
+					default:
+				}
+	 		}(conn)
+		}
 
+		//结果通道必须带缓冲,保证第一个发送进来的数据有位置可以存放,确保放入的首个数据总会成功
+		//所以第一个到达的值会被获取跟执行的顺序无关,正在执行的协程总是可以使用runtime.Goexit()来停止
+		return <-ch
+	}
+
+	在应用中缓存数据:
+	应用程序中用到了来自数据库/常见的数据存储 的数据时,经常会把数据缓存到内存中,因为从数据库中获取数据的操作代价很高
+	如果数据库中的值不发生变化,就没有问题,如果值有变化,我们需要一个机制来周期性的从数据库重新读取这些值:缓存的值
+	就不可用/过期了
+	 */
+}
+
+//https://github.com/unknwon/the-way-to-go_ZH_CN/blob/master/eBook/14.6.md
+func sel5()  {
+	/**
+		协程和恢复(recover)
+		func server(workChan <-chan *Work) {
+			for work := range workChan {
+				go safelyDo(work)
+			}
+		}
+		func safelyDo(work *Work) {
+			defer func(){
+				if err := recover(); err != nil {
+					log.Println(err.Error(),work)
+				}
+			}()
+			do(work)
+		}
+	上边的代码 如果do(work)发生panic ,错误会被记录且当前协程会退出释放,而其他协程不会受影响.
+	因为 recover 总是返回nil, 除非直接在defer修饰的函数中调用,defer修饰的代码可以调用那些
+	自身可以使用panic和recover 避免失败的库例程
+	 */
 }
