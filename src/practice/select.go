@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"sync"
 	"time"
 )
 
@@ -33,6 +34,8 @@ func execute(n string) {
 		"sel3" : sel3,
 		"sel4" : sel4,
 		"sel5" : sel5,
+		"sel6" : sel6,
+		"sel7" : sel7,
 	}
 	if nil == funs[n] {
 		fmt.Println("func",n,"unregistered")
@@ -210,3 +213,109 @@ func sel5()  {
 	自身可以使用panic和recover 避免失败的库例程
 	 */
 }
+
+//https://github.com/unknwon/the-way-to-go_ZH_CN/blob/master/eBook/14.7.md
+
+/**
+任务和worker
+假设我们需要处理很多任务,一个worker处理一项任务,一个任务可以被定为一个结构体
+*/
+type Task struct {
+	a string
+	//属性...
+}
+
+/**
+旧模式,共享内存,由各个任务组成的任务池共享内存,避免资源竞争,需要对任务池加锁(java,C++,C#)
+ */
+type TaskPool struct {
+	Mu sync.Mutex  "是互斥锁,用来在代码中保护临界区资源,同一时间只有一个go协程可以进入该区域"
+	Tasks []*Task
+}
+func sel6()  {
+	TP      := new(TaskPool)
+	taskNum := 3
+	for i := 0; i < taskNum; i++ {
+		TP.Tasks = append(TP.Tasks,new(Task))
+	}
+	/**
+	这些worker有很多可以并发执行,他们可以在go协程中启动,一个worker先将pool锁定
+	从Pool中获取第一个任务,然后解锁跟处理任务,加锁保证了同一时间只有一个go协程可以进入到Pool
+	中,一个任务有且只能被赋予一个worker,加锁实现同步的方式在工作协程比较少的情况下可以工作的很好
+	但是当协程数量很多时,处理效率会因为频繁的加锁/解锁开销而降低 ,当工作协程数增加到一个阈值时,
+	程序效率急剧下降,成为了瓶颈
+	 */
+	go Worker(TP)
+	go Worker(TP)
+}
+func Worker(pool *TaskPool)  {
+	for {
+		//加锁
+		pool.Mu.Lock()
+
+		//取出当前任务
+		task      := pool.Tasks[0]
+		//更新任务池
+		pool.Tasks = pool.Tasks[1:]
+
+		//解锁
+		pool.Mu.Unlock()
+		//执行任务
+		task.process()
+	}
+}
+//任务执行的具体内容
+func (t *Task)process()  {
+	t.a = "abc"
+	fmt.Println(t.a)
+}
+
+/**
+其他模式:使用通道
+一个通道接受需要处理的任务(队列),一个通道接受处理完成的任务
+worker在协程中启动,其数量N应该根据任务数量进行调整
+主线程扮演master节点角色
+ */
+func sel7()  {
+	N := 5
+	pending,done := make(chan *Task),make(chan *Task)
+	go sendWork(pending,N)
+
+	//开启多个协程同步(顺序接受任务,处理任务,接已完成的任务)
+	for i := 0; i < N; i++ {
+		go Worker2(pending,done)
+	}
+
+	for doneTask := range done  {
+		fmt.Println(doneTask.a)
+	}
+}
+func Worker2(in ,out chan *Task)  {
+	for {
+		//接受需要处理的任务
+		t := <-in
+
+		//开始完成任务
+		t.process()
+
+		//接受处理完成的任务
+		out <- t
+	}
+}
+func sendWork(t chan<- *Task,taskNum int)  {
+	for i:= 0; i < taskNum; i++ {
+		t <- new(Task)
+	}
+}
+
+/**
+总结
+使用锁的情景:
+	访问共享数据结构中的缓存信息
+	保存应用程序上下文和状态信息数据
+
+使用通道的情景:
+	与异步操作的结果进行交互
+	分发任务
+	传递数据所有权
+ */

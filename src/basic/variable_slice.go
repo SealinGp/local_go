@@ -46,23 +46,25 @@ ref : https://my.oschina.net/joeyjava/blog/504249
 //声明切片
 func create_slice() {
 	//直接创建数组切片 []type,length,capability(maxLength) 长度 容量(最大长度(可选))
-	var sli3 = make([]int, 5, 10)
+	/*var sli3 = make([]int, 5, 10)
 	sli3[1] = 3
 	fmt.Println(sli3)
-	fmt.Println("----------------------")
+	fmt.Println("----------------------")*/
 
 	//基于切片创建切片
-	var sli1 [2]int = [2]int{1, 2}
-	var sli2 = sli1[0:2] //startIndex:length
-	var sli21 = sli1[:2] //不填写为下限
-	var sli22 = sli1[0:] //不填写为上限
-	var sli23 = sli1[:]  //不填写为上限
-	sli2[0] = 3
+	var sli1  = [5]string{"a","b","c","d","e"}
+	var sli2  = sli1[0:2]  //startIndex:endIndex <=> [startIndex,endIndex) 左闭右开
+	var sli21 = sli1[:2]   //不填写为下限 <=> 0:2 <=> [0,2)
+	var sli22 = sli1[1:]   //不填写为上限 <=> 1:maxIndex+1 <=> [1,5)
+	var sli23 = sli1[3:]   //不填写为上限 <=> 3:len
+	sli24    := sli1[1:3]
+	sli2[0] = "abc"
 	fmt.Println(sli1)
 	fmt.Println(sli2)
 	fmt.Println(sli21)
 	fmt.Println(sli22)
 	fmt.Println(sli23)
+	fmt.Println(sli24)//b,c
 }
 
 //遍历切片foreach
