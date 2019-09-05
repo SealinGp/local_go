@@ -30,14 +30,17 @@ func main() {
 }
 func execute(n string) {
 	funs := map[string]func(){
-		"sel1" : sel1,
-		"sel2" : sel2,
-		"sel3" : sel3,
-		"sel4" : sel4,
-		"sel5" : sel5,
-		"sel6" : sel6,
-		"sel7" : sel7,
-		"sel8" : sel8,
+		"sel1"  : sel1,
+		"sel2"  : sel2,
+		"sel3"  : sel3,
+		"sel4"  : sel4,
+		"sel5"  : sel5,
+		"sel6"  : sel6,
+		"sel7"  : sel7,
+		"sel8"  : sel8,
+		"sel9"  : sel9,
+		"sel10" : sel10,
+
 	}
 	if nil == funs[n] {
 		fmt.Println("func",n,"unregistered")
@@ -328,13 +331,14 @@ https://github.com/unknwon/the-way-to-go_ZH_CN/blob/master/eBook/14.8.md
 惰性生成器的实现(在需要时求值)
 	通道+协程
  */
+
+//惰性求值 例子1
 var ints chan int
 func sel8()  {
 	ints = yield()
 	fmt.Println(generate())
 	fmt.Println(generate())
 	fmt.Println(generate())
-	//runtime.Goexit()
 }
 func yield() chan int  {
 	ch    := make(chan int)
@@ -351,4 +355,90 @@ func yield() chan int  {
 }
 func generate() int {
 	return <-ints
+}
+
+//惰性求值 例子2,一次获取一个偶数
+type Any interface {}
+type EvalFunc func(any Any) (Any,Any)
+func sel9()  {
+	//具体计算过程
+	evenFunc := func(state Any) (Any,Any) {
+		OS,ok := state.(int)
+		ns    := 0
+		if ok {
+			ns = OS + 2
+		}
+		return OS,ns
+	}
+	event := sel9_2(evenFunc,0)
+
+	//消费者
+	for i := 0; i < 10; i++ {
+		fmt.Println(event())
+	}
+}
+
+//生产者
+func sel9_1(e EvalFunc,a Any) func() Any {
+	ch       := make(chan Any)
+
+	//开启协程通过函数计算出需要的东西,写入管道,函数e为具体计算过程
+	go func() {
+		as  := a
+		var retVal Any
+		for {
+			retVal,as = e(as)
+			ch <- retVal
+		}
+	}()
+
+	//将管道中的内容,通过返回函数来返回(需要的时候再调用)
+	return func() Any {
+		return <-ch
+	}
+}
+func sel9_2(evalFunc EvalFunc,initState Any) func() int  {
+	ef := sel9_1(evalFunc,initState)
+	return func() int {
+		return ef().(int)
+	}
+}
+
+//惰性求值 练习1
+var fibArr []uint64
+func sel10()  {
+	pro := func() uint64 {
+		var ap uint64
+		ap    = 1
+		le   := len(fibArr)
+		if le >= 2 {
+			ap  = fibArr[le-1] + fibArr[le-2]
+		}
+		fibArr = append(fibArr,ap)
+		return fibArr[len(fibArr)-1]
+	}
+	g := getFib(pro)
+	for i := 0; i < 10; i++ {
+		fmt.Println(g())
+	}
+}
+func generateFib(pro func()uint64) func() uint64  {
+	fibch := make(chan uint64)
+
+	go func() {
+		for {
+			fib := pro()
+			fibch <- fib
+		}
+	}()
+
+	return func() uint64 {
+		return <-fibch
+	}
+}
+func getFib(pro func()uint64) func() uint64  {
+	fib := generateFib(pro)
+	return func() uint64 {
+		return fib()
+	}
 }
