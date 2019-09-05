@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	//"runtime"
 	"sync"
 	"time"
 )
@@ -36,6 +37,7 @@ func execute(n string) {
 		"sel5" : sel5,
 		"sel6" : sel6,
 		"sel7" : sel7,
+		"sel8" : sel8,
 	}
 	if nil == funs[n] {
 		fmt.Println("func",n,"unregistered")
@@ -319,3 +321,34 @@ func sendWork(t chan<- *Task,taskNum int)  {
 	分发任务
 	传递数据所有权
  */
+
+
+/**
+https://github.com/unknwon/the-way-to-go_ZH_CN/blob/master/eBook/14.8.md
+惰性生成器的实现(在需要时求值)
+	通道+协程
+ */
+var ints chan int
+func sel8()  {
+	ints = yield()
+	fmt.Println(generate())
+	fmt.Println(generate())
+	fmt.Println(generate())
+	//runtime.Goexit()
+}
+func yield() chan int  {
+	ch    := make(chan int)
+	count := 0
+	go func() {
+		for {
+			fmt.Println("gorountine")
+			ch <- count
+			count++
+		}
+	}()
+	fmt.Println(count,"yield end")
+	return ch
+}
+func generate() int {
+	return <-ints
+}
