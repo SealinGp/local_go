@@ -28,6 +28,7 @@ func execute(n string) {
 		"str1" : str1,
 		"conv" : conv,
 		"str2" : str2,
+		"str3" : str3,
 	}
 	funs[n]()
 }
@@ -109,4 +110,7 @@ func str2()  {
 		return r1
 	}
 	fmt.Println(strings.Map(rot13, "Twas brillig and the slithy gopher..."))
+}
+func str3()  {
+	fmt.Println(strings.SplitAfter("a,b,c",","))
 }

@@ -6,6 +6,7 @@ import (
 	"os"
 	"runtime"
 	"sync"
+	"testing"
 )
 
 /*
@@ -40,6 +41,7 @@ func execute(n string) {
 		"cha9"   : cha9,
 		"cha10"  : cha10,
 		"cha11"  : cha11,
+		"cha12"  : cha12,
 	}
 	if nil == funs[n] {
 		fmt.Println("func",n,"unregistered")
@@ -474,5 +476,40 @@ func cha11_1()  {
 }
 
 /**
-漏桶算法 
+https://github.com/unknwon/the-way-to-go_ZH_CN/blob/master/eBook/14.15.md
+漏桶算法
+客户端协程执行一个无限循环从某个源头,也许是网络接收数据,数据读取到Buffer类型的缓冲区,为了避免分配过多的
+缓冲区以及释放缓冲区,他暴露了一份空闲缓冲区列表,并且使用一个缓冲管道来表示这个列表
+var freeList = make(chan *Buffer,100)
+这个可重用的缓冲区队列(freeList)是与服务器共享的,当接收数据时,客户端尝试从freeList获取缓冲区,
+但如果此时通道为空,则会分配新的缓冲区,一旦消息被加载后,它将被发送到服务器上的serverChan管道 var serverChan = make(chan *Buffer)
  */
+
+//https://github.com/unknwon/the-way-to-go_ZH_CN/blob/master/eBook/14.16.md
+func cha12()  {
+	fmt.Println(" sync", testing.Benchmark(BenchmarkChannelSync).String())
+	fmt.Println("buffered", testing.Benchmark(BenchmarkChannelBuffered).String())
+}
+func BenchmarkChannelSync(b *testing.B) {
+	ch := make(chan int)
+	go func() {
+		for i := 0; i < b.N; i++ {
+			ch <- i
+		}
+		close(ch)
+	}()
+	for range ch {
+	}
+}
+
+func BenchmarkChannelBuffered(b *testing.B) {
+	ch := make(chan int, 128)
+	go func() {
+		for i := 0; i < b.N; i++ {
+			ch <- i
+		}
+		close(ch)
+	}()
+	for range ch {
+	}
+}
