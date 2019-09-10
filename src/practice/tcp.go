@@ -2,11 +2,13 @@ package main
 
 import (
 	"bufio"
+	"flag"
 	"fmt"
 	"io"
 	"net"
 	"os"
 	"strings"
+	"syscall"
 )
 
 /*
@@ -32,6 +34,7 @@ func execute(n string) {
 	funs := map[string]func(){
 		"tcp1"  : tcp1,
 		"tcp_client"  : tcp_client,
+		"tcp2"  : tcp2,
 	}
 	if nil == funs[n] {
 		fmt.Println("func",n,"unregistered")
@@ -40,6 +43,7 @@ func execute(n string) {
 	funs[n]()
 }
 var clients = map[string]int{}
+//类似于socket编程,客户端,服务端消息传送(=聊天系统后台原理)
 func tcp1()  {
 	fmt.Println("starting the server ...")
 	listener, err := net.Listen("tcp","127.0.0.1:50000")
@@ -112,5 +116,64 @@ func tcp_client()  {
 			return
 		}
 		_, err = conn.Write([]byte(trimmedClient + " says " + trimmedInput))
+	}
+}
+
+//改进版本的socket
+const readBuffer = 25 //读取数据缓冲大小
+func tcp2()  {
+	flag.Parse()
+	if flag.NArg() != 3 {
+		panic("command: go build tcp.go && tcp tcp2 host port")
+	}
+
+	hostPort := net.JoinHostPort(flag.Arg(1),flag.Arg(2))
+	listener := initServer(hostPort)
+	for {
+		conn,err := listener.Accept()
+		checkError(err,"Accept failed")
+		connHandler(conn)
+	}
+}
+//服务端初始化(创建,监听,返回)
+func initServer(hostPort string) *net.TCPListener {
+	serverAddr,err := net.ResolveTCPAddr("tcp",hostPort)
+	checkError(err,"resolve failed,address:"+hostPort)
+	listener,err := net.ListenTCP("tcp",serverAddr)
+	checkError(err,"listen failed,address:" + hostPort)
+	fmt.Println("listening to ",hostPort)
+	return listener
+}
+func checkError(err error,info string)  {
+	if err != nil {
+		panic("ERROR:" + info + " " + err.Error())
+	}
+}
+func connHandler(conn net.Conn)  {
+	connFrom := conn.RemoteAddr().String()
+	fmt.Println("connect from",connFrom)
+	for {
+		var ibuf []byte = make([]byte,readBuffer+1)
+		length,err := conn.Read(ibuf[0:readBuffer])
+		ibuf[readBuffer] = 0 //防止溢出?
+		switch err {
+		case nil:
+			printMsg(length,err,ibuf)
+		case syscall.EAGAIN:
+			continue
+		default:
+			goto DISCONNECT
+		}
+	}
+	DISCONNECT:
+		err := conn.Close()
+		fmt.Println("closed connection",connFrom)
+		checkError(err,"Close error")
+}
+func printMsg(length int,err error,ibuf []byte)  {
+	if length > 0 {
+		fmt.Println("<",length,":")
+		fmt.Println(string(ibuf))
+		fmt.Println(">")
 	}
 }
