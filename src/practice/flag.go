@@ -33,6 +33,7 @@ func execute(n string) {
 		"flag4" : flag4,
 		"flag5" : flag5,
 		"flag6" : flag6,
+		"flag7" : flag7,
 	}
 	if nil == funs[n] {
 		fmt.Println("func",n,"unregistered")
@@ -41,15 +42,22 @@ func execute(n string) {
 	funs[n]()
 }
 
-//定义了一个默认值是 false的 -n选项, : -n=false
+//定义了一个默认值是 false的 -h选项, : -h=false
 var (
-	NewLine = flag.Bool("n",false,"print newline")
-	Help    = flag.Bool("h",false,"print this help")
+	help    bool
 	Newline = "\n"
 )
 func flag1()  {
+	//go run flag.go flag1 -h
+	flag.BoolVar(&help,"h",false,"print this help")
+
 	//扫描参数列表,并设置flag
 	flag.Parse()
+
+	if help {
+		flag.Usage()
+		return
+	}
 
 	output := ""
 	//flag.NArg 返回参数的数量
@@ -235,4 +243,7 @@ func flag6()  {
 		return
 	}
 	fmt.Println("Conversion done")
+}
+func flag7()  {
+
 }
