@@ -19,24 +19,22 @@ func main() {
 		fmt.Println("lack param ?func=xxx")
 		return
 	}
-
 	execute(args[1])
 }
 
+//动态执行函数
+type ref struct {}
 func execute(n string) {
-	funs := map[string]func(){
-		"ref1" : ref1,
-		"ref2" : ref2,
-		"ref3" : ref3,
-	}
-	if nil == funs[n] {
-		fmt.Println("func",n,"unregistered")
-		return
-	}
-	funs[n]()
+	ref    := NewRef()
+	refVal := reflect.ValueOf(&ref).Elem()
+	//nil为输入参数
+	refVal.MethodByName(n).Call(nil)
+}
+func NewRef() *ref {
+	return &ref{}
 }
 
-func ref1()  {
+func (r *ref)Ref1()  {
 	type myInt int
 	var m myInt = 5
 	v := reflect.ValueOf(m)
@@ -57,7 +55,7 @@ type t struct {
 func (t1 t)String(b,c string) string  {
 	return t1.s1 + t1.s2 + t1.s3 + b + string(c)
 }
-func ref2()  {
+func (r *ref)Ref2()  {
 	var s interface{} = t{"s1_","s2_","s3_"}
 
 	attributes    := reflect.TypeOf(s)
@@ -86,7 +84,7 @@ func ref2()  {
 }
 
 //通过反射设置值
-func ref3()  {
+func (r *ref)Ref3()  {
 	//普通值
 	a  := 123
 	av := reflect.ValueOf(&a).Elem()
