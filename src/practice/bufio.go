@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"encoding/base64"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -61,6 +62,7 @@ func execute(n string) {
 		"buf5" : buf5,
 		"buf6" : buf6,
 		"buf7" : buf7,
+		"buf8" : buf8,
 	}
 	if nil == funs[n] {
 		fmt.Println("func",n,"unregistered")
@@ -247,4 +249,6 @@ func buf7()  {
 	}
 
 	fmt.Println(products)
+}
+func buf8()  {
 }

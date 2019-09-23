@@ -5,6 +5,7 @@ import (
 	"crypto/rand"
 	"crypto/rsa"
 	"crypto/x509"
+	"encoding/base64"
 	"encoding/pem"
 	"errors"
 	"fmt"
@@ -16,7 +17,7 @@ import (
 rsa 非对称加密解密方式
 */
 func init() {
-	fmt.Println("Content-Type:text/plain;charset=utf-8\n\n")
+	fmt.Println("Content-Type:text/plain;charset=gbk2312\n\n")
 }
 func main() {
 	args := os.Args
@@ -31,6 +32,7 @@ func main() {
 func execute(n string) {
 	funs := map[string]func(){
 		"rsa1" : rsa1,
+		"rsa2" : rsa2,
 	}
 	if nil == funs[n] {
 		fmt.Println("func",n,"unregistered")
@@ -47,6 +49,7 @@ func rsa1()  {
 	token,err := RSAEncrypt([]byte("hi"),pub)
 
 	fmt.Println(string(token))
+	fmt.Println(token)
 
 	msg,_ := RSADecrypt(token,pri)
 
@@ -140,4 +143,24 @@ func RSADecrypt(deMsg []byte,privateKey string) (deByte []byte,Err error) {
 	}
 	deByte = decryptedStr
 	return
+}
+func rsa2()  {
+	Puk,_,err := RsaGenKey(2048)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+	msg := []byte("sea")
+	msgEn,err := RSAEncrypt(msg,Puk)
+	if err != nil {
+		fmt.Println(err)
+	}
+	msg64En := make([]byte,len(msg))
+	base64.StdEncoding.Encode(msg64En,msgEn)
+	base64.StdEncoding.EncodedLen(64)
+
+	fmt.Println(string(msg64En))
+
+	msg64De := make([]byte,len(msg))
+	base64.StdEncoding.Decode(msg64De,msg64En)
+	fmt.Println(msg64De)
 }
