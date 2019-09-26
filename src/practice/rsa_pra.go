@@ -5,7 +5,7 @@ import (
 	"crypto/rand"
 	"crypto/rsa"
 	"crypto/x509"
-	"encoding/base64"
+	//"encoding/base64"
 	"encoding/pem"
 	"errors"
 	"fmt"
@@ -68,7 +68,13 @@ func RsaGenKey(bits int) (PubKey string,PriKey string,Err error)  {
 		return
 	}
 	//2.MarshalPKCS1PrivateKey 将rsa私钥序列化为ASN.1 PKCS#1 DER编码
-	derPrivateStream := x509.MarshalPKCS1PrivateKey(privateKey)
+	//derPrivateStream := x509.MarshalPKCS1PrivateKey(privateKey)
+	derPrivateStream,err := x509.MarshalPKCS8PrivateKey(privateKey)
+	if err != nil {
+		Err = err
+		return
+	}
+
 	//3.Block代表PEM编码的结构,对其配置
 	block := pem.Block{
 		Type  : "RSA PRIVATE KEY",
@@ -131,11 +137,14 @@ func RSADecrypt(deMsg []byte,privateKey string) (deByte []byte,Err error) {
 		Err = errors.New("error privateKey")
 		return
 	}
-	priKey,err := x509.ParsePKCS1PrivateKey(block.Bytes)
+	//priKey,err := x509.ParsePKCS1PrivateKey(block.Bytes)
+	priKey1,err := x509.ParsePKCS8PrivateKey(block.Bytes)
 	if err != nil {
 		Err = err
 		return
 	}
+	priKey := priKey1.(*rsa.PrivateKey)
+
 	decryptedStr,err := rsa.DecryptPKCS1v15(rand.Reader,priKey,deMsg)
 	if err != nil {
 		Err = err
@@ -145,22 +154,26 @@ func RSADecrypt(deMsg []byte,privateKey string) (deByte []byte,Err error) {
 	return
 }
 func rsa2()  {
-	Puk,_,err := RsaGenKey(2048)
+	Puk,Prk,err := RsaGenKey(1024)
 	if err != nil {
 		fmt.Println(err.Error())
 	}
-	msg := []byte("sea")
+	msg       := []byte("sea")
 	msgEn,err := RSAEncrypt(msg,Puk)
 	if err != nil {
 		fmt.Println(err)
 	}
-	msg64En := make([]byte,len(msg))
-	base64.StdEncoding.Encode(msg64En,msgEn)
-	base64.StdEncoding.EncodedLen(64)
+	fmt.Println(Puk)
+	fmt.Println(Prk)
 
-	fmt.Println(string(msg64En))
+	msgDe,_ := RSADecrypt(msgEn,Prk)
+	fmt.Println(string(msgDe))
 
-	msg64De := make([]byte,len(msg))
-	base64.StdEncoding.Decode(msg64De,msg64En)
-	fmt.Println(msg64De)
+	//msg64En := make([]byte,len(msg))
+	//msg1 := base64.StdEncoding.EncodeToString(msgEn)
+	//fmt.Println(msg1)
+
+	//a,_ := base64.StdEncoding.DecodeString(msg1)
+	//fmt.Println(string(a))
+	//fmt.Println(msg64De)
 }
