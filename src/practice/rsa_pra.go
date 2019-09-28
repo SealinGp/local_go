@@ -49,6 +49,7 @@ func execute(n string) {
 	funs[n]()
 }
 
+//-----example----- start
 //PKCS1
 func rsa1()  {
 	//秘钥生成
@@ -103,44 +104,22 @@ func rsa3()  {
 		fmt.Println(err.Error())
 		return
 	}
-	//msg       := []byte("sea")
-	//msgEn,err := RSAEncrypt(msg,Puk,"PKIX")
-	//if err != nil {
-	//	fmt.Println(err)
-	//	return
-	//}
-	msgEn := "jr1fsCQs1v3aIyGJ6y8CFhzVXaS03n3s0T/kSQBE2WIjwRi3UAvI1oQYNV5zToS3iRgupzCVh2VGp8MpClfyQN07XI2UElU2Hd+smKo3FwRsuCqt4jz/7GAsKEju3dWdaGvOIRA8cfae5rwOEj0BV4FfSaBU8BdoJpolY58syzs="
+	msg       := []byte("sea")
+	msgEn,err := RSAEncrypt(msg,Puk,"PKIX")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
 	fmt.Println(Puk)
 	fmt.Println(Prk)
-	Prk = "-----BEGIN RSA PRIVATE KEY-----\n" +
-	"MIICXQIBAAKBgQDl5UrPMf4qQ3UaLII0XLETs+XRzHVCgqwjtskFHvLXwK/Z1Vr4\n" +
-		"RSr7mcrjfWVrCSINhiRjY4Xis5I8rgcgGw7RGmS0PWS2TLaspTMfxqQ3T7hbcsil\n" +
-		"2Ss+pH2jRwtkn2iOVhgk9vifb7sBJrLsVCrjzeiaeZaNc4KcGlUXaVcNTQIDAQAB\n" +
-		"AoGBAIesk0LGOT6OAw0IWWs3jNWY5Le1FzrCTX7iP65C/oQv1lgTXxWIFH7Z22/4\n" +
-		"MCNEB5G9qbnyITCSU2p2NgRPk6TbY3hfNWkhoGyudtINJ314r0/X/8XjgOd292M8\n" +
-		"uvy9pg8GuGT8TGoxCs+F/vXQxDw6HmNHsAUHiTRPPeek7YqtAkEA5vzjt0ZC0L77\n" +
-		"PH1s01S7LpSOXxq3hmRlfmjI6VDlcG46o/g2Li0YRsL4TrqrxBHOkph7mUUGwgXt\n" +
-		"3es/IZNylwJBAP7KIICgbmTgiAc8eFcN1ZOOUo7/wuvXNd4RjjAs9GZ/qR79biXN\n" +
-		"LD8Ch0Xd+fDYrk4c/lE41uXQjn0a+Xtgj7sCQBpXqNiT6LbJsPk7DJglR5uOUZZD\n" +
-		"A78N4A1EgfUpxqDF0WY1vmgRuH0Jayv/WetoZHiPbzkRiC3EY1Y1p+N6X00CQE13\n" +
-		"e0ZggPAe7Hz2v8gIJsXEYgmkbclzF6e7QrYXFQANFIidmV3Y8fj+dc6iXRoDZ4vM\n" +
-		"eO6ND5m0PX6AMxZ2F30CQQDVkvKY4zRE8mCzc3dSQSK52eWkKKLahCo95Zpgu1vq\n" +
-		"W56bL/6ztCkqPytHdqtbql0GI0Kxd4NRffIpH5oGKwGG\n" +
-		"-----END RSA PRIVATE KEY-----"
 
-	//msgEnb,err := base64.StdEncoding.DecodeString(msgEn)
-	//if err != nil {
-	//	fmt.Println(err)
-	//	return
-	//}
-	msgDe,err := RSADecrypt([]byte(msgEn),Prk,"PKCS1")
+	msgDe,err := RSADecrypt(msgEn,Prk,"PKCS1")
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 	fmt.Println(string(msgDe))
 }
-
 //私钥签名,公钥验签
 func rsa4()  {
 	Puk,Prk,err := RsaGenKey(1024,"PKCS1","PKCS1")
@@ -160,6 +139,9 @@ func rsa4()  {
 	}
 	fmt.Println(true)
 }
+//-----example----- end
+
+//-----实现方法----- start
 /**
 https://www.jianshu.com/p/60fe90594583 (有一处有问题,已提交评论)
  */
@@ -248,7 +230,6 @@ func RsaGenKey(bits int,PriEnType string,PubEnType string) (PubKey string,PriKey
 //PubEnType 公钥加密算法 PKCS1 | PKIX
 //enByte    加密后的数据
 func RSAEncrypt(enMsg []byte,publicKey string,PubEnType string) (enByte []byte,Err error)  {
-
 	//1.从公钥中找出block和pubKey
 	pubKey,err := rsaParsePubKey(publicKey,PubEnType )
 	if err != nil {
@@ -412,3 +393,4 @@ func verfiySign(msg,sig,publicKey,pubEnType,alg string) (Err error) {
 	hash1.Write([]byte(msg))
 	return rsa.VerifyPKCS1v15(pub,algr, hash1.Sum(nil), sig1)
 }
+//-----实现方法----- end
