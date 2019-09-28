@@ -41,6 +41,7 @@ func execute(n string) {
 		"rsa2" : rsa2,
 		"rsa3" : rsa3,
 		"rsa4" : rsa4,
+		"rsa5" : rsa5,
 	}
 	if nil == funs[n] {
 		fmt.Println("func",n,"unregistered")
@@ -138,6 +139,33 @@ func rsa4()  {
 		return
 	}
 	fmt.Println(true)
+}
+func rsa5()  {
+	PrivateKey := "-----BEGIN RSA PRIVATE KEY-----\n" +
+		"MIICXQIBAAKBgQDl5UrPMf4qQ3UaLII0XLETs+XRzHVCgqwjtskFHvLXwK/Z1Vr4\n" +
+		"RSr7mcrjfWVrCSINhiRjY4Xis5I8rgcgGw7RGmS0PWS2TLaspTMfxqQ3T7hbcsil\n" +
+		"2Ss+pH2jRwtkn2iOVhgk9vifb7sBJrLsVCrjzeiaeZaNc4KcGlUXaVcNTQIDAQAB\n" +
+		"AoGBAIesk0LGOT6OAw0IWWs3jNWY5Le1FzrCTX7iP65C/oQv1lgTXxWIFH7Z22/4\n" +
+		"MCNEB5G9qbnyITCSU2p2NgRPk6TbY3hfNWkhoGyudtINJ314r0/X/8XjgOd292M8\n" +
+		"uvy9pg8GuGT8TGoxCs+F/vXQxDw6HmNHsAUHiTRPPeek7YqtAkEA5vzjt0ZC0L77\n" +
+		"PH1s01S7LpSOXxq3hmRlfmjI6VDlcG46o/g2Li0YRsL4TrqrxBHOkph7mUUGwgXt\n" +
+		"3es/IZNylwJBAP7KIICgbmTgiAc8eFcN1ZOOUo7/wuvXNd4RjjAs9GZ/qR79biXN\n" +
+		"LD8Ch0Xd+fDYrk4c/lE41uXQjn0a+Xtgj7sCQBpXqNiT6LbJsPk7DJglR5uOUZZD\n" +
+		"A78N4A1EgfUpxqDF0WY1vmgRuH0Jayv/WetoZHiPbzkRiC3EY1Y1p+N6X00CQE13\n" +
+		"e0ZggPAe7Hz2v8gIJsXEYgmkbclzF6e7QrYXFQANFIidmV3Y8fj+dc6iXRoDZ4vM\n" +
+		"eO6ND5m0PX6AMxZ2F30CQQDVkvKY4zRE8mCzc3dSQSK52eWkKKLahCo95Zpgu1vq\n" +
+		"W56bL/6ztCkqPytHdqtbql0GI0Kxd4NRffIpH5oGKwGG\n" +
+		"-----END RSA PRIVATE KEY-----"
+	enData := "G30AIrZ5piuBA0P30k6bara1HhKGzKT4mwcpXEBbkQtAq6kcZPpmUms1gJP8J"+
+		"PTkIVLayQCU1+vFUmO64Y30rmziaCrh0WiCfFlEkJqUGsJkCCSSlUzEI6yWTiVDj9i8"+
+		"aG/ZVsqnY/Gp2E4UlicEgYkp1XA1MZnSYjl0n9QwRkc="
+
+	deData,err := RSADecrypt([]byte(enData),PrivateKey,"PKCS1")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Println(string(deData))
 }
 //-----example----- end
 
@@ -263,7 +291,6 @@ func RSADecrypt(deMsg []byte,privateKey string,PriEnType string) (deByte []byte,
 		Err = err
 		return
 	}
-
 	decryptedStr,err := rsa.DecryptPKCS1v15(rand.Reader,priKey,deMsg)
 	if err != nil {
 		Err = err
@@ -315,6 +342,7 @@ func rsaParsePriKey(privateKey string,PriEnType string) (PriKey *rsa.PrivateKey,
 		Err          = err
 		return
 	}
+	Err = errors.New("PriEnType error")
 	return
 }
 /*
