@@ -6,6 +6,7 @@ import (
 	"io"
 	"io/ioutil"
 	"os"
+	"runtime"
 )
 
 /*
@@ -70,9 +71,11 @@ func com1()  {
 
 //不使用缓冲写入内容到文件
 func com2()  {
-	f, _ := os.OpenFile("test.deb",os.O_CREATE|os.O_WRONLY,0666)
+	_,absPath,line,_ := runtime.Caller(1)
+	f, _ := os.OpenFile("test.deb",os.O_CREATE|os.O_WRONLY|os.O_APPEND,0666)
 	defer f.Close()
-	f.WriteString("abc")
+	f.WriteString("abc1")
+	fmt.Println(absPath,line)
 }
 
 //https://github.com/unknwon/the-way-to-go_ZH_CN/blob/master/eBook/12.2.md

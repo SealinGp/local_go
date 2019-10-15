@@ -113,4 +113,11 @@ func str2()  {
 }
 func str3()  {
 	fmt.Println(strings.SplitAfter("a,b,c",","))
+	a := "a,b"
+	i := strings.Index(a,",")
+	b := ""
+	if i != -1 {
+		b = a[i+1:]
+	}
+	fmt.Println(b)
 }

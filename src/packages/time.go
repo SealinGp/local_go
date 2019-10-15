@@ -38,6 +38,7 @@ func time1()  {
 	now := time.Now()
 	fmt.Println(
 		strings.Split(now.Format(timeLayOut),":"),
+		int(now.Month()),
 	)
 	a := 5
 	switch a  {

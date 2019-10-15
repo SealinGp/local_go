@@ -117,6 +117,7 @@ func execute(n string) {
 		"string_type": string_type,
 		"other_type":  other_type,
 		"type1":  type1,
+		"type2":  type2,
 	}
 	funs[n]()
 }
@@ -232,4 +233,9 @@ func type1()  {
 		len(s),
 		s[:2],
 	) //12(3*4) ??
+}
+func type2()  {
+	var a float64
+	a = 12.2
+	fmt.Println(fmt.Sprint(a))
 }

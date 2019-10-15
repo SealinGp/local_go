@@ -25,7 +25,7 @@ func main() {
 	//prin()
 
 	//  fmt.Println(add(1,2))
-	index1()
+	//index1()
 	//    index2()
 	// fmt.Println(index3(3))
 }
