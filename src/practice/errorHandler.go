@@ -99,6 +99,7 @@ func err3_2(i int)  {
 //defer的坑
 //https://www.jianshu.com/p/9a7364762714?tdsourcetag=s_pctim_aiomsg
 //defer的函数的参数是在执行defer时计算的，defer的函数中的变量的值是在函数执行时计算的
+//同一个函数里面的defer,栈结构,最后写的先执行,不同函数的defer,先执行的函数的defer先执行
 func err4()  {
 	err4_1()//  x = 0
 	err4_2()//  x = 7
@@ -113,6 +114,9 @@ func err4_2() (x int)  {
 	defer fmt.Println("in err4_2 defer x=",x)
 	return 9
 }
+
+
+
 func err5()  {
 	err5_1() // x=9
 	err5_2() // n=0 x=9
