@@ -2,9 +2,9 @@ package main
 
 import (
 	"fmt"
+	"math/rand"
 	"os"
 	"strings"
-
 	//"strconv"
 	"time"
 )
@@ -36,10 +36,17 @@ func execute(funcN string)  {
 }
 func time1()  {
 	now := time.Now()
+	r := rand.New(rand.NewSource(time.Now().UnixNano()))
+	a1 := r.Intn(26)
+	a2 := string(rune(int('A') + a1)) + "_" + fmt.Sprint(time.Now().Unix())
+
 	fmt.Println(
 		strings.Split(now.Format(timeLayOut),":"),
 		int(now.Month()),
+		a2,
 	)
+
+
 	a := 5
 	switch a  {
 	case 5:
