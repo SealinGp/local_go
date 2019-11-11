@@ -12,6 +12,7 @@ import (
 )
 
 /*
+ref :https://github.com/unknwon/the-way-to-go_ZH_CN/blob/master/eBook/15.1.md
 通道,超时,计时器
 1 s  = 1000 ms(毫秒)
 1 ms = 1000 us(微妙)

@@ -15,10 +15,10 @@ http://www.ruanyifeng.com/blog/2007/10/ascii_unicode_and_utf-8.html
 Unicode : 这是一种所有符号的编码,Unicode 只是一个符号集,它只规定了符号的二进制代码,却没有规定这个二进制代码应该如何存储
 UTF-8 就是在互联网上使用最广的一种 Unicode 的实现方式
 
-1 b(字节byte) = 8 bit(比特)
-1 Kb          = 1024 b
-1 Mb          = 1024 Kb
-1 Gb          = 1024 Mb
+1 byte(字节) = 8 bit(比特)
+1 Kb        = 1024 byte
+1 Mb        = 1024 Kb
+1 Gb        = 1024 Mb
 
 fmt.Printf()格式字符
  %d   : 十进制输出 (负数带符号)
