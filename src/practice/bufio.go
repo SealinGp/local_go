@@ -2,7 +2,6 @@ package main
 
 import (
 	"bufio"
-	"encoding/base64"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -39,6 +38,8 @@ bufio是通过缓冲来提高效率,bufio提供了缓冲区(分配一块内存),
  程序->缓冲区(写入B1大小的内容)->文件(写入B1大小的内容)
  B2 < B1时:
  程序->文件(写入B1大小内容)
+
+可以用于做一个简单的项目结构脚手架
 */
 func init() {
 	fmt.Println("Content-Type:text/plain;charset=utf-8\n\n")
@@ -74,11 +75,12 @@ func execute(n string) {
 //读取用户输入方法1
 func buf1()  {
 	var (
-		firstName,lastName,s string
-		i int
-		f32 float32
-		input  = "56.12 / 5212 / Go"
-		format = "%f / %d / %s"
+		firstName,lastName string
+		//s string
+		//i int
+		//f32 float32
+		//input  = "56.12 / 5212 / Go"
+		//format = "%f / %d / %s"
 	)
 
 	fmt.Println("enter full name:")
@@ -88,8 +90,8 @@ func buf1()  {
 	fmt.Println("hi",firstName,lastName)
 
 	//?
-	fmt.Sscanf(input,format,&f32,&i,&s)
-	fmt.Println(f32,i,s)
+	//fmt.Sscanf(input,format,&f32,&i,&s)
+	//fmt.Println(f32,i,s)
 }
 //读取用户输入方法2:缓冲读取
 func buf2()  {
