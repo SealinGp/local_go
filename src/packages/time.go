@@ -1,6 +1,7 @@
 package main
 
 import (
+	"certs-master/config"
 	"fmt"
 	"math/rand"
 	"os"
@@ -33,6 +34,7 @@ func execute(funcN string)  {
 		"time2" : time2,
 		"time3" : time3,
 		"time4" : time4,
+		"time5" : time5,
 	}
 	funcMap[funcN]()
 }
@@ -77,9 +79,9 @@ func time2()  {
 
 func time3()  {
 	startTime  := "2019-02-01T00:00:00+08:00"
-	startTime1 := time.Time{}
+	startTime1 := &time.Time{}
 	endTime    := "2019-04-30T23:59:59+08:00"
-	endTime1   := time.Time{}
+	endTime1   := &time.Time{}
 	if err := startTime1.UnmarshalText([]byte(startTime)); err != nil {
 		fmt.Println(err.Error())
 		return
@@ -88,33 +90,30 @@ func time3()  {
 		fmt.Println(err.Error())
 		return
 	}
-	t,_ := getLastDay(startTime1)
-	fmt.Println(t.Format(timeLayOut))
-	return
 
 	timeUnit    := "week"
 	var err error
 	switch timeUnit {
 	case "week":
-		startTime1,err = getWeekDay(First,startTime1)
+		startTime1,err = getWeekDay(first,startTime1)
 		if err != nil {
 			fmt.Println("get start week day err:",err.Error())
 			return
 		}
 
-		endTime1,err = getWeekDay(Last,endTime1)
+		endTime1,err = getWeekDay(last,endTime1)
 		if err != nil {
 			fmt.Println("get start week day err:",err.Error())
 			return
 		}
 	case "month":
-		startTime1,err = getMonthDay(First,startTime1)
+		startTime1,err = getMonthDay(first,startTime1)
 		if err != nil {
 			fmt.Println("parse month start time err:"+err.Error())
 			return
 		}
 
-		endTime1,err = getMonthDay(Last,endTime1)
+		endTime1,err = getMonthDay(last,endTime1)
 		if err != nil {
 			fmt.Println(err.Error())
 			return
@@ -132,46 +131,56 @@ func time4()  {
 
 type WeekDayType int
 const (
-	First WeekDayType = iota  //获取给定时间的周一/月头
-	Last                      //获取给定时间的周日/月尾
+	first WeekDayType = iota  //获取给定时间的周一/月头
+	last                      //获取给定时间的周日/月尾
 )
 //获取给定时间的当前周的 周一/周日 对应的日期
-func getWeekDay(dayType WeekDayType,t time.Time) (time.Time,error) {
-	currentWeekDay := t.Weekday()
-	dayNum         := 0
-	HourMinSecond  := ""
-	var compareWeekDay time.Weekday
-	if dayType == First {
+func getWeekDay(dayType WeekDayType,t *time.Time) (*time.Time,error) {
+	var (
+		currentWeekDay = t.Weekday()
+		dayNum            int
+		HourMinSecond     string
+		compareWeekDay    time.Weekday
+		compareWeekDayAbs time.Weekday
+	)
+
+	if dayType == first {
 		HourMinSecond  = " 00:00:00"
 		compareWeekDay = time.Monday
 	} else {
 		HourMinSecond = " 23:59:59"
-		compareWeekDay = time.Saturday
+		compareWeekDay = time.Sunday
 	}
 	for i := 0; i < 7; i++ {
-		if currentWeekDay == compareWeekDay {
-			dayNum = i
-			if dayType == Last {
-				dayNum++
-				break
-			}
-			dayNum = -dayNum
+		compareWeekDayAbs = currentWeekDay
+		if dayType == first && compareWeekDayAbs < 0 {
+			compareWeekDayAbs = 7 + compareWeekDayAbs
+		}
+		if dayType == last && compareWeekDayAbs > 6 {
+			compareWeekDayAbs = compareWeekDayAbs - 7
+		}
+		if compareWeekDayAbs == compareWeekDay {
 			break
 		}
-		if dayType == First {
+		if dayType == first {
 			currentWeekDay--
 		} else {
 			currentWeekDay++
 		}
+		dayNum++
 	}
-	dur     := 24 * time.Hour * time.Duration(dayNum)
-	weekDay := t.Add(dur)
-	return time.Parse(timeLayOut,weekDay.Format("2006-01-02") + HourMinSecond)
+	if dayType == first {
+		dayNum = -dayNum
+	}
+	weekDay := t.AddDate(0,0,dayNum)
+	var err error
+	weekDay,err = time.Parse(config.DefaultTimeLayOut,weekDay.Format("2006-01-02") + HourMinSecond)
+	return &weekDay,err
 }
 //获取给定时间的当月的 第一天/最后一天 对应的日期
-func getMonthDay(dayType WeekDayType,t time.Time) (time.Time,error) {
+func getMonthDay(dayType WeekDayType,t *time.Time) (*time.Time,error) {
 	dayHourMinSecond := ""
-	if dayType == First {
+	if dayType == first {
 		dayHourMinSecond = "01 00:00:00"
 	} else {
 		dayHourMinSecond = "01 23:59:59"
@@ -179,20 +188,32 @@ func getMonthDay(dayType WeekDayType,t time.Time) (time.Time,error) {
 	
 	monthDay,err := time.Parse(timeLayOut,t.Format("2006-01-") + dayHourMinSecond)
 	if err != nil {
-		return monthDay,err
+		return &monthDay,err
 	}
-	if dayType == Last {
+	if dayType == last {
 		monthDay = monthDay.AddDate(0,1,-1)
 	}
-	return monthDay,nil
+	return &monthDay,nil
 }
 
 //获取给定时间的 当月最后一天的日期 = 当月有多少天
-func getLastDay(t time.Time) (time.Time,error) {
+func getlastDay(t *time.Time) (time.Time,error) {
 	monthEndTime,err := time.Parse(timeLayOut,t.Format("2006-01-") + "01" + t.Format(" 15:04:05"))
 	if err != nil {
 		return monthEndTime,err
 	}
 	monthEndTime = monthEndTime.AddDate(0,1,-1)
 	return monthEndTime,nil
+}
+
+func time5()  {
+	a := []interface{}{}
+	b := []interface{}{
+		"1","2","3",
+	}
+	a = append(a,&b)
+	var c interface{} = a
+	for index,v := range c.([]interface{})  {
+		fmt.Println(index,v)
+	}
 }

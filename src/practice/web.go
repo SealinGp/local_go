@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/xml"
+	"html/template"
 	"io"
 	"io/ioutil"
 	"log"
@@ -29,6 +30,7 @@ func execute(n string) {
 		"web5"  : web5,
 		"web6"  : web6,
 		"web7"  : web7,
+		"web8"  : web8,
 	}
 	if nil == funs[n] {
 		fmt.Println("func",n,"unregistered")
@@ -165,5 +167,20 @@ func panicCatch(han func(w http.ResponseWriter,r *http.Request)) http.HandlerFun
 func wcheckError(err error)  {
 	if err != nil {
 		log.Fatal(err)
+	}
+}
+
+//https://github.com/unknwon/the-way-to-go_ZH_CN/blob/master/eBook/15.7.md
+//探索template pkg
+type Person struct {
+	Name string
+	NonExportedAgeField string
+}
+func web8()  {
+	t   := template.New("hello")
+	t,_  = t.Parse(fmt.Sprintln("hello {{.Name}}{{.NonExportedAgeField}}"))
+	per := Person{"Sea","Zhang"}
+	if err := t.Execute(os.Stdout,per) ;err != nil {
+		fmt.Println(err.Error())
 	}
 }
