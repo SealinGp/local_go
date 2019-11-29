@@ -29,6 +29,7 @@ func main() {
 	Xs := make(map[string]int)
 	Xs["1"]=1
 	fmt.Println(len(Xs))
+
 	//prin()
 
 	//  fmt.Println(add(1,2))

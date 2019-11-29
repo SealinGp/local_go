@@ -73,11 +73,11 @@ func cmd2()  {
 }
 
 func cmd3()  {
-	cmd := exec.Command("gedit")
-	err := cmd.Run()
+	cmd := exec.Command("ls","-l")
+	out,err := cmd.CombinedOutput()
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
-	fmt.Println(cmd.Args)
+	fmt.Println(string(out))
 }
