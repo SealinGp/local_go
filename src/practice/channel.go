@@ -88,7 +88,7 @@ type Task struct {
 旧模式,共享内存,由各个任务组成的任务池共享内存,避免资源竞争,需要对任务池加锁(java,C++,C#)
  */
 type TaskPool struct {
-	Mu sync.Mutex  "是互斥锁,用来在代码中保护临界区资源,同一时间只有一个go协程可以进入该区域"
+	Mu sync.Mutex  `description:"是互斥锁,用来在代码中保护临界区资源,同一时间只有一个go协程可以进入该区域"`
 	Tasks []*Task
 }
 func cha2()  {
@@ -126,7 +126,6 @@ func Worker(pool *TaskPool)  {
 //任务执行的具体内容
 func (t *Task)process()  {
 	t.a = "abc"
-	fmt.Println(t.a)
 }
 
 /**
@@ -136,37 +135,40 @@ worker在协程中启动,其数量N应该根据任务数量进行调整
 主线程扮演master节点角色
  */
 func cha3()  {
-	N := 5
-	pending,done := make(chan *Task),make(chan *Task)
-	go sendWork(pending,N)
+	N            := 5
+	pending,done := make(chan *Task,N),make(chan *Task)
+	finished     := make(chan bool)
 
-	//开启多个协程同步(顺序接受任务,处理任务,接已完成的任务)
-	for i := 0; i < N; i++ {
-		go Worker2(pending,done)
-	}
+	//老板分发任务,同时分发N个 给5人,5人同时工作
+	//send work
+	go func() {
+		for N > 0  {
+			N--
+			pending <- new(Task)
+		}
+		close(pending)
+	}()
+	//exec work
+	go func() {
+		for pendWork := range pending {
+			pendWork.process()
+			done <- pendWork
+		}
+		close(done)
+	}()
 
-	for doneTask := range done  {
-		fmt.Println(doneTask.a)
-	}
+	//老板接收任务结果,一个个接收
+	//received work
+	go func() {
+		for doneWork := range done  {
+			fmt.Println(doneWork.a)
+		}
+		finished<-true
+	}()
+
+	fin := <-finished
+	fmt.Println("finished:",fin)
 }
-func Worker2(in ,out chan *Task)  {
-	for {
-		//接受需要处理的任务
-		t := <-in
-
-		//开始完成任务
-		t.process()
-
-		//接受处理完成的任务
-		out <- t
-	}
-}
-func sendWork(t chan<- *Task,taskNum int)  {
-	for i:= 0; i < taskNum; i++ {
-		t <- new(Task)
-	}
-}
-
 /**
 总结
 使用锁的情景:

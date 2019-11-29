@@ -22,6 +22,13 @@ func init() {
 }
 
 func main() {
+	type X struct {
+		index int
+		valid bool
+	}
+	Xs := make(map[string]int)
+	Xs["1"]=1
+	fmt.Println(len(Xs))
 	//prin()
 
 	//  fmt.Println(add(1,2))
