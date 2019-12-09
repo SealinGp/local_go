@@ -36,6 +36,7 @@ func execute(n string) {
 		"app1" : app1,
 		"slice6" : slice6,
 		"slice7" : slice7,
+		"slice8" : slice8,
 	}
 	if nil == funs[n] {
 		fmt.Println("func",n,"unregistered")
@@ -141,6 +142,7 @@ func by1()  {
 	buf5 := bytes.NewBuffer([]byte{})
 	buf6 := bytes.Buffer{}
 	buf6.WriteByte('a')
+	buf4.Write([]byte("abc"))
 	fmt.Println(
 		buf4.String(),
 		buf5.String(),
@@ -298,4 +300,18 @@ func slice7()  {
 	}
 	str = string(strSli)
 	fmt.Println(str)
+}
+
+func slice8()  {
+	f := func(ar... string) string {
+		if len(ar) > 0 {
+			return ar[0]
+		}
+		return ""
+	}
+
+	b := f()
+	fmt.Println(b)
+	c := f("1")
+	fmt.Println(c)
 }
