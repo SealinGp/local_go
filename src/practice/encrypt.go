@@ -1,9 +1,11 @@
 package main
 
 import (
+	"crypto/hmac"
+	"crypto/md5"
 	"crypto/sha1"
+	"encoding/hex"
 	"fmt"
-	"io"
 	"os"
 )
 
@@ -27,6 +29,7 @@ func main() {
 func execute(n string) {
 	funs := map[string]func(){
 		"enc1" : enc1,
+		"Md5En" : Md5En,
 	}
 	if nil == funs[n] {
 		fmt.Println("func",n,"unregistered")
@@ -37,21 +40,39 @@ func execute(n string) {
 
 //sha1
 func enc1()  {
-	//加密test
-	ha := sha1.New()
-	io.WriteString(ha,"test") //等价于 ha.Write([]byte("test"))
-	b := []byte{}
-	s := ha.Sum(b)
-	fmt.Printf("%x\n", s)
-	fmt.Printf("%d\n", ha.Sum(b))
+	SHA1  := sha1.New()
+	Msg   :=  "test"
+	MsgBy := []byte(Msg)
+	Key   := "key"
+	KeyBy := []byte(Key)
 
-	ha.Reset()
-	data := []byte("we shall overcome")
-	n,err := ha.Write(data)
-	if n != len(data) || err != nil {
+	//加密
+	_,err := SHA1.Write(MsgBy)
+	if err != nil {
 		fmt.Println(err)
 		return
 	}
-	checksum := ha.Sum(b)
-	fmt.Printf("%x",checksum)
+	checksum    := SHA1.Sum(nil)
+	checksumStr := fmt.Sprintf("%x",checksum)
+	fmt.Println(checksumStr)
+
+
+	//hmac的sha1
+	HmacWithSha1 := hmac.New(sha1.New,KeyBy)
+	//HmacWithSha1.Write(MsgBy)
+	checksum1    := HmacWithSha1.Sum(nil)
+	checksum1Str := fmt.Sprintf("%x",checksum1)
+	fmt.Println(checksum1Str)
+}
+
+/**
+https://studygolang.com/articles/2283
+md5加密
+*/
+func Md5En()  {
+	msg := "121"
+	m := md5.New()
+	m.Write([]byte(msg))
+	by := m.Sum(nil)
+	fmt.Println(hex.EncodeToString(by))
 }

@@ -10,9 +10,15 @@ import (
 https://github.com/unknwon/the-way-to-go_ZH_CN/blob/master/eBook/13.6.md
 执行linux命令和程序
 */
+var (
+	A = "a"
+)
 /*func init() {
 	fmt.Println("Content-Type:text/plain;charset=utf-8\n\n")
 }*/
+func init()  {
+	fmt.Println(A)
+}
 func main() {
 	args := os.Args
 	if len(args) <= 1 {
@@ -73,7 +79,7 @@ func cmd2()  {
 }
 
 func cmd3()  {
-	cmd := exec.Command("ls","-l")
+	cmd := exec.Command("pwd")
 	out,err := cmd.CombinedOutput()
 	if err != nil {
 		fmt.Println(err)
