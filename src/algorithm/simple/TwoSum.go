@@ -1,36 +1,9 @@
-package main
+package simple
 
 import (
 	"fmt"
 	"os"
-	"time"
 )
-
-func init() {
-	fmt.Println("Content-Type:text/plain;charset=utf-8\n\n")
-}
-func main() {
-	startTime := time.Now()
-	args := os.Args
-	if len(args) <= 1 {
-		fmt.Println("lack param ?func=xxx")
-		echoTime(startTime)
-		return
-	}
-
-	execute(args[1])
-	echoTime(startTime)
-}
-func execute(n string) {
-	funs := map[string]func(){
-		"twoSum": twoSum,
-	}
-	funs[n]()
-}
-func echoTime(startTime time.Time) {
-	since := time.Since(startTime).String()
-	fmt.Println("processTime:", since)
-}
 
 /*
 给定一个整数数组 nums 和一个目标值 target，请你在该数组中找出和为目标值的那 两个 整数，并返回他们的数组下标。
@@ -56,7 +29,9 @@ O(n) = (index+1)*(n-1);
 O(n) = n + n +.... n;
 O(n) = n;
 */
-func twoSum() {
+func (*Ref)TwoSum() {
+	fmt.Println("123")
+	os.Exit(1)
 	nums := []int{2, 7, 11, 15}
 	target := 9
 	numIndex := make([]int, 0)
@@ -86,8 +61,4 @@ func in_slice(sliceElement int, intSlice []int) (int, bool) {
 		}
 	}
 	return findIndex, find
-}
-
-func twoAdd() {
-
 }
