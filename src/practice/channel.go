@@ -104,10 +104,14 @@ func cha2()  {
 	但是当协程数量很多时,处理效率会因为频繁的加锁/解锁开销而降低 ,当工作协程数增加到一个阈值时,
 	程序效率急剧下降,成为了瓶颈
 	 */
-	go Worker(TP)
-	go Worker(TP)
+	finished := make(chan bool)
+	go Worker(TP,finished)
+
+	<-finished
+	fmt.Println("finished!")
 }
-func Worker(pool *TaskPool)  {
+func Worker(pool *TaskPool,sig chan<- bool)  {
+	i := 0
 	for {
 		//加锁
 		pool.Mu.Lock()
@@ -120,12 +124,18 @@ func Worker(pool *TaskPool)  {
 		//解锁
 		pool.Mu.Unlock()
 		//执行任务
-		task.process()
+		task.process(i)
+		if len(pool.Tasks) < 1 {
+			sig <- true
+			break
+		}
+		i++
 	}
 }
 //任务执行的具体内容
-func (t *Task)process()  {
+func (t *Task)process(i int)  {
 	t.a = "abc"
+	fmt.Println("process",i)
 }
 
 /**
@@ -139,7 +149,7 @@ func cha3()  {
 	pending,done := make(chan *Task,N),make(chan *Task)
 	finished     := make(chan bool)
 
-	//老板分发任务,同时分发N个 给5人,5人同时工作
+	//老板分发任务,分发N个 给5人,5人同时工作
 	//send work
 	go func() {
 		for N > 0  {
@@ -150,9 +160,11 @@ func cha3()  {
 	}()
 	//exec work
 	go func() {
+		i := 0
 		for pendWork := range pending {
-			pendWork.process()
+			pendWork.process(i)
 			done <- pendWork
+			i++
 		}
 		close(done)
 	}()
@@ -195,8 +207,8 @@ func cha4()  {
 	fmt.Println(generate())
 	fmt.Println(generate())
 }
-var ints chan int
-func yield() chan int  {
+var ints <-chan int
+func yield() <-chan int  {
 	ch    := make(chan int)
 	count := 0
 	go func() {
@@ -206,7 +218,7 @@ func yield() chan int  {
 			count++
 		}
 	}()
-	fmt.Println(count,"yield end")
+
 	return ch
 }
 func generate() int {
