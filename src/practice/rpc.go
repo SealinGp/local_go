@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"net/rpc"
 	"os"
+	"time"
 )
 
 /*
@@ -55,8 +56,13 @@ func rpc1()  {
 		return
 	}
 	fmt.Println("rpc server listening in: localhost:1234")
-	go http.Serve(lis,nil)
-
+	go func() {
+		err := http.Serve(lis,nil)
+		if err != nil {
+			fmt.Println("serve err:",err.Error())
+		}
+	}()
+	time.Sleep(time.Second*1)
 	select {}
 }
 type Args struct {
@@ -70,7 +76,7 @@ func (*Args)Multiply(a Args,reply *int) error {
 //client
 func rpc2()  {
 	//connect
-	client,err := rpc.Dial("tcp","localhost:1234")
+	client,err := rpc.DialHTTP("tcp","localhost:1234")
 	if err != nil {
 		fmt.Println("dial rpc server(localhost:1234) failed:"+err.Error())
 		return
@@ -81,7 +87,7 @@ func rpc2()  {
 	defer client.Close()
 	arg     := Args{2,3}
 	reply   := 0
-	err     = client.Call("Arg.Multiply",arg,&reply);
+	err     = client.Call("Args.Multiply",arg,&reply);
 	if err != nil {
 		fmt.Println("cal error:"+err.Error())
 		return
