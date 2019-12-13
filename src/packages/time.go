@@ -35,6 +35,7 @@ func execute(funcN string)  {
 		"time3" : time3,
 		"time4" : time4,
 		"time5" : time5,
+		"time6" : time6,
 	}
 	funcMap[funcN]()
 }
@@ -216,4 +217,10 @@ func time5()  {
 	for index,v := range c.([]interface{})  {
 		fmt.Println(index,v)
 	}
+}
+
+func time6()  {
+	t := "2019-11-07 23:59:59"
+	t1,_ := time.Parse(timeLayOut,t)
+	fmt.Println(t1.Format(timeLayOut))
 }
