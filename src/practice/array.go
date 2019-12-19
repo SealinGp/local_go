@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"fmt"
+	uuid "github.com/satori/go.uuid"
 	"math"
 	"os"
 )
@@ -37,6 +38,7 @@ func execute(n string) {
 		"slice6" : slice6,
 		"slice7" : slice7,
 		"slice8" : slice8,
+		"slice9" : slice9,
 	}
 	if nil == funs[n] {
 		fmt.Println("func",n,"unregistered")
@@ -103,7 +105,7 @@ func slice1()  {
 
 	/*
 	new 和 make的区别
-	new(T) 为每个新的类型T分配一片内存，初始化为 0 并且返回类型为*T的内存地址
+	new(T) 为每个新的类型T分配一片内存，初始化为 0 并且返回类型为*T的内存地址(数组、结构体和所有的值类型)
 	make(T) 返回一个类型为 T 的初始值，它只适用于3种内建的引用类型：切片、map 和 channel
 	*/
 	s5 := make([]int,3,5)
@@ -314,4 +316,12 @@ func slice8()  {
 	fmt.Println(b)
 	c := f("1")
 	fmt.Println(c)
+}
+
+func slice9()  {
+	//a := "13129551272"
+	//fmt.Println(a[len(a)-6:])
+
+	v5 := uuid.Must(uuid.NewV4())
+	fmt.Println(v5.String())
 }

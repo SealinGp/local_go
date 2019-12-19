@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"bytes"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -253,4 +254,12 @@ func buf7()  {
 	fmt.Println(products)
 }
 func buf8()  {
+	buf := bytes.Buffer{}
+	for i := 0; i < 5 ; i++ {
+		buf.WriteString(strconv.Itoa(i))
+	}
+	s := buf.String()
+	fmt.Println(s)
+	buf.Reset()
+	fmt.Println(buf.String())
 }

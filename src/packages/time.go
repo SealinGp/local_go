@@ -36,6 +36,7 @@ func execute(funcN string)  {
 		"time4" : time4,
 		"time5" : time5,
 		"time6" : time6,
+		"time7" : time7,
 	}
 	funcMap[funcN]()
 }
@@ -222,5 +223,11 @@ func time5()  {
 func time6()  {
 	t := "2019-11-07 23:59:59"
 	t1,_ := time.Parse(timeLayOut,t)
+	fmt.Println(t1.Format(timeLayOut))
+}
+func time7()  {
+	t := "2019-12-17T17:33:21+08:00"
+	t1 := time.Time{}
+	t1.UnmarshalText([]byte(t))
 	fmt.Println(t1.Format(timeLayOut))
 }

@@ -34,8 +34,8 @@ func NewRef() *ref {
 	return &ref{}
 }
 
+type myInt int
 func (r *ref)Ref1()  {
-	type myInt int
 	var m myInt = 5
 	v := reflect.ValueOf(m)
 	fmt.Println(
@@ -46,6 +46,21 @@ func (r *ref)Ref1()  {
 		v.Interface().(myInt),
 		reflect.TypeOf(m),
 	)
+
+	meLen := v.NumMethod()
+	iv := 3
+	for i := iv; i < meLen; i++  {
+		v.Method(i).Call(nil)
+	}
+}
+func (m myInt)MyIntFun20191213()  {
+	fmt.Println("3?")
+}
+func (m myInt)MyIntFun20191211()  {
+	fmt.Println("1?")
+}
+func (m myInt)MyIntFun20191212()  {
+	fmt.Println("2?")
 }
 
 //反射获取对象中的信息(包含属性,方法,标签)

@@ -76,7 +76,7 @@ https://github.com/unknwon/the-way-to-go_ZH_CN/blob/master/eBook/04.5.md
 
 优先级  运算符
  7     ^ !
- 6     * / % << >> & &^
+ 6     * / %(求余数) << >> & &^
  5     + - | ^
  4     == != < <= >= >
  3     <-
