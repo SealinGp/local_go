@@ -1,7 +1,17 @@
 package main
 
 /*
-https://github.com/unknwon/the-way-to-go_ZH_CN/blob/master/eBook/19.3.md
+基本
+version 1:https://github.com/unknwon/the-way-to-go_ZH_CN/blob/master/eBook/19.3.md
+
+添加持久化
+version 2:https://github.com/unknwon/the-way-to-go_ZH_CN/blob/master/eBook/19.5.md
+
+添加协程
+version 3:https://github.com/unknwon/the-way-to-go_ZH_CN/blob/master/eBook/19.6.md
+
+添加协程
+versuib 4:https://github.com/unknwon/the-way-to-go_ZH_CN/blob/master/eBook/19.7.md
 url缩短练习版本1
 目的: 长url -> 短url
 访问 短url 的时候,将其重定向到 长url所在页面
@@ -18,7 +28,9 @@ URL: <input type="text" name="url">
 <input type="submit" value="Add">
 </form>
 `
-var store = NewURLStore()
+
+const saveQueueLength = 1000
+var store = NewURLStore("store.gob")
 
 func main() {
 	http.HandleFunc("/",Redirect)

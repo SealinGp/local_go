@@ -1,6 +1,10 @@
 package main
 
 import (
+	"encoding/gob"
+	"io"
+	"log"
+	"os"
 	"sync"
 )
 
@@ -8,10 +12,23 @@ import (
 type URLStore struct {
 	urls map[string]string
 	mu   sync.RWMutex
+	save chan record
+}
+type record struct {
+	Key,URL string
 }
 
-func NewURLStore() *URLStore {
-	return &URLStore{urls: make(map[string]string)}
+
+func NewURLStore(fileName string) *URLStore {
+	store := &URLStore{
+		urls: make(map[string]string),
+		save: make(chan record,saveQueueLength),
+	}
+	if err := store.load(fileName); err != nil {
+		log.Println("Error loading URLStore:", err)
+	}
+	go store.saveLoop(fileName)
+	return store
 }
 
 
@@ -41,8 +58,45 @@ func (u *URLStore)Put(url string) string {
 	for {
 		key := genKey(u.Count()) //生成短url的key
 		if ok := u.Set(key,url);ok {
+			u.save <- record{key,url}
 			return key
 		}
 	}
 	return ""
+}
+
+func (u *URLStore)load(fileName string) error {
+	f, err := os.Open(fileName)
+	if err != nil {
+		log.Println("Error opening URLStore:", err)
+		return err
+	}
+	defer f.Close()
+	d := gob.NewDecoder(f)
+	for err == nil {
+		var r record
+		if err = d.Decode(&r); err == nil {
+			u.Set(r.Key, r.URL)
+		}
+	}
+	if err == io.EOF {
+		return nil
+	}
+	return err
+}
+
+func (u *URLStore) saveLoop(filename string) error {
+	f,err := os.OpenFile(filename,os.O_WRONLY|os.O_CREATE|os.O_APPEND,0644)
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+	defer f.Close()
+	e := gob.NewEncoder(f)
+
+	for {
+		r := <-u.save
+		if err = e.Encode(r); err != nil {
+			log.Println("error saving to gob")
+		}
+	}
 }
