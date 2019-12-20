@@ -30,7 +30,7 @@ URL: <input type="text" name="url">
 `
 
 const saveQueueLength = 1000
-var store = NewURLStore("store.gob")
+var store = NewURLStore("store.json")
 
 func main() {
 	http.HandleFunc("/",Redirect)
