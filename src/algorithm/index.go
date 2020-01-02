@@ -23,6 +23,6 @@ func main() {
 	}
 
 	ref    := simple.Ref{}
-	refVal := reflect.ValueOf(&ref).Elem()
-	refVal.MethodByName(args[0]).Call(nil)
+	refVal := reflect.ValueOf(&ref)
+	refVal.MethodByName(args[1]).Call(nil)
 }
