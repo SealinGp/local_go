@@ -6,6 +6,8 @@ import (
 	"math"
 	"os"
 	"runtime"
+	"strings"
+	"sync"
 	"time"
 )
 
@@ -96,6 +98,8 @@ func execute(n string) {
 		"gor18" : gor18,
 		"gor19" : gor19,
 		"gor20" : gor20,
+		"gor21" : gor21,
+		"gor22" : gor22,
 	}
 	if nil == funs[n] {
 		fmt.Println("func",n,"unregistered")
@@ -757,4 +761,148 @@ func gor20()  {
 func (z *ZJ)calculate(J *JI) {
 	z.y = J.le * math.Sin(J.corner)
 	z.x = math.Sqrt(J.le*J.le - z.y*z.y)
+}
+
+//生产者-消费者模型
+//https://github.com/chai2010/advanced-go-programming-book/blob/master/ch1-basic/ch1-06-goroutine.md
+func gor21()  {
+	done := make(chan bool)
+	taskCh := make(chan int,10)
+
+	go gor21_producer(taskCh,2)
+	go gor21_consumer(taskCh,done)
+
+	<-done
+}
+func gor21_producer(task chan<- int,beishu int)  {
+	defer close(task)
+	for i := 0; i<10; i++ {
+		task <- i*beishu
+	}
+}
+func gor21_consumer(task <-chan int,done chan<- bool)  {
+	for t := range task  {
+		index := t
+		fmt.Println(index)
+	}
+	done <- true
+}
+
+/**
+发布-订阅模型(published-subscribe = pub-sub)
+https://github.com/chai2010/advanced-go-programming-book/blob/master/ch1-basic/ch1-06-goroutine.md
+生产者 = 发布者
+消费者 = 订阅者
+传统生产者-消费者模型中,将消息发送到一个队列中,发布者-订阅者,将消息发布给一个主题
+ */
+type (
+	sub       chan interface{}         //订阅者
+	topicFunc func(v interface{}) bool //主题
+
+	Publisher struct {                //发布者
+		m sync.RWMutex                //读写锁
+		buffer int                    //订阅队列的缓存大小
+		timeout time.Duration         //发布超时时间
+		subscribers map[sub]topicFunc //订阅者信息
+	}
+)
+func gor22()  {
+	p     := NewPublisher(100*time.Millisecond,10)
+	done  := make(chan bool)
+	done1 := make(chan bool)
+
+	all       := p.Subscribe()
+	golangTop := p.SubscribeTopic(func(v interface{}) bool {
+		if s,ok := v.(string);ok {
+			return strings.Contains(s,"golang")
+		}
+		return false
+	})
+
+	p.Publish("hello,world!")
+	p.Publish("hello,golang!")
+	p.Close()
+
+	go func() {
+		for msg := range all {
+			fmt.Println("all:",msg)
+		}
+		done <- true
+
+	}()
+
+	go func() {
+		for msg := range golangTop {
+			fmt.Println("golang:",msg)
+		}
+		done1<- true
+	}()
+
+	<-done1
+	<-done
+}
+func NewPublisher(timeOut time.Duration,buf int) *Publisher {
+	return &Publisher{
+		buffer:buf,
+		timeout:timeOut,
+		subscribers:make(map[sub]topicFunc),
+	}
+}
+
+//添加一个订阅者,订阅指定主题
+func (p *Publisher)SubscribeTopic(topic topicFunc) chan interface{} {
+	ch := make(chan interface{},p.buffer)
+
+	p.m.Lock()
+	defer p.m.Unlock()
+	p.subscribers[ch] = topic
+	return ch
+}
+//添加一个订阅者,订阅所有主题
+func (p *Publisher)Subscribe() chan interface{} {
+	return p.SubscribeTopic(nil)
+}
+
+//退出订阅
+func (p *Publisher)Evict(sub chan interface{})  {
+	p.m.Lock()
+	defer p.m.Unlock()
+	delete(p.subscribers,sub)
+	close(sub)
+}
+
+//发布一个主题,允许一定时间内的超时
+func (p *Publisher)sendTopic(su sub,topic topicFunc,v interface{}, wg *sync.WaitGroup)  {
+	defer wg.Done()
+	if topic != nil && !topic(v) {
+		return
+	}
+	select {
+	case su <- v:
+		fmt.Println("sendTopic success!")
+	case <-time.After(p.timeout):
+		fmt.Println("sendTopic time out!")
+	}
+}
+func (p *Publisher)Publish(v interface{})  {
+	p.m.RLock()
+	defer p.m.RUnlock()
+
+	var wg sync.WaitGroup
+	for sub,top := range p.subscribers {
+		wg.Add(1)
+		go p.sendTopic(sub,top,v,&wg)
+	}
+
+	wg.Wait()
+}
+
+//关闭发布者,同时关闭订阅者管道
+func (p *Publisher)Close()  {
+	p.m.Lock()
+	defer p.m.Unlock()
+	for sub := range p.subscribers {
+		delete(p.subscribers,sub)
+		close(sub)
+	}
 }
