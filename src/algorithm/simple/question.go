@@ -3,6 +3,7 @@ package simple
 import (
 	"fmt"
 	"log"
+	"math"
 	"math/rand"
 	"strconv"
 	"time"
@@ -13,8 +14,6 @@ import (
 你可以假设每种输入只会对应一个答案。不能重复利用这个数组中同样的元素。
 来源：力扣（LeetCode）
 链接：https://leetcode-cn.com/problems/two-sum
-
-著作权归领扣网络所有.商业转载请联系官方授权,非商业转载请注明出处.
 */
 
 /*
@@ -33,16 +32,17 @@ O(n) = n + n +.... n;
 O(n) = n;
 */
 func (*Ref)TwoSum() {
-	nums := []int{2, 7, 11, 15}
-	target := 9
-	numIndex := make([]int, 0)
+	nums      := []int{2, 7, 11, 15}
+	target    := 9
+
+	numIndex  := make([]int, 0)
 	valueLeft := 0
 
 	for index, value := range nums {
 		valueLeft = target - value
 		sli := nums[index+1:]
 
-		index2, find := in_slice(valueLeft, sli)
+		index2, find := inSlice(valueLeft, sli)
 		if find {
 			numIndex = append(numIndex, index, index2+(index+1))
 		}
@@ -50,6 +50,7 @@ func (*Ref)TwoSum() {
 
 	fmt.Println(numIndex)
 }
+
 /**
 给出一个 32 位的有符号整数，你需要将这个整数中每位上的数字进行反转
 https://leetcode-cn.com/problems/reverse-integer/
@@ -106,18 +107,11 @@ func (*Ref)Reverse2()  {
 	result := 0
 	xStr   := strconv.Itoa(x)
 	xLen   := len(xStr)
-	fanGen := func(a,b int) int {
-		res := 1
-		for b > 0 {
-			res *= a
-			b--
-		}
-		return res
-	}
-	xMax := fanGen(2,31) - 1
-	xMin := -fanGen(2,31)
+	intMax := int(math.Pow(2,31))
+	xMax   := intMax - 1
+	xMin   := -intMax
 	for i := xLen;i > 0; i-- {
-		result += (x%10)*fanGen(10,i-1)
+		result += (x%10)*int(math.Pow10(i-1))
 		x /= 10
 	}
 
@@ -128,4 +122,46 @@ func (*Ref)Reverse2()  {
 		result = 0
 	}
 	fmt.Println(result)
+}
+
+
+/**
+https://leetcode-cn.com/problems/palindrome-number/
+ */
+func (*Ref)IsPalindrome()  {
+	x     := 12121
+
+	isPalindrome := false
+	xReverse     := 0
+	xReverseS    := []int{}
+	xLeft        := x
+	for {
+		remainder := xLeft % 10
+		xReverseS  = append(xReverseS,remainder)
+		if xLeft = xLeft/10;xLeft == 0 {
+			break
+		}
+	}
+
+	xReverseSLen := len(xReverseS)
+	for i,v := range xReverseS {
+		xReverse += v*int(math.Pow10(xReverseSLen-i-1))
+	}
+
+	isPalindrome = x == xReverse
+	fmt.Println(isPalindrome)
+}
+func (*Ref)IsPalindrome1()  {
+	x     := 1212
+	if x < 0 {
+		log.Fatal(false)
+	}
+
+	tmp := x
+	new := 0
+	for tmp != 0 {
+		new = new*10 + tmp%10
+		tmp /= 10
+	}
+	fmt.Println(new == x)
 }

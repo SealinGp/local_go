@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="a5b6c2ab-357b-447a-83c9-96cafc681720" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/assembler/basic/basic.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/assembler/basic/pkg1_amd64.s" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/assembler/index_amd64.s" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/assembler/main.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/assembler/pkg/pkg.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/assembler/pkg/pkg_amd64.s" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="GOROOT" path="/usr/lib/go-1.12" />
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="ProjectId" id="1W5u8aI0rJRNqvw30EBAwpejrlU" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="go.sdk.automatically.set" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/algorithm" />
+  </component>
+  <component name="ServiceViewManager">
+    <option name="viewStates">
+      <list>
+        <serviceView>
+          <treeState>
+            <expand />
+            <select />
+          </treeState>
+        </serviceView>
+      </list>
+    </option>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="721" y="297" key="FileChooserDialogImpl" timestamp="1578451628614">
+      <screen x="65" y="24" width="1855" height="1056" />
+    </state>
+    <state x="721" y="297" key="FileChooserDialogImpl/65.24.1855.1056@65.24.1855.1056" timestamp="1578451628614" />
+  </component>
+</project>

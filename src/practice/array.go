@@ -6,6 +6,7 @@ import (
 	uuid "github.com/satori/go.uuid"
 	"math"
 	"os"
+	"reflect"
 )
 
 /*
@@ -39,6 +40,8 @@ func execute(n string) {
 		"slice7" : slice7,
 		"slice8" : slice8,
 		"slice9" : slice9,
+		"slice10" : slice10,
+		"slice11" : slice11,
 	}
 	if nil == funs[n] {
 		fmt.Println("func",n,"unregistered")
@@ -322,6 +325,42 @@ func slice9()  {
 	//a := "13129551272"
 	//fmt.Println(a[len(a)-6:])
 
+
 	v5 := uuid.Must(uuid.NewV4())
 	fmt.Println(v5.String())
+}
+func slice10()  {
+	b1 := 2
+	b  := []int{1,2,3}
+	a,ok := in_slice(b1,b)
+	fmt.Println(a,ok)
+}
+func slice11()  {
+	s := []int{1, 2, 3, 4, 5, 6}
+	s = s[1:4]
+	fmt.Println(s)//2,3,4
+
+	s = s[:5]
+	fmt.Println(s)//2,3,4,5,6
+
+	s = s[1:]//
+	fmt.Println(s)
+}
+
+func in_slice(sliceElement interface{}, Slices interface{}) (int,bool) {
+	index  := -1
+	exists := false
+	if reflect.TypeOf(Slices).Kind() != reflect.Slice {
+		return index, false
+	}
+	value := reflect.ValueOf(Slices)
+	for i := 0; i < value.Len(); i++ {
+		if reflect.DeepEqual(sliceElement,value.Index(i).Interface()) {
+			index  = i
+			exists = true
+			break
+		}
+	}
+
+	return index,exists
 }

@@ -1,15 +1,23 @@
 package simple
+
+import "reflect"
+
 type Ref struct {}
 
-func in_slice(sliceElement interface{}, intSlice interface{}) (int, bool) {
-	find := false
-	findIndex := 0
-	for index, element := range intSlice.([]interface{}) {
-		if element == sliceElement {
-			find = true
-			findIndex = index
+func inSlice(sliceElement interface{}, Slices interface{}) (int,bool) {
+	index  := -1
+	exists := false
+	if reflect.TypeOf(Slices).Kind() != reflect.Slice {
+		return index, false
+	}
+
+	value := reflect.ValueOf(Slices)
+	for i := 0; i < value.Len(); i++ {
+		if reflect.DeepEqual(sliceElement,value.Index(i).Interface()) {
+			index  = i
+			exists = true
 			break
 		}
 	}
-	return findIndex, find
+	return index,exists
 }
