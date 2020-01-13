@@ -343,17 +343,21 @@ func slice11()  {
 	s = s[:5]
 	fmt.Println(s)//2,3,4,5,6
 
-	s = s[1:]//
+	s = s[1:]//3,4,5,6
 	fmt.Println(s)
+
+	//[low:high:max] max: 最大容量则只能是索引 max-1 处的元素
+	fmt.Println(s[0:1:3],cap(s[0:1:2]))
 }
 
 func in_slice(sliceElement interface{}, Slices interface{}) (int,bool) {
 	index  := -1
 	exists := false
-	if reflect.TypeOf(Slices).Kind() != reflect.Slice {
+	value  := reflect.ValueOf(Slices)
+	if value.Kind() != reflect.Slice {
 		return index, false
 	}
-	value := reflect.ValueOf(Slices)
+
 	for i := 0; i < value.Len(); i++ {
 		if reflect.DeepEqual(sliceElement,value.Index(i).Interface()) {
 			index  = i
