@@ -6,7 +6,6 @@ import (
 	"net/http"
 	"net/rpc"
 	"os"
-	"time"
 )
 
 /*
@@ -61,8 +60,8 @@ func rpc1()  {
 		if err != nil {
 			fmt.Println("serve err:",err.Error())
 		}
+		fmt.Println("serve success!")
 	}()
-	time.Sleep(time.Second*1)
 	select {}
 }
 type Args struct {
