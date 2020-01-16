@@ -6,6 +6,7 @@ import (
 	"math"
 	"math/rand"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -164,4 +165,132 @@ func (*Ref)IsPalindrome1()  {
 		tmp /= 10
 	}
 	fmt.Println(new == x)
+}
+
+func (*Ref)RomanToInt() {
+	s := "III"
+	roman := map[string]int{
+		"I": 1,
+		"V": 5,
+		"X": 10,
+		"L": 50,
+		"C": 100,
+		"D": 500,
+		"M": 1000,
+	}
+	spe := map[string]int{
+		"IV":4,
+		"IX":9,
+		"XL":40,
+		"XC":90,
+		"CD":400,
+		"CM":900,
+	}
+	I := 0
+	for k,v := range spe {
+		if num := strings.Count(s,k); num != 0 {
+			s = strings.Replace(s,k,"",-1)
+			I += v*num
+		}
+	}
+
+	fmt.Println(s)
+	for k,v := range roman {
+		if num := strings.Count(s,k); num != 0 {
+			I += v*num
+		}
+	}
+	fmt.Println(I)
+}
+func (*Ref)RomanToInt2()  {
+	s    := "MCMXCIV"
+	roman := map[rune]int{
+		'I': 1,
+		'V': 5,
+		'X': 10,
+		'L': 50,
+		'C': 100,
+		'D': 500,
+		'M': 1000,
+	}
+	sLen := len(s)
+	I := 0
+	for i,v := range s {
+		if roman[v] == 0 {
+			continue
+		}
+		if i+1 < sLen && roman[v] < roman[rune(s[i+1])] {
+			I -= roman[v]
+		} else {
+			I += roman[v]
+		}
+	}
+	fmt.Println(I)
+}
+func (*Ref)LongestCommonPrefix()  {
+	strs  := []string{"aa","a"}
+	strsL := len(strs)
+	res   := ""
+	x     := 0
+	hasCommon := false
+
+	if strsL == 0 {
+		fmt.Println(res)
+		return
+	}
+	if strsL == 1 {
+		res = strs[0]
+		fmt.Println(res)
+		return
+	}
+	
+
+	f:for {
+		for i := 0; i < strsL;i++ {
+			//["","abc"]
+			if strs[i] == "" {
+				hasCommon = false
+				break f
+			}
+
+			//["a","a"] ["aa","a"]
+			if x == len(strs[i]) ||  (i+1 != strsL && x == len(strs[i+1])) {
+				break f
+			}
+
+			if i+1 != strsL && strs[i][x] != strs[i+1][x] {
+				break f
+			}
+			hasCommon = true
+		}
+		x++
+	}
+
+	if hasCommon {
+		res = strs[0][:x]
+	}
+	fmt.Println(res)
+}
+
+func (*Ref)LongestCommonPrefix1()  {
+	strs := []string{"a","ab","ac"}
+	res  := ""
+	defer func() {
+		fmt.Println(res)
+	}()
+	
+	if len(strs) == 0 {
+		return
+	}
+	res = strs[0]
+	for i := 1; i < len(strs) ; i++ {
+		for !strings.HasPrefix(strs[i],res)  {
+			res = res[:len(res)-1]
+
+			if len(res) == 0 {
+				res = ""
+				return
+			}
+		}
+	}
 }

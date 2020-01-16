@@ -110,17 +110,14 @@ func grpc1()  {
 	//accept 1 connect req
 	go func() {
 		fmt.Println("wait accept...")
-		//for  {
-			con,err1 := listener.Accept()
-			if err1 != nil {
-				log.Println(err1.Error())
-				//break
-			}
-			fmt.Println("accept success!")
-			rpc.ServeConn(con)
-			fmt.Println("serve conn success!")
-			defer con.Close()
-		//}
+		con,err1 := listener.Accept()
+		if err1 != nil {
+			log.Println(err1.Error())
+		}
+		fmt.Println("accept success!")
+		rpc.ServeConn(con)
+		fmt.Println("serve conn success!")
+		defer con.Close()
 		done <- true
 	}()
 
