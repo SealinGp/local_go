@@ -29,6 +29,7 @@ func execute(n string) {
 		"conv" : conv,
 		"str2" : str2,
 		"str3" : str3,
+		"str4" : str4,
 	}
 	funs[n]()
 }
@@ -120,4 +121,11 @@ func str3()  {
 		b = a[i+1:]
 	}
 	fmt.Println(b)
+}
+
+func str4()  {
+	a    := "ab.c.b.com"
+	l    := strings.LastIndex(a,".")
+	l1   := strings.LastIndex(a[:l],".")
+	fmt.Println(a[l1:])
 }

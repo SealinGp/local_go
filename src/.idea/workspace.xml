@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="a5b6c2ab-357b-447a-83c9-96cafc681720" name="Default Changelist" comment="" />
+    <list default="true" id="a5b6c2ab-357b-447a-83c9-96cafc681720" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/dataStruct/dataStruct.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/algorithm/simple/question.go" beforeDir="false" afterPath="$PROJECT_DIR$/algorithm/simple/question.go" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -35,7 +39,7 @@
     <property name="go.import.settings.migrated" value="true" />
     <property name="go.sdk.automatically.set" value="true" />
     <property name="go.tried.to.enable.integration.vgo.integrator" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/grpc" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/dataStruct" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -59,9 +63,9 @@
     <option name="version" value="1" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="721" y="297" key="FileChooserDialogImpl" timestamp="1578968669232">
+    <state x="721" y="297" key="FileChooserDialogImpl" timestamp="1579231703787">
       <screen x="65" y="24" width="1855" height="1056" />
     </state>
-    <state x="721" y="297" key="FileChooserDialogImpl/65.24.1855.1056@65.24.1855.1056" timestamp="1578968669232" />
+    <state x="721" y="297" key="FileChooserDialogImpl/65.24.1855.1056@65.24.1855.1056" timestamp="1579231703787" />
   </component>
 </project>

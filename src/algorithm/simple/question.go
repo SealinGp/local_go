@@ -243,7 +243,6 @@ func (*Ref)LongestCommonPrefix()  {
 		fmt.Println(res)
 		return
 	}
-	
 
 	f:for {
 		for i := 0; i < strsL;i++ {
@@ -293,4 +292,34 @@ func (*Ref)LongestCommonPrefix1()  {
 			}
 		}
 	}
+}
+
+func (*Ref)IsValid()  {
+	//1 2 5
+	s   := "[(({})}]"
+	res := false
+	defer func() {
+		fmt.Println(res)
+	}()
+
+	m := map[rune]rune{
+		'(':')',
+		'{':'}',
+		'[':']',
+	}
+
+	validNum := 0
+	for i,v := range s {
+		if vRight,ok := m[v];ok {
+			for j:= i+1;j < len(s);j++ {
+				if rune(s[j]) == vRight && (j-i)%2 != 0 {
+					validNum++
+					//不重复寻找匹配的
+					break
+				}
+			}
+		}
+	}
+
+	res =  validNum*2 == len(s)
 }
