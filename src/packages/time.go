@@ -1,10 +1,13 @@
 package main
 
 import (
-	"certs-master/config"
+	"crypto/md5"
+	"encoding/base64"
+	"encoding/hex"
 	"fmt"
 	"math/rand"
 	"os"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -37,6 +40,7 @@ func execute(funcN string)  {
 		"time5" : time5,
 		"time6" : time6,
 		"time7" : time7,
+		"time8" : time8,
 	}
 	funcMap[funcN]()
 }
@@ -176,7 +180,7 @@ func getWeekDay(dayType WeekDayType,t *time.Time) (*time.Time,error) {
 	}
 	weekDay := t.AddDate(0,0,dayNum)
 	var err error
-	weekDay,err = time.Parse(config.DefaultTimeLayOut,weekDay.Format("2006-01-02") + HourMinSecond)
+	weekDay,err = time.Parse(timeLayOut,weekDay.Format("2006-01-02") + HourMinSecond)
 	return &weekDay,err
 }
 //获取给定时间的当月的 第一天/最后一天 对应的日期
@@ -230,4 +234,18 @@ func time7()  {
 	t1 := time.Time{}
 	t1.UnmarshalText([]byte(t))
 	fmt.Println(t1.Format(timeLayOut))
+}
+
+func time8()  {
+	var (
+		//suffixbigstarttime int64 = 1579669212
+		//suffixbigendtime int64   = 1579676412
+		suffixbighash            = "7r6CGokk_xgOlROYiSqYjHkl8hf-PtfDE15SMOl2TgU="
+	)
+	//start := time.Unix(suffixbigstarttime,0)
+	//end   := time.Unix(suffixbigendtime,0)
+	//fmt.Println(start.Format(timeLayOut))
+	//fmt.Println(end.Format(timeLayOut))
+
+	fmt.Println(suffixbighash)
 }
