@@ -43,6 +43,7 @@ func execute(n string) {
 		"slice9" : slice9,
 		"slice10" : slice10,
 		"slice11" : slice11,
+		"slice12" : slice12,
 	}
 	if nil == funs[n] {
 		fmt.Println("func",n,"unregistered")
@@ -117,12 +118,12 @@ func slice1()  {
 	fmt.Println(s5,s6)
 
 	//使用append后,就是复制赋值了
-	s7   := [3]int{1,2,3}
-	s8   := s7[:]
-	s8[0] = 3
-	s8    = append(s8,4)
-	s8[0] = 2
-	fmt.Println(s7,s8)
+	s7   := [3]int{1,2,3} //[1,2,3]
+	s8   := s7[:]         //[1,2,3]
+	s8[0] = 3             //[3,2,3]
+	s8    = append(s8,4) //[3,2,3,4]
+	s8[0] = 2 //[2,2,3,4]
+	fmt.Println(s7,s8)//[3,2,3] [2,2,3,4]
 
 	//
 	s9  := []byte{'p','o','e','m'}
@@ -177,11 +178,16 @@ func slice2()  {
 
 //切片重组(reslice) 左闭右开[)[indexStart:indexEnd] len = indexEnd - indexStart
  func slice3()  {
-	a := [5]int{9,8,7,6}
-	a1 := a[2:3]
+	a  := [5]int{9,8,7,6}
+
+	a1 := a[2:3] //[7]
 	fmt.Println(a1)
-	a1 = a[2:4]
+
+	a1 = a[2:4] //[7,6]
 	fmt.Println(a1)
+
+	a1 = append(a1,10)
+	fmt.Println(a1,a)//[7,6,10] [9,8,7,6,10]
 }
 
 /*
@@ -369,4 +375,26 @@ func in_slice(sliceElement interface{}, Slices interface{}) (int,bool) {
 	}
 
 	return index,exists
+}
+
+func slice12()  {
+	a  := [2]int{1,2}
+	a1 := a[:]
+	for _, v := range a1 {
+		a1 = append(a1,2)
+		fmt.Println(v)
+	}
+	fmt.Println(a1)
+
+	a2 := a[:]
+	a2L:= len(a2)
+	i  := 0
+	for ;i < a2L;i++ {
+		if i <= 1 {
+			a2  = append(a2,2)
+			a2L = len(a2)
+		}
+		fmt.Println(a2[i])
+	}
+	fmt.Println(a2)
 }
