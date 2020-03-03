@@ -1,6 +1,7 @@
 package main
 
 import (
+	"archive/zip"
 	"bufio"
 	"fmt"
 	"io"
@@ -32,6 +33,8 @@ func execute(n string) {
 		"com2" : com2,
 		"com3" : com3,
 		"com4" : com4,
+		"com5" : com5,
+		"com6" : com6,
 	}
 	if nil == funs[n] {
 		fmt.Println("func",n,"unregistered")
@@ -153,4 +156,50 @@ func copyF(dst,src string) (written int64,err error)  {
 	defer dstF.Close()
 
 	return io.Copy(dstF,srcF)
+}
+
+//文件压缩
+func com5()  {
+	e := Compress([]string{"array.go","cmd.go"},"1.zip")
+	if e != nil {
+		fmt.Println(e.Error())
+	}
+}
+func com6()  {
+	DeCompress("1.zip")
+}
+
+func Compress(src []string, dst string) error {
+	dstFile,err := os.Create(dst)
+	if err != nil {
+		return err
+	}
+	zw := zip.NewWriter(dstFile)
+	defer zw.Close()
+
+	for _, v := range src {
+		f,err  := os.Stat(v)
+		if err != nil {
+			return err
+		}
+
+		zwc,err := zw.Create(f.Name())
+		if err != nil {
+			return err
+		}
+		contents, err := ioutil.ReadFile(v)
+		_, err = zwc.Write(contents)
+		if err != nil {
+			return err
+		}
+
+	}
+	return nil
+}
+func DeCompress(zipFile string)  {
+	r,_ := zip.OpenReader(zipFile)
+	defer r.Close()
+	for _, zf := range r.File {
+		fmt.Println(zf.Name)
+	}
 }

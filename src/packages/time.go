@@ -1,13 +1,9 @@
 package main
 
 import (
-	"crypto/md5"
-	"encoding/base64"
-	"encoding/hex"
 	"fmt"
 	"math/rand"
 	"os"
-	"strconv"
 	"strings"
 	"time"
 )
@@ -41,6 +37,7 @@ func execute(funcN string)  {
 		"time6" : time6,
 		"time7" : time7,
 		"time8" : time8,
+		"time9" : time9,
 	}
 	funcMap[funcN]()
 }
@@ -225,9 +222,10 @@ func time5()  {
 }
 
 func time6()  {
-	t := "2019-11-07 23:59:59"
+	t := "2020-01-21 16:00:00"
 	t1,_ := time.Parse(timeLayOut,t)
 	fmt.Println(t1.Format(timeLayOut))
+	fmt.Println(t1.Unix())
 }
 func time7()  {
 	t := "2019-12-17T17:33:21+08:00"
@@ -238,14 +236,31 @@ func time7()  {
 
 func time8()  {
 	var (
-		//suffixbigstarttime int64 = 1579669212
+		suffixbigstarttime int64 = 1579669212
 		//suffixbigendtime int64   = 1579676412
 		suffixbighash            = "7r6CGokk_xgOlROYiSqYjHkl8hf-PtfDE15SMOl2TgU="
 	)
-	//start := time.Unix(suffixbigstarttime,0)
+	start := time.Unix(suffixbigstarttime,0)
 	//end   := time.Unix(suffixbigendtime,0)
-	//fmt.Println(start.Format(timeLayOut))
+	fmt.Println(start.Format(timeLayOut))
 	//fmt.Println(end.Format(timeLayOut))
-
 	fmt.Println(suffixbighash)
+
+	d := 1129.6
+	fmt.Println((d * 100))
+}
+
+func time9()  {
+	l,_  := time.LoadLocation("Asia/Shanghai")
+
+	now := time.Now()
+
+
+	fmt.Println(now.Local())
+
+	t    := "2020-02-28 22:59:00"
+	t1,_ := time.ParseInLocation(timeLayOut,t,l)
+	t2,_ := time.Parse(timeLayOut,t)
+	fmt.Println(now.Sub(t1))
+	fmt.Println(now.Sub(t2) + 8*time.Hour)
 }

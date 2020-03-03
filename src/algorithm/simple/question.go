@@ -323,3 +323,169 @@ func (*Ref)IsValid()  {
 
 	res =  validNum*2 == len(s)
 }
+
+func (*Ref)Check()  {
+
+}
+
+
+// https://leetcode-cn.com/problems/add-two-numbers
+type ListNode struct {
+	Val int
+	Next *ListNode
+}
+func (*Ref)AddTwoNumbers()  {
+	// l1,l2 : 输入节点
+	// l3    : l1+l2 的节点
+	// l3P   : l3节点指针
+	l1       := &ListNode{
+		Val:2,
+		Next:&ListNode{
+			Val:4,
+			Next:&ListNode{
+				Val:3,
+			},
+		},
+	}
+	l2       := &ListNode{
+		Val:5,
+		Next:&ListNode{
+			Val:6,
+			Next:&ListNode{
+				Val:4,
+			},
+		},
+	}
+	l3       := &ListNode{}
+	l3P      := l3
+	nextPlus := 0
+
+	for l1 != nil || l2 != nil || nextPlus > 0 {
+		val := 0
+
+		if l1 != nil {
+			val += l1.Val
+			l1   = l1.Next
+		}
+		if l2 != nil {
+			val += l2.Val
+			l2   = l2.Next
+		}
+		val     += nextPlus
+		nextPlus = val/10
+		val     %= 10
+
+		l3P.Next = &ListNode{Val:val}
+		l3P      = l3P.Next
+	}
+
+	fmt.Println(l3.Next)
+}
+func (*Ref)AddTwoNumbers1()  {
+	l1       := &ListNode{
+		Val:2,
+		Next:&ListNode{
+			Val:4,
+			Next:&ListNode{
+				Val:3,
+			},
+		},
+	}
+	l2       := &ListNode{
+		Val:5,
+		Next:&ListNode{
+			Val:6,
+			Next:&ListNode{
+				Val:4,
+			},
+		},
+	}
+
+	l3P      := &ListNode{}
+	l3       := l3P
+	nextPlus := 0
+
+	for  ;l1 != nil || l2 != nil || nextPlus > 0;   {
+		var val = 0
+		if l1 != nil && l2 != nil {
+			val += l1.Val + l2.Val
+			l1 = l1.Next
+			l2 = l2.Next
+		} else if l1 != nil {
+			val += l1.Val
+			l1 = l1.Next
+		} else if l2 != nil {
+			val += l2.Val
+			l2 = l2.Next
+		}
+		val += nextPlus
+
+		//进多少位
+		nextPlus = val/10
+		//取余
+		val     %= 10
+
+		l3P.Next = &ListNode{Val:val,Next:nil}
+		l3P      = l3P.Next
+	}
+
+	fmt.Println(l3.Next)
+}
+
+func (*Ref)MaxSubString()  {
+	s         := "pwwkew"
+	resm      := make(map[rune]int)
+	maxL      := 0
+	for i, sr := range s {
+		resm[sr]++
+
+		//存在重复的
+		if resm[sr] > 1  {
+
+			if resl := len(resm);maxL < resl {
+				maxL = resl
+			}
+			resm = make(map[rune]int)
+
+			resm[sr]++
+			sr1      := s[:i]
+			sr1Index := len(sr1)-1
+			for sr1Index >= 0 {
+				if int32(sr1[sr1Index]) == sr {
+					break
+				}
+				resm[int32(sr1[sr1Index])]++
+				sr1Index--
+			}
+		}
+	}
+
+	if resl := len(resm);maxL < resl {
+		maxL = resl
+	}
+
+
+	fmt.Println(maxL)
+}
+func (*Ref)MaxSubString2()  {
+	s := "bbtablud"
+	maxLen, left := 0, 0
+	for right := range s {
+		sCur  := s[left:right]
+		index := strings.IndexByte(sCur,s[right])
+		if index != -1 {
+			left += index + 1
+		} else {
+			le := right - left + 1
+			if maxLen < le {
+				maxLen = le
+			}
+		}
+	}
+	fmt.Println(maxLen)
+}
+
+//https://leetcode-cn.com/problems/median-of-two-sorted-arrays/
+func (*Ref)MidSortedArrays()  {
+
+}

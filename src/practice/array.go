@@ -7,6 +7,7 @@ import (
 	"math"
 	"os"
 	"reflect"
+	"strings"
 )
 
 /*
@@ -327,7 +328,8 @@ func slice9()  {
 
 
 	v5 := uuid.Must(uuid.NewV4())
-	fmt.Println(v5.String())
+
+	fmt.Println(strings.Replace(v5.String(),"-","",-1)[:uuid.Size])
 }
 func slice10()  {
 	b1 := 2
