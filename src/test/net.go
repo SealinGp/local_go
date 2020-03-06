@@ -7,6 +7,8 @@ import (
 	"net/http/cgi"
 	"net/http/fcgi"
 	"os"
+	"os/signal"
+	"syscall"
 
 	//net3
 	"reflect"
@@ -99,8 +101,26 @@ http 服务器
 func net4() {
 	http.HandleFunc("/hello", hello)
 	http.Handle("/handle/", http.HandlerFunc(say))
+	serv := http.Server{
+		Addr:              ":8989",
+		Handler:           http.HandlerFunc(say),
+		TLSConfig:         nil,
+		ReadTimeout:       0,
+		ReadHeaderTimeout: 0,
+		WriteTimeout:      0,
+		IdleTimeout:       0,
+		MaxHeaderBytes:    0,
+		TLSNextProto:      nil,
+		ConnState:         nil,
+		ErrorLog:          nil,
+	}
+	go func() {
+		http.ListenAndServe(":8989", nil)
+	}()
 
-	http.ListenAndServe(":8989", nil)
+	exitSignal := make(chan os.Signal)
+	signal.Notify(exitSignal,os.Interrupt,syscall.SIGTERM)
+	<-exitSignal
 }
 
 func hello(w http.ResponseWriter, req *http.Request) {

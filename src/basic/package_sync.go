@@ -36,7 +36,7 @@ func execute(n string) {
  Type Mutex struct {}
     func (m *Mutex)Lock()	//锁住m,若m阻塞到m解锁
     func (m *Mutex)Unlock() //解锁m,若m未加锁会导致错误
- Type WaitGrout struct {}
+ Type WaitGroup struct {}
  	添加int类型的delta到WaitGroup计数器中,
 	若计数器=0,则释放在等待时阻止的所有goroutine,
 	若计数器<0,则报错
@@ -82,10 +82,11 @@ func mutex_sync() {
 	}
 
 	time.Sleep(time.Second)
-	fmt.Println("Unlocked")
-	mutex.Unlock() //等待所有协程运行完毕
 
-	wait.Wait()
+	fmt.Println("Unlocked")
+	mutex.Unlock()
+
+	wait.Wait()//等待所有协程运行完毕
 }
 
 /*
