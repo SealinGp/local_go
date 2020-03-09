@@ -2,19 +2,20 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"net"
 	"net/http"
 	"net/http/cgi"
 	"net/http/fcgi"
 	"os"
+	"os/exec"
 	"os/signal"
+	"path/filepath"
 	"syscall"
 
-	//net3
 	"reflect"
 	"strings"
 	//"log"
-	//net5
 	// "database/sql"
 	// _ "github.com/go-sql-driver/mysql"
 )
@@ -36,6 +37,7 @@ func main() {
 func execute(func1 string) {
 	funs := map[string]func(){
 		"net1": net1,
+		"net2": net2,
 		"net3": net3,
 		"net4": net4,
 		"net5": net5,
@@ -78,7 +80,6 @@ func net2() {
 		handle.ServeHTTP(w, r)
 	})
 	http.ListenAndServe(":8989", nil)
-	select {}
 }
 
 /*
@@ -101,22 +102,11 @@ http 服务器
 func net4() {
 	http.HandleFunc("/hello", hello)
 	http.Handle("/handle/", http.HandlerFunc(say))
-	serv := http.Server{
-		Addr:              ":8989",
-		Handler:           http.HandlerFunc(say),
-		TLSConfig:         nil,
-		ReadTimeout:       0,
-		ReadHeaderTimeout: 0,
-		WriteTimeout:      0,
-		IdleTimeout:       0,
-		MaxHeaderBytes:    0,
-		TLSNextProto:      nil,
-		ConnState:         nil,
-		ErrorLog:          nil,
-	}
+
 	go func() {
 		http.ListenAndServe(":8989", nil)
 	}()
+
 
 	exitSignal := make(chan os.Signal)
 	signal.Notify(exitSignal,os.Interrupt,syscall.SIGTERM)
@@ -161,19 +151,59 @@ func say(w http.ResponseWriter, req *http.Request) {
 	method.Call([]reflect.Value{wr, r})
 }
 
+//开启守护进程
+//ref: https://phpjieshuo.com/archives/121/
+//原理: 父进程开启一个子进程,然后父进程退出,那么此时子进程就变成了守护进程
 func net5() {
-	fmt.Println("net5 func")
-	fmt.Println(os.Getenv("GOPATH"))
-	fmt.Println("after go PATH")
-	arr := make([]string, 5)
-	for k,v := range arr  {
-		fmt.Println(k,v);
+	//需要守护的进程
+	a := func() {
+		log.Println(os.Getpid())
+		select{}
 	}
-}
-type Rope string
 
-func net6()  {
-	var r Rope
-	r = "abc"
-	fmt.Println(r)
+	//将其守护进程化
+	daemonize1(a)
 }
+
+func daemonize1(process func())  {
+	if os.Getenv("daemonize") == "1" {
+		fmt.Println("child process running")
+		process()
+		return
+	}
+	sc, _     := filepath.Abs(os.Args[0])
+	cmd       := exec.Command(sc,os.Args[1:]...)
+	cmd.Stdin  = os.Stdin
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	cmd.Env = []string{"daemonize=1"}
+	e     := cmd.Start()
+	if e != nil {
+		log.Fatal(e.Error())
+	}
+	fmt.Println("parent process finished")
+}
+
+func daemonize2(process func())  {
+	if os.Getenv("daemonize") == "1" {
+		fmt.Println("child process running")
+		process()
+		return
+	}
+
+	sc, _ := filepath.Abs(os.Args[0])
+	cmd1 := &exec.Cmd{
+		Path:         sc,
+		Args:         append([]string{sc},os.Args[1:]...),
+		Stdin:        os.Stdin,
+		Stdout:       os.Stdout,
+		Stderr:       os.Stderr,
+		Env:[]string{"daemonize=1"},
+	}
+	e := cmd1.Start()
+	if e != nil {
+		log.Fatal(e.Error())
+	}
+	fmt.Println("i'm parent process finished.")
+}
+
