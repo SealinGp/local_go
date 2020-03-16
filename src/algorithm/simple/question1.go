@@ -51,30 +51,27 @@ func (*Ref)FindMid2()  {
 }
 
 func (*Ref)CompressString()  {
-	S  := "aabcccccaaa"
-
-	//SL := len(S)
+	S := "aabcccccaaa"
+	SL := len(S)
 	sc := ""
-
 	var v1 rune
 	v1L := 0
-	for _, v := range S {
-		if v1 != v && v1L != 0 {
+	for i:= 0; i < SL + 1; i++ {
+		if (i == SL) || (v1 != rune(S[i]) && v1L > 0) {
 			sc += string(v1) + strconv.Itoa(v1L)
-			if v1 == 'c' {
-				fmt.Println(string(v))
-			}
 			v1L = 0
 		}
 
-		v1 = v
+		if i == SL {
+			continue
+		}
+		v1 = rune(S[i])
 		v1L++
 	}
 
-	//if SL < len(sc) {
-	//	sc = S
-	//}
 
-	//fmt.Println(sc)
-	fmt.Println(S)
+	if SL <= len(sc) {
+		sc = S
+	}
+	fmt.Println(sc)
 }
