@@ -78,11 +78,11 @@ func (*Ref)MaxDiv()  {
 }
 
 // https://leetcode-cn.com/problems/longest-palindromic-substring/
-func (*Ref)LPalidromic()  {
+func (*Ref)LPalidromic() {
 	s := "cyyoacmjwjubfkzrrbvquqkwhsxvmytmjvbborrtoiyotobzjmohpadfrvmxuagbdczsjuekjrmcwyaovpiogspbslcppxojgbfxhtsxmecgqjfuvahzpgprscjwwutwoiksegfreortttdotgxbfkisyakejihfjnrdngkwjxeituomuhmeiesctywhryqtjimwjadhhymydlsmcpycfdzrjhstxddvoqprrjufvihjcsoseltpyuaywgiocfodtylluuikkqkbrdxgjhrqiselmwnpdzdmpsvbfimnoulayqgdiavdgeiilayrafxlgxxtoqskmtixhbyjikfmsmxwribfzeffccczwdwukubopsoxliagenzwkbiveiajfirzvngverrbcwqmryvckvhpiioccmaqoxgmbwenyeyhzhliusupmrgmrcvwmdnniipvztmtklihobbekkgeopgwipihadswbqhzyxqsdgekazdtnamwzbitwfwezhhqznipalmomanbyezapgpxtjhudlcsfqondoiojkqadacnhcgwkhaxmttfebqelkjfigglxjfqegxpcawhpihrxydprdgavxjygfhgpcylpvsfcizkfbqzdnmxdgsjcekvrhesykldgptbeasktkasyuevtxrcrxmiylrlclocldmiwhuizhuaiophykxskufgjbmcmzpogpmyerzovzhqusxzrjcwgsdpcienkizutedcwrmowwolekockvyukyvmeidhjvbkoortjbemevrsquwnjoaikhbkycvvcscyamffbjyvkqkyeavtlkxyrrnsmqohyyqxzgtjdavgwpsgpjhqzttukynonbnnkuqfxgaatpilrrxhcqhfyyextrvqzktcrtrsbimuokxqtsbfkrgoiznhiysfhzspkpvrhtewthpbafmzgchqpgfsuiddjkhnwchpleibavgmuivfiorpteflholmnxdwewj"
 
-	isPa := func(str string,le int) bool {
-		for i := 0; i < le / 2; i++ {
+	isPa := func(str string, le int) bool {
+		for i := 0; i < le/2; i++ {
 			if str[i] != str[le-i-1] {
 				return false
 			}
@@ -94,16 +94,16 @@ func (*Ref)LPalidromic()  {
 	l := 0
 	sL := len(s)
 	for i := 0; i < sL; i++ {
-		for j := i+1; j <= sL; j++ {
+		for j := i + 1; j <= sL; j++ {
 			Le := len(s[i:j])
-			if Le > l && isPa(s[i:j],Le){
+			if Le > l && isPa(s[i:j], Le) {
 				l = len(s[i:j])
 				m = s[i:j]
 			}
 		}
 	}
 	fmt.Println(m)
-=======
+}
 func (*Ref)FindMid2()  {
 }
 
@@ -131,5 +131,4 @@ func (*Ref)CompressString()  {
 		sc = S
 	}
 	fmt.Println(sc)
->>>>>>> 8ec223ca433fbf94f2b3be2734ff5eb52ff96b00
 }
