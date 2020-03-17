@@ -3,6 +3,7 @@ package simple
 import (
 	"fmt"
 	"strings"
+	"strconv"
 )
 
 //https://leetcode-cn.com/problems/median-of-two-sorted-arrays/
@@ -102,4 +103,33 @@ func (*Ref)LPalidromic()  {
 		}
 	}
 	fmt.Println(m)
+=======
+func (*Ref)FindMid2()  {
+}
+
+func (*Ref)CompressString()  {
+	S := "aabcccccaaa"
+	SL := len(S)
+	sc := ""
+	var v1 rune
+	v1L := 0
+	for i:= 0; i < SL + 1; i++ {
+		if (i == SL) || (v1 != rune(S[i]) && v1L > 0) {
+			sc += string(v1) + strconv.Itoa(v1L)
+			v1L = 0
+		}
+
+		if i == SL {
+			continue
+		}
+		v1 = rune(S[i])
+		v1L++
+	}
+
+
+	if SL <= len(sc) {
+		sc = S
+	}
+	fmt.Println(sc)
+>>>>>>> 8ec223ca433fbf94f2b3be2734ff5eb52ff96b00
 }
