@@ -2,6 +2,7 @@ package simple
 
 import (
 	"fmt"
+	"strings"
 )
 
 //https://leetcode-cn.com/problems/median-of-two-sorted-arrays/
@@ -46,5 +47,59 @@ func (*Ref)FindMid()  {
 
 	fmt.Println(mid)
 }
-func (*Ref)FindMid2()  {
+
+// https://leetcode-cn.com/problems/greatest-common-divisor-of-strings/
+func (*Ref)MaxDiv()  {
+	//假设str1 为长的那个 str2为短的那个
+	str1 := "LEET"
+	str2 := "CODE"
+
+	if len(str1) < len(str2) {
+		str1, str2 = str2, str1
+	}
+	
+	str3 := ""
+	maxL := 0
+
+	for i := range str2 {
+		if  str2[:i+1] == str1[:i+1] &&
+			strings.ReplaceAll(str1,str1[:i+1],"") == "" &&
+			strings.ReplaceAll(str2,str1[:i+1],"") == "" {
+			if maxL < len(str1[:i+1]) {
+				str3 = str1[:i+1]
+				maxL = len(str1[:i+1])
+			}
+		}
+	}
+
+	fmt.Println(str3)
+	fmt.Println(maxL)
+}
+
+// https://leetcode-cn.com/problems/longest-palindromic-substring/
+func (*Ref)LPalidromic()  {
+	s := "cyyoacmjwjubfkzrrbvquqkwhsxvmytmjvbborrtoiyotobzjmohpadfrvmxuagbdczsjuekjrmcwyaovpiogspbslcppxojgbfxhtsxmecgqjfuvahzpgprscjwwutwoiksegfreortttdotgxbfkisyakejihfjnrdngkwjxeituomuhmeiesctywhryqtjimwjadhhymydlsmcpycfdzrjhstxddvoqprrjufvihjcsoseltpyuaywgiocfodtylluuikkqkbrdxgjhrqiselmwnpdzdmpsvbfimnoulayqgdiavdgeiilayrafxlgxxtoqskmtixhbyjikfmsmxwribfzeffccczwdwukubopsoxliagenzwkbiveiajfirzvngverrbcwqmryvckvhpiioccmaqoxgmbwenyeyhzhliusupmrgmrcvwmdnniipvztmtklihobbekkgeopgwipihadswbqhzyxqsdgekazdtnamwzbitwfwezhhqznipalmomanbyezapgpxtjhudlcsfqondoiojkqadacnhcgwkhaxmttfebqelkjfigglxjfqegxpcawhpihrxydprdgavxjygfhgpcylpvsfcizkfbqzdnmxdgsjcekvrhesykldgptbeasktkasyuevtxrcrxmiylrlclocldmiwhuizhuaiophykxskufgjbmcmzpogpmyerzovzhqusxzrjcwgsdpcienkizutedcwrmowwolekockvyukyvmeidhjvbkoortjbemevrsquwnjoaikhbkycvvcscyamffbjyvkqkyeavtlkxyrrnsmqohyyqxzgtjdavgwpsgpjhqzttukynonbnnkuqfxgaatpilrrxhcqhfyyextrvqzktcrtrsbimuokxqtsbfkrgoiznhiysfhzspkpvrhtewthpbafmzgchqpgfsuiddjkhnwchpleibavgmuivfiorpteflholmnxdwewj"
+
+	isPa := func(str string,le int) bool {
+		for i := 0; i < le / 2; i++ {
+			if str[i] != str[le-i-1] {
+				return false
+			}
+		}
+		return true
+	}
+
+	m := ""
+	l := 0
+	sL := len(s)
+	for i := 0; i < sL; i++ {
+		for j := i+1; j <= sL; j++ {
+			Le := len(s[i:j])
+			if Le > l && isPa(s[i:j],Le){
+				l = len(s[i:j])
+				m = s[i:j]
+			}
+		}
+	}
+	fmt.Println(m)
 }
