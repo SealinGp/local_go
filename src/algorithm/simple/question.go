@@ -511,23 +511,14 @@ func (*Ref)Message()  {
 	dp0 := 0 //不接的
 	dp1 := nums[0] //接的
 	for i := 1; i < numsL; i++ {
-		//i = 1 dp0 = 0 dp1 = 2  tdp0 = 2
-		//i = 2 dp0 = 2 dp1 = 2  tdp0 = 2
-		//i = 3 dp0 = 2 dp1 = 6  tdp0 = 6
-		//i = 4 dp0 = 6 dp1 = 7  tdp0 = 7
 		tdp0 := math.Max(float64(dp0),float64(dp1))
-
-		//i = 1 tdp1 = 0 + 2 = 2
-		//i = 2 tdp1 = 2 + 4 = 6
-		//i = 3 tdp1 = 2 + 5 = 7
-		//i = 4 tdp1 = 6 + 3 =
 		tdp1 := dp0 + nums[i]
-
-		//i = 1 dp0 = 2 dp1 =2
-		//i = 2 dp0 = 2 dp1 = 6
-		//i = 3 dp0 = 6 dp1 = 7
 		dp0 = int(tdp0)
 		dp1 = tdp1
 	}
 	log.Println(math.Max(float64(dp0),float64(dp1)))
+}
+
+func (*Ref)Rob()  {
+
 }
