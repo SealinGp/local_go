@@ -2,8 +2,9 @@ package simple
 
 import (
 	"fmt"
-	"strings"
+	"log"
 	"strconv"
+	"strings"
 )
 
 //https://leetcode-cn.com/problems/median-of-two-sorted-arrays/
@@ -131,4 +132,47 @@ func (*Ref)CompressString()  {
 		sc = S
 	}
 	fmt.Println(sc)
+}
+
+// https://leetcode-cn.com/problems/surface-area-of-3d-shapes/
+func (*Ref)SurfaceArea()  {
+	grid := [][]int{
+		{2,2,2},{2,1,2},{2,2,2},
+	}
+
+	s     := 0
+	for i := range grid {
+		for j,v := range grid[i]  {
+			curS := 0
+			if v > 0 {
+				curS = 6*v - 2*(v-1)
+			}
+			s = s + curS
+
+			//情况1 j相邻
+			prevj := j-1
+			previ := i
+			if prevj >= 0 {
+				min := grid[previ][prevj]
+				if v < min {
+					min = v
+				}
+				s = s - min * 2
+			}
+
+			//情况2 i相邻
+			prevj = j
+			previ = i-1
+			if previ >= 0 {
+				min := grid[previ][prevj]
+				if v < min {
+					min = v
+				}
+				s = s - min * 2
+			}
+		}
+	}
+
+	log.Println(s)
+	//log.Println(prevAll)
 }
