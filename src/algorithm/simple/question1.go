@@ -134,6 +134,7 @@ func (*Ref)CompressString()  {
 	fmt.Println(sc)
 }
 
+
 // https://leetcode-cn.com/problems/find-words-that-can-be-formed-by-characters/
 // 1.字母只能用一次
 func (*Ref)CountC()  {
@@ -200,17 +201,150 @@ func (*Ref)ZXDKGS()  {
 }
 
 // https://leetcode-cn.com/problems/water-and-jug-problem/
-func (*Ref)Water()  {
-	x, y, z            := 3, 5, 4
+func (*Ref)Water() {
+	x, y, z := 3, 5, 4
 	//remain_x: x中的水量
 	remain_x, remain_y := x, y
 
 	//存储已经搜索过的所有的remain_x/remain_y 的状态
 	stack := [][]int{
-		{0,0},
+		{0, 0},
 	}
 
 	for stack != nil {
 
 	}
+}
+
+// https://leetcode-cn.com/problems/surface-area-of-3d-shapes/
+func (*Ref)SurfaceArea()  {
+	grid := [][]int{
+		{2,2,2},{2,1,2},{2,2,2},
+	}
+
+	s     := 0
+	for i := range grid {
+		for j,v := range grid[i]  {
+			curS := 0
+			if v > 0 {
+				curS = 6*v - 2*(v-1)
+			}
+			s = s + curS
+
+			//情况1 j相邻
+			prevj := j-1
+			previ := i
+			if prevj >= 0 {
+				min := grid[previ][prevj]
+				if v < min {
+					min = v
+				}
+				s = s - min * 2
+			}
+
+			//情况2 i相邻
+			prevj = j
+			previ = i-1
+			if previ >= 0 {
+				min := grid[previ][prevj]
+				if v < min {
+					min = v
+				}
+				s = s - min * 2
+			}
+		}
+	}
+
+	log.Println(s)
+	//log.Println(prevAll)
+}
+
+// https://leetcode-cn.com/problems/available-captures-for-rook/
+func (*Ref)NRC()  {
+
+	//R : [2,3]  //y轴位置 [7,3] ~ [0,3]
+	board := [][]byte{
+		{'.','.','.','.','.','.','.','.'},
+		{'.','.','.','p','.','.','.','.'},
+		{'.','.','.','R','.','.','.','p'},
+		{'.','.','.','.','.','.','.','.'},
+		{'.','.','.','.','.','.','.','.'},
+		{'.','.','.','p','.','.','.','.'},
+		{'.','.','.','.','.','.','.','.'},
+		{'.','.','.','.','.','.','.','.'},
+	}
+	//是不是白车
+	ifWhiteRook := func(b byte) bool {
+		return b == 'R'
+	}
+	//是不是黑卒
+	ifBlackPawn := func(b byte) bool {
+		return b == 'p'
+	}
+	//是不是空格
+	ifEmpty := func(b byte) bool {
+		return b == '.'
+	}
+	//白车一次吃的黑卒的数量
+	nums := 0
+
+	//1.找白车的位置[x1,y1]
+	x1, y1 := 0, 0
+	out:for x := range board  {
+		for y := range board[x]  {
+			if ifWhiteRook(board[x][y]) {
+				x1, y1 = x, y
+				break out
+			}
+		}
+	}
+
+	//找x轴上的黑卒的位置[x2,y2] [0,y1] ~ [8,y1]
+	for i := 0; i < 8; i++ {
+		if ifBlackPawn(board[i][y1]) {
+
+			x2,y2 := i, y1
+			leftX  := x2
+			rightX := x1
+			if rightX < leftX {
+				leftX, rightX = rightX, leftX
+			}
+
+			//[x2,y2] ~ [x1,y1]之间必须全为'.',否则不能吃到黑卒
+			for i1 := leftX + 1; i1 < rightX ; i1++ {
+				if !ifEmpty(board[i1][y2]) {
+					nums--
+					break
+				}
+			}
+			//假设找到了
+			nums++
+		}
+	}
+
+	//找y轴上的黑卒的位置[x2,y2] [x1,0] ~ [x1,8]
+	for j := 0; j < 8; j++ {
+		if ifBlackPawn(board[x1][j]) {
+			x2,y2 := x1,j
+
+			topY    := y2
+			bottomY := y1
+			if topY < bottomY {
+				topY, bottomY = bottomY,topY
+			}
+
+			//[x2,y2] ~ [x1,y1]之间必须全为'.',否则不能吃到黑卒
+			for j1 := bottomY + 1; j1 < topY ; j1++ {
+				if !ifEmpty(board[x2][j1]) {
+					nums--
+					break
+				}
+			}
+			//假设找到了
+			nums++
+		}
+	}
+
+
+	log.Println(nums)
 }

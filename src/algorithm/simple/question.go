@@ -489,3 +489,36 @@ func (*Ref)MaxSubString2()  {
 func (*Ref)MidSortedArrays()  {
 
 }
+
+// https://leetcode-cn.com/problems/the-masseuse-lcci/
+func (*Ref)Message()  {
+	nums := []int{2,1,4,5,3,1,1,3}
+	numsL := len(nums)
+	if numsL == 0 {
+		log.Println(0)
+		return
+	}
+	/**
+	dp[i][0] : 前i个预约, 第i个预约 不接的最长预约时间
+	dp[i][1] : 前i个预约, 第i个预约 接的最长预约时间
+	nums : 第i个预约的预约时长
+
+	从前往后计算dp值, 假设已经计算出前i-1个dp值 考虑计算dp[i][0] dp[i][1]
+	dp[i][0] = max(dp[i-1][0],dp[i-1][1])
+	dp[i][1] = dp[i-1][0] + nums
+	 */
+	//{2,1,4,5,3,1,1,3}
+	dp0 := 0 //不接的
+	dp1 := nums[0] //接的
+	for i := 1; i < numsL; i++ {
+		tdp0 := math.Max(float64(dp0),float64(dp1))
+		tdp1 := dp0 + nums[i]
+		dp0 = int(tdp0)
+		dp1 = tdp1
+	}
+	log.Println(math.Max(float64(dp0),float64(dp1)))
+}
+
+func (*Ref)Rob()  {
+
+}
