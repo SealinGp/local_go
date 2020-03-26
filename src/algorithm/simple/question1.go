@@ -176,3 +176,93 @@ func (*Ref)SurfaceArea()  {
 	log.Println(s)
 	//log.Println(prevAll)
 }
+
+// https://leetcode-cn.com/problems/available-captures-for-rook/
+func (*Ref)NRC()  {
+
+	//R : [2,3]  //y轴位置 [7,3] ~ [0,3]
+	board := [][]byte{
+		{'.','.','.','.','.','.','.','.'},
+		{'.','.','.','p','.','.','.','.'},
+		{'.','.','.','R','.','.','.','p'},
+		{'.','.','.','.','.','.','.','.'},
+		{'.','.','.','.','.','.','.','.'},
+		{'.','.','.','p','.','.','.','.'},
+		{'.','.','.','.','.','.','.','.'},
+		{'.','.','.','.','.','.','.','.'},
+	}
+	//是不是白车
+	ifWhiteRook := func(b byte) bool {
+		return b == 'R'
+	}
+	//是不是黑卒
+	ifBlackPawn := func(b byte) bool {
+		return b == 'p'
+	}
+	//是不是空格
+	ifEmpty := func(b byte) bool {
+		return b == '.'
+	}
+	//白车一次吃的黑卒的数量
+	nums := 0
+
+	//1.找白车的位置[x1,y1]
+	x1, y1 := 0, 0
+	out:for x := range board  {
+		for y := range board[x]  {
+			if ifWhiteRook(board[x][y]) {
+				x1, y1 = x, y
+				break out
+			}
+		}
+	}
+
+	//找x轴上的黑卒的位置[x2,y2] [0,y1] ~ [8,y1]
+	for i := 0; i < 8; i++ {
+		if ifBlackPawn(board[i][y1]) {
+
+			x2,y2 := i, y1
+			leftX  := x2
+			rightX := x1
+			if rightX < leftX {
+				leftX, rightX = rightX, leftX
+			}
+
+			//[x2,y2] ~ [x1,y1]之间必须全为'.',否则不能吃到黑卒
+			for i1 := leftX + 1; i1 < rightX ; i1++ {
+				if !ifEmpty(board[i1][y2]) {
+					nums--
+					break
+				}
+			}
+			//假设找到了
+			nums++
+		}
+	}
+
+	//找y轴上的黑卒的位置[x2,y2] [x1,0] ~ [x1,8]
+	for j := 0; j < 8; j++ {
+		if ifBlackPawn(board[x1][j]) {
+			x2,y2 := x1,j
+
+			topY    := y2
+			bottomY := y1
+			if topY < bottomY {
+				topY, bottomY = bottomY,topY
+			}
+
+			//[x2,y2] ~ [x1,y1]之间必须全为'.',否则不能吃到黑卒
+			for j1 := bottomY + 1; j1 < topY ; j1++ {
+				if !ifEmpty(board[x2][j1]) {
+					nums--
+					break
+				}
+			}
+			//假设找到了
+			nums++
+		}
+	}
+
+
+	log.Println(nums)
+}
