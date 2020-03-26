@@ -2,8 +2,9 @@ package simple
 
 import (
 	"fmt"
-	"strings"
+	"log"
 	"strconv"
+	"strings"
 )
 
 //https://leetcode-cn.com/problems/median-of-two-sorted-arrays/
@@ -131,4 +132,85 @@ func (*Ref)CompressString()  {
 		sc = S
 	}
 	fmt.Println(sc)
+}
+
+// https://leetcode-cn.com/problems/find-words-that-can-be-formed-by-characters/
+// 1.字母只能用一次
+func (*Ref)CountC()  {
+	words   := []string{"cat","bt","hat","tree"}
+	chars  := "atach"
+
+	charts1 := chars
+	remNum  := 0
+	for _, word := range words {
+		//是否掌握了
+		notRem := false
+		//每次拼写
+		charts1 = chars
+
+		for _, w := range word {
+			i := strings.IndexRune(charts1,w)
+			if i == -1 {
+				notRem = true
+				break
+			}
+
+			//每个字母只能用一次
+			charts1 = charts1[:i] + charts1[i+1:]
+		}
+		if !notRem {
+			remNum += len(word)
+		}
+	}
+
+	fmt.Println(remNum)
+}
+
+// https://leetcode-cn.com/problems/longest-palindrome/
+func (*Ref)LP()  {
+	
+}
+// https://leetcode-cn.com/problems/zui-xiao-de-kge-shu-lcof/
+func (*Ref)ZXDKGS()  {
+	arr  := []int{3,2,1}
+	k    := 2
+
+	arr1 := []int{}
+	for k > 0 {
+		min  := arr[0]
+		minI := 0
+		arrL := len(arr)
+		for i := 1;i < arrL; i++  {
+			if min > arr[i] {
+				min  = arr[i]
+				minI = i
+			}
+		}
+
+		tmp := []int{}
+		tmp = append(tmp,arr[:minI]...)
+		tmp = append(tmp,arr[minI+1:]...)
+		arr = tmp
+		k--
+
+		arr1 = append(arr1,min)
+	}
+
+	log.Println(arr1)
+}
+
+// https://leetcode-cn.com/problems/water-and-jug-problem/
+func (*Ref)Water()  {
+	x, y, z            := 3, 5, 4
+	//remain_x: x中的水量
+	remain_x, remain_y := x, y
+
+	//存储已经搜索过的所有的remain_x/remain_y 的状态
+	stack := [][]int{
+		{0,0},
+	}
+
+	for stack != nil {
+
+	}
 }
