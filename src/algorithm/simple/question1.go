@@ -201,7 +201,7 @@ func (*Ref)ZXDKGS()  {
 }
 
 // https://leetcode-cn.com/problems/water-and-jug-problem/
-func (*Ref)Water() {
+/*func (*Ref)Water() {
 	x, y, z := 3, 5, 4
 	//remain_x: x中的水量
 	remain_x, remain_y := x, y
@@ -214,7 +214,7 @@ func (*Ref)Water() {
 	for stack != nil {
 
 	}
-}
+}*/
 
 // https://leetcode-cn.com/problems/surface-area-of-3d-shapes/
 func (*Ref)SurfaceArea()  {
@@ -347,4 +347,51 @@ func (*Ref)NRC()  {
 
 
 	log.Println(nums)
+}
+
+// https://leetcode-cn.com/problems/x-of-a-kind-in-a-deck-of-cards/
+func (*Ref)HGSX()  {
+	deck := []int{
+		1,2,3,4,4,3,2,1,
+	}
+	//分y组,每组x个, x >= 2时返回true
+	//1 =< y <= deckL/2
+	//1.x * y = deckL : x = deckL / y
+
+	deckL := len(deck)
+	ifw   := false
+	if deckL < 1 {
+		return
+	}
+
+	//计算每个整数的个数
+	tmp := make(map[int]int)
+	for _,d := range deck  {
+		tmp[d]++
+	}
+
+	//找出分组的可能性
+	for y := 1; y <= deckL/2; y++{
+		if deckL % y == 0 {
+			x   := deckL/y
+			if x < 2 {
+				continue
+			}
+
+			//每个整数a的个数v 满足 v%x == 0 才可分组成功
+			manzu := true
+			for _,v := range tmp {
+				if v % x != 0 {
+					manzu = false
+					break
+				}
+			}
+			if manzu {
+				ifw = true
+				break
+			}
+		}
+	}
+
+	log.Println(ifw)
 }
