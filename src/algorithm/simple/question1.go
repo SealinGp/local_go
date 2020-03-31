@@ -446,3 +446,33 @@ func (*Ref)LR()  {
 
 	log.Println(x)
 }
+// https://leetcode-cn.com/problems/sort-an-array/
+func (*Ref)Sort()  {
+	nums := []int{
+		5,2,3,1,
+	}
+
+	nums = S(nums,len(nums))
+	log.Println(nums)
+}
+func S(nums []int,L int) []int {
+	if len(nums) <= 1 {
+		return nums
+	}
+	mid   := nums[0]
+	left  := []int{}
+	right := []int{}
+	for i := 1; i < L; i++ {
+		if nums[i] < mid {
+			left = append(left,nums[i])
+		} else {
+			right = append(right,nums[i])
+		}
+	}
+
+	la := []int{}
+	la = append(la,S(left,len(left))...)
+	la = append(la,mid)
+	la = append(la,S(right,len(right))...)
+	return la
+}
