@@ -476,3 +476,22 @@ func S(nums []int,L int) []int {
 	la = append(la,S(right,len(right))...)
 	return la
 }
+
+func (*Ref)MDAS()  {
+	seq := "(()(())())"
+	C   := 0
+	D   := []int{}
+
+
+	for i := 0;i < len(seq); i++ {
+		if seq[i] == '(' {
+			C++
+			D = append(D,C%2)
+		} else {
+			D = append(D,C%2)
+			C--
+		}
+	}
+
+	log.Println(D)
+}

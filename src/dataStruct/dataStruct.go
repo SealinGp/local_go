@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"os"
 )
@@ -14,208 +13,103 @@ func main() {
 
 	fun := map[string]func(){
 		"linkTable" : linkTable,
-		"linkTable2" : linkTable2,
+		"stack" : stack,
+		"queue" : queue,
+		"hashTable" : hashTable,
 	}
 	fun[os.Args[1]]()
 }
 
 
-type Object interface {}
-//单个节点
-type Node struct {
-	Data Object
-	Next *Node
-}
 //单向链表
-type list struct {
-	head *Node  //首节点
-	tail *Node  //尾节点
-	size uint64 //链表总长度
+type Node struct {
+	Data int //数据域
+	Next *Node       //指针域
 }
-func NewList() *list {
-	return &list{}
-}
-//向尾部添加节点
-func (l *list)Append(node *Node) bool {
-	if node == nil {
-		return false
-	}
-	node.Next = nil
-
-	//新节点放入单向链表中
-	if l.size == 0 {
-		l.head = node
-	} else {
-		oldTail     := l.tail
-		oldTail.Next = node
-	}
-
-	l.tail = node
-	l.size++
-	return true
+//双向链表
+type DNode struct {
+	Data  int
+	Left  *DNode
+	Right *DNode
 }
 
-//插入节点
-func (l *list)Insert(i uint64,node *Node) bool {
-	//空链表|插入的索引超出范围|空节点 均无法做插入操作
-	if l.size == 0 || i > l.size || node == nil {
-		return false
-	}
-
-	//首个插入
-	if i == 0 {
-		node.Next = l.head
-		l.head    = node
-	} else {
-		//找到对应索引i的前面一个节点
-		iPreNode := l.head
-		for j := 0; uint64(j) < i; j++{
-			iPreNode = iPreNode.Next
-		}
-		node.Next     = iPreNode.Next
-		iPreNode.Next = node
-	}
-
-	l.size++
-	return true
-}
-
-//删除某节点
-func (l *list)Remove(i uint64) bool {
-	var node *Node
-
-	//要删除的节点的索引不得 >= 链表长度
-	if i >= l.size {
-		return false
-	}
-
-	//删除首节点
-	if i == 0 {
-		node   = l.head
-		l.head = node.Next
-		if l.size == 1 {
-			l.tail = nil
-		}
-
-	//删除其他节点
-	} else {
-		//找到索引为i的前一个节点j
-		preNode := l.head
-		for j := 1; uint64(j) < i; j++ {
-			preNode = preNode.Next
-		}
-		node         = preNode.Next //i节点
-		preNode.Next = node.Next    //j节点的next = i节点的next
-
-		//若删除尾部,则链表尾部需要调整
-		if i == l.size-1 {
-			l.tail = preNode
-		}
-	}
-
-	l.size--
-	return true
-}
-func (l *list)Get(i uint64) *Node {
-	if i >= l.size {
-		return nil
-	}
-
-	node := l.head
-	for j := 0; uint64(j) < i;j++ {
-		node = node.Next
-	}
-	return node
-}
-
+//链表 https://oi-wiki.org/ds/linked-list/
 func linkTable()  {
-	l := NewList()
-
-	n := &Node{
-		Data:"123",
-	}
-	l.Append(n)
-
-	n1 := &Node{
-		Data:"1234",
-	}
-	l.Append(n1)
-
-	for i := 0; uint64(i) < l.size; i++ {
-		fmt.Println(l.Get(uint64(i)).Data)
-	}
-
-	fmt.Println(11%10)
-}
-
-type ListNode struct {
-	 Val int
-	 Next *ListNode
-}
-func linkTable2()  {
-	l1 := &ListNode{
-		Val:1,
-		Next:&ListNode{
-			Val:8,
+	//单向链表插入数据
+	SNode := &Node{
+		Data: 1,
+		Next: &Node{
+			Data: 2,
+			Next: nil,
 		},
 	}
 
-	l2 := &ListNode{
-		Val:0,
+	//插入到索引为1 的位置,则找到索引为1-1=0的位置做插入操作
+	i1     := 1
+	iNode := &Node{
+		Data: 3,
+		Next: nil,
 	}
 
-	if l1.Val == 0 && l1.Next != nil {
-		log.Fatal("l1 begin with zero")
-	}
-	if l2.Val == 0 && l2.Next != nil {
-		log.Fatal("l2 begin with zero")
-	}
-
-	l3P      := &ListNode{}
-	l3       := l3P
-	i        := 0
-	nextPlus := 0
-	for {
-		l3P.Val  = l1.Val + l2.Val
-		if l3P.Val >= 10 {
-			l3P.Val = l3P.Val%10
-			nextPlus++
-		}
-
-		if l1.Next == nil && l2.Next == nil {
-			if nextPlus != 0 {
-				l3P.Next = &ListNode{}
-				l3P      = l3P.Next
-				l3P.Val++
-			}
+	//插入链表
+	i := 0
+	for preN := SNode;preN.Next != nil;preN = preN.Next {
+		if i == i1-1 {
+			iNode.Next,preN.Next = preN.Next,iNode
 			break
 		}
-
-		l3P.Next = &ListNode{}
-		l3P      = l3P.Next
-		l1       = l1.Next
-		l2       = l2.Next
-		if l1 == nil {
-			l1 = &ListNode{
-				Val:0,
-			}
-		}
-		if l2 == nil {
-			l2 = &ListNode{
-				Val:0,
-			}
-		}
-
 		i++
-		l1.Val += nextPlus
-		nextPlus = 0
 	}
 
-	for  {
-		fmt.Println(l3.Val)
-		l3 = l3.Next
-		if l3 == nil {
+	for {
+		log.Println(SNode.Data)
+		if SNode.Next == nil {
 			break
 		}
+		SNode = SNode.Next
 	}
+
+}
+
+//栈: https://oi-wiki.org/ds/stack/ 规律: 坐电梯
+func stack()  {
+	sta := []int{}
+	sta  = append(sta,1,2,3)
+	for i := len(sta)-1;i >= 0; i-- {
+		log.Println(sta[i])
+	}
+}
+
+//队列: https://oi-wiki.org/ds/queue/ 规律: 排队
+func queue()  {
+	que := []int{}
+	que = append(que,1,2,3)
+	for _,v := range que {
+		log.Println(v)
+	}
+
+	//双端队列:可以在队首|队尾 插入|删除 的队列
+
+	//队首插入
+	que = append([]int{0},que...)
+	log.Println(que)
+
+	//队首删除
+	que = que[1:]
+	log.Println(que)
+
+	//队尾插入
+	que = append(que,4)
+	log.Println(que)
+
+	//队尾删除
+	que = que[:len(que)-1]
+	log.Println(que)
+}
+
+// https://oi-wiki.org/ds/hash/
+func hashTable()  {
+	m := make(map[string]interface{})
+	m["a"] = "123"
+	log.Println(m)
 }
