@@ -16,6 +16,7 @@ func main() {
 		"stack" : stack,
 		"queue" : queue,
 		"hashTable" : hashTable,
+		"dsu" : dsu,
 	}
 	fun[os.Args[1]]()
 }
@@ -112,4 +113,41 @@ func hashTable()  {
 	m := make(map[string]interface{})
 	m["a"] = "123"
 	log.Println(m)
+}
+
+// https://oi-wiki.org/ds/dsu/ 并合集,用来查找环
+// https://www.bilibili.com/video/av38498175/
+var set  = make([]int,5)
+func dsu()  {
+	makeSet(2)
+	makeSet(3)
+	log.Println(set)
+	Union(2,3)
+
+	makeSet(4)
+	Union(4,3)
+	log.Println(set)
+
+	log.Println(findSet(3),findSet(2),"?")
+}
+//新增一个集合,根节点的值为-1
+func makeSet(i int)  {
+	set[i]  = -1
+}
+//查找集合的根节点
+func findSet(i int) int {
+	if set[i] == -1 {
+		return i
+	}
+	return findSet(set[i])
+}
+//合并集合
+func Union(i,j int)  {
+	i = findSet(i)
+	j = findSet(j)
+	if i > j {
+		set[j] = i
+	} else {
+		set[i] = j
+	}
 }
