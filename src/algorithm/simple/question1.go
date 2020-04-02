@@ -495,3 +495,70 @@ func (*Ref)MDAS()  {
 
 	log.Println(D)
 }
+
+// m × n
+// 1:活细胞 0:死细胞
+
+// = 3 活
+// > 3 || < 2 死
+//卷积运算
+// https://leetcode-cn.com/problems/game-of-life/
+func (*Ref)GOF()  {
+	board := [][]int{
+		{0,1,0},
+		{0,0,1},
+		{1,1,1},
+		{0,0,0},
+	}
+
+	n    := len(board)
+	m    := 0
+	if n >= 1 {
+		m  = len(board[0])
+	}
+
+	nextBoard := [][]int{}
+	for i := range board  {
+		rows := []int{}
+		for j := range board[i]  {
+			liveCells := 0
+
+			for i1 := i-1; i1 <= i+1; i1++ {
+				for j1 := j-1; j1 <= j+1 ; j1++ {
+					//不包括自己
+					if i1 == i && j1 == j {
+						continue
+					}
+					//不能超过边界
+					if j1 < 0 || j1 > m-1 {
+						continue
+					}
+					if i1 < 0 || i1 > n-1 {
+						continue
+					}
+
+					liveCells += board[i1][j1]
+				}
+			}
+
+
+			nextCell := 0
+			//假设为死细胞
+			if board[i][j] == 0 && liveCells == 3 {
+				nextCell = 1
+			} else if board[i][j] == 1 {
+				//活细胞
+				nextCell = 1
+				if liveCells > 3 || liveCells < 2 {
+					nextCell = 0
+				}
+			}
+
+			rows = append(rows,nextCell)
+		}
+		nextBoard = append(nextBoard,rows)
+	}
+
+	copy(board,nextBoard)
+	log.Println(board)
+}
