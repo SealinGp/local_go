@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"os"
 )
@@ -17,6 +18,7 @@ func main() {
 		"queue" : queue,
 		"hashTable" : hashTable,
 		"dsu" : dsu,
+		"Heap" : Heap,
 	}
 	fun[os.Args[1]]()
 }
@@ -149,5 +151,154 @@ func Union(i,j int)  {
 		set[j] = i
 	} else {
 		set[i] = j
+	}
+}
+
+
+//https://oi-wiki.org/ds/heap/
+//https://zhuanlan.zhihu.com/p/40294173
+func Heap()  {
+
+}
+
+// 前序遍历:  根节点 ——> 左子树 ——> 右子树
+// 中序遍历:  左子树 ——> 根节点 ——> 右子树
+// 后序遍历:  左子树 ——> 右子树 ——> 根节点
+
+//大根二叉树(从上->下,从右->左,从大->小) 排序二叉树
+type Leaf struct {
+	Key   int     //节点的大小 ?
+	Value int     //节点值
+	Left  *Leaf   //左节点
+	Right *Leaf   //右节点
+}
+type tree interface {
+	Insert(key int,value int)            //插入节点
+	Min() int                            //值最小的节点
+	Max() int                            //值最大的节点
+	Search(key int) bool                 //查询是否存在
+	InOrderTraverse(f func(value int))   //中序优先遍历
+	PreOrderTraverse(f func(value int))  //前序优先遍历
+	PostOrderTraverse(f func(value int)) //后序优先遍历
+	String()                             //打印树
+}
+
+type T1 struct {
+	Root *Leaf
+}
+func (t *T1)Insert(key,value int)  {
+	n := &Leaf{key,value,nil,nil}
+
+	if t.Root == nil {
+		t.Root = n
+	} else {
+		insertNode(t.Root,n)
+	}
+}
+func insertNode(currentLeaf,newLeaf *Leaf)  {
+	if newLeaf.Key < currentLeaf.Key {
+		if currentLeaf.Left == nil {
+			currentLeaf.Left = newLeaf
+		} else {
+			insertNode(currentLeaf.Left,newLeaf)
+		}
+	} else {
+		if currentLeaf.Right == nil {
+			currentLeaf.Right = newLeaf
+		} else {
+			insertNode(currentLeaf.Right,newLeaf)
+		}
+	}
+}
+
+//最小的节点在二叉树的最左边
+func (t *T1)Min() int {
+	n := t.Root
+	if n == nil {
+		return 0
+	}
+	for {
+		if n.Left == nil {
+			return n.Value
+		}
+		n = n.Left
+	}
+	return 0
+}
+
+func (t *T1)Max() int {
+	n := t.Root
+	if n == nil {
+		return 0
+	}
+	for {
+		if n.Right == nil {
+			return n.Value
+		}
+		n = n.Right
+	}
+	return 0
+}
+
+func (t *T1)Search(key int) bool {
+	return search(t.Root,key)
+}
+func search(currentLeaf *Leaf,key int) bool {
+	if currentLeaf == nil {
+		return false
+	}
+	if key < currentLeaf.Key {
+		return search(currentLeaf.Left,key)
+	}
+	if key > currentLeaf.Key {
+		return search(currentLeaf.Right,key)
+	}
+	return true
+}
+func (t *T1)InOrderTraverse(f func(value int))  {
+	inOrderTraver(t.Root,f)
+}
+func inOrderTraver(currentLeaf *Leaf,f func(value int))  {
+	if currentLeaf != nil {
+		inOrderTraver(currentLeaf.Left,f)
+		f(currentLeaf.Value)
+		inOrderTraver(currentLeaf.Right,f)
+	}
+}
+func (t *T1)PreOrderTraverse(f func(value int))  {
+	preOrderTraver(t.Root,f)
+}
+func preOrderTraver(currentLeaf *Leaf,f func(value int))  {
+	if currentLeaf != nil {
+		f(currentLeaf.Value)
+		preOrderTraver(currentLeaf.Left,f)
+		preOrderTraver(currentLeaf.Right,f)
+	}
+}
+func (t *T1)PostOrderTraverse(f func(value int))  {
+	postOrderTraver(t.Root,f)
+}
+func postOrderTraver(currentLeaf *Leaf,f func(value int))  {
+	if currentLeaf != nil {
+		postOrderTraver(currentLeaf.Left,f)
+		postOrderTraver(currentLeaf.Right,f)
+		f(currentLeaf.Value)
+	}
+}
+func (t *T1)String()  {
+	fmt.Println(" ---------------------------------------------------- ")
+	stringify(t.Root,0)
+	fmt.Println(" ---------------------------------------------------- ")
+}
+func stringify(currentLeaf *Leaf,level int)  {
+	if currentLeaf != nil {
+		format := ""
+		for i := 0; i < level; i++ {
+			format += "----["
+			level++
+			stringify(currentLeaf.Left, level)
+			fmt.Printf(format+"%d\n", n.Key)
+			stringify(currentLeaf.Right, level)
+		}
 	}
 }
