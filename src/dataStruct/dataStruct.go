@@ -121,22 +121,22 @@ var set  = make([]int,5)
 func dsu()  {
 	makeSet(2)
 	makeSet(3)
-	log.Println(set)
 	Union(2,3)
-
-	makeSet(4)
-	Union(4,3)
 	log.Println(set)
 
-	log.Println(findSet(3),findSet(2),"?")
+	//makeSet(4)
+	//Union(4,3)
+	//log.Println(set)
+	//
+	//log.Println(findSet(3),findSet(2),"?")
 }
 //新增一个集合,根节点的值为-1
 func makeSet(i int)  {
-	set[i]  = -1
+	set[i]  = i
 }
 //查找集合的根节点
 func findSet(i int) int {
-	if set[i] == -1 {
+	if set[i] == i {
 		return i
 	}
 	return findSet(set[i])

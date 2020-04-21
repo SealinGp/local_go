@@ -54,8 +54,8 @@ func web1()  {
 	}
 }
 func web1_HelloServer(w http.ResponseWriter,r *http.Request)  {
-	fmt.Println("HelloServer func")
-	fmt.Fprint(w,"Hello :",r.URL.Path[1:])
+	//fmt.Println("HelloServer func")
+	_,_ = fmt.Fprint(w,"Hello :",r.URL.Path[1:])
 }
 
 type hello struct {}

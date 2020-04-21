@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"log"
 	"os"
 	"runtime"
 	"sync"
@@ -71,6 +72,20 @@ func cha1()  {
 	因为 recover 总是返回nil, 除非直接在defer修饰的函数中调用,defer修饰的代码可以调用那些
 	自身可以使用panic和recover 避免失败的库例程
 	 */
+	a := make(chan int)
+	go func() {
+		a <- 1
+	}()
+	b := <-a
+	log.Println(b)
+
+	a1 := make(chan int,2)
+	a1 <- 1
+	a1 <- 2
+	b = <-a1
+	log.Println(b)
+	b = <-a1
+	log.Println(b)
 }
 
 //https://github.com/unknwon/the-way-to-go_ZH_CN/blob/master/eBook/14.7.md

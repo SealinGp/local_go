@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"net"
+	"log"
 	"net/http"
 	"net/rpc"
 	"os"
@@ -49,20 +49,10 @@ func rpc1()  {
 	rpc.HandleHTTP()
 
 	//start server
-	lis,err := net.Listen("tcp","localhost:1234")
-	if err != nil {
-		fmt.Println(err.Error())
-		return
+	e := http.ListenAndServe(":1234",rpc.DefaultServer)
+	if e != nil {
+		log.Println(e)
 	}
-	fmt.Println("rpc server listening in: localhost:1234")
-	go func() {
-		err := http.Serve(lis,nil)
-		if err != nil {
-			fmt.Println("serve err:",err.Error())
-		}
-		fmt.Println("serve success!")
-	}()
-	select {}
 }
 type Args struct {
 	N,M int
