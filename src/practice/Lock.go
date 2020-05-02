@@ -4,7 +4,6 @@ import (
 	"log"
 	"os"
 	"sync"
-	"syscall"
 )
 
 //https://github.com/chai2010/advanced-go-programming-book/blob/master/ch6-cloud/ch6-02-lock.md
@@ -68,8 +67,8 @@ func (l LockS)Unlock()  {
 }
 func NewLockS() LockS {
 	l :=  LockS{}
-	l.c = make(chan struct{},2)
-	l.c <- struct{}{}
+	l.c = make(chan struct{},1)
+	//l.c <- struct{}{}
 	l.c <- struct{}{}
 	return l
 }
@@ -94,5 +93,5 @@ func lock3()  {
 }
 
 func lock4()  {
-	syscall.Socket()
+
 }

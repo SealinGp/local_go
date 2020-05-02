@@ -42,6 +42,16 @@ ref : https://my.oschina.net/joeyjava/blog/504249
 然后才在其中存放有数组元素,多余部分处于空闲状态,在Slice上追加元素的时候,
 首先会放到这块空闲的内存中,如果添加的参数个数超过了容量值,
 内存管理器会重新划分一块容量值为原容量值*2大小的内存空间
+
+
+切片 或 数组 长度len和容量cap
+数组: 长度和容量相等,不可append
+切片: 长度和容量可不相等,可append
+例: s := make([]int,2,3) 的切片,索引赋值对长度,append对容量,超容量给双倍
+s[0] = 1 //1,2  len=2 cap=3
+s[1] = 2 //1,2  len=2 cap=3
+s = append(s,3) //1,2,3   len=3 cap=3  (s[2] = 3 //报错)
+s = append(s,4)//1,2,3,4  len=4 cap=6
 */
 //声明切片
 func create_slice() {

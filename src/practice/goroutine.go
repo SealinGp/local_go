@@ -3,7 +3,10 @@ package main
 import (
 	"flag"
 	"fmt"
+	"io"
+	"log"
 	"math"
+	"net"
 	"os"
 	"runtime"
 	"strings"
@@ -64,17 +67,33 @@ GOMAXPROCS = 9 适用于1颗cpu的笔记本电脑
 GOMAXPROCS = 8 适用于32核的机器上,更高的数值无法提升性能
 总结: GOMAXPROCS 等同于(并发的)线程数量,在一台核心数>1的机器上,会尽可能有等同于核心数的线程在并行运行
 */
-//func init() {
-//	fmt.Println("Content-Type:text/plain;charset=utf-8\n\n")
-//}
+var (
+	timezone string
+	port     string
+	numCores int
+	fun      string
+	NewYork  string
+	Tokyo    string
+	London   string
+)
+func init()  {
+	flag.StringVar(&fun,"fun","","func you need to run")
+
+	flag.StringVar(&timezone,"timezone","Asia/Shanghai","usage")
+	flag.StringVar(&port,"port","","port")
+	flag.StringVar(&NewYork,"NewYork","","address")
+	flag.StringVar(&Tokyo,"Tokyo","","address")
+	flag.StringVar(&London,"London","","address")
+	flag.IntVar(&numCores,"numCores",2,"core")
+}
 func main() {
-	args := os.Args
-	if len(args) <= 1 {
-		fmt.Println("lack param ?func=xxx")
+	flag.Parse()
+
+	if fun == "" {
+		flag.Usage()
 		return
 	}
-
-	execute(args[1])
+	execute(fun)
 }
 func execute(n string) {
 	funs := map[string]func(){
@@ -100,18 +119,22 @@ func execute(n string) {
 		"gor20" : gor20,
 		"gor21" : gor21,
 		"gor22" : gor22,
+		"gor23" : gor23,
+		"gor24" : gor24,
+		"gor25" : gor25,
+		"gor_test" : gor_test,
 	}
-	if nil == funs[n] {
-		fmt.Println("func",n,"unregistered")
-		return
-	}
+	defer func() {
+		if e := recover();e != nil {
+			log.Println(e)
+		}
+	}()
 	funs[n]()
 }
-var numCores = flag.Int("n",2,"usage")
 func gor1()  {
-	flag.Parse()
+	log.Println(numCores)
 	//通过命令行指定使用的核心数量
-	runtime.GOMAXPROCS(*numCores)
+	runtime.GOMAXPROCS(numCores)
 }
 
 //并行只用了10s,若不使用go关键字,串行会耗时10+5+2 = 17s
@@ -293,6 +316,34 @@ func (s semaphore)Wait(n int)  {
 func (s semaphore)Signal()  {
 	s.r(1)
 }
+func gor_test()  {
+	c := container{
+		items:[]item{"a1","a2","a3"},
+	}
+	ifdone := make(chan bool)
+
+	go c.consume(ifdone)
+	<-ifdone
+}
+func (c container)product()  <-chan item {
+	ch := make(chan item)
+	go func() {
+		for _,it := range c.items {
+			ch <- it
+		}
+		close(ch)
+	}()
+	return ch
+}
+
+func (c container)consume(done chan<- bool)  {
+	for it := range c.product() {
+		log.Println(it)
+	}
+	done <- true
+}
+
+
 
 func gor8()  {
 	c    := make(chan int)
@@ -905,4 +956,187 @@ func (p *Publisher)Close()  {
 		delete(p.subscribers,sub)
 		close(sub)
 	}
+}
+
+// http://dev.api.com/_book/ch8/ch8-02.html
+func gor23()  {
+	go spinner(100 * time.Millisecond)
+	const n = 45
+	fibN := fib(n)
+	fmt.Printf("\r Fibonacci(%d) = %d\n",n,fibN)
+}
+func fib(x int) int  {
+	if x < 2 {
+		return x
+	}
+	return fib(x-1) + fib(x-2)
+}
+func spinner(d time.Duration)  {
+	for {
+		for _, r := range `-\|/` {
+			fmt.Printf("\r%c",r)
+			time.Sleep(d)
+		}
+	}
+}
+
+// http://dev.api.com/_book/ch8/ch8-02.html
+//clock2
+func gor24()  {
+	clock2()
+}
+func clock2()  {
+	listener, err := net.Listen("tcp","localhost:" + port)
+	if err != nil {
+		log.Fatal(err)
+	}
+	lo,_  := time.LoadLocation(timezone)
+	fmt.Println("in:",timezone,"listen:",port,"now:",time.Now().In(lo).Format("15:04:05\n"))
+
+	for {
+		conn,err := listener.Accept()
+		if err != nil {
+			log.Println(err)
+			continue
+		}
+		go func(c net.Conn) {
+			defer c.Close()
+			for {
+				_, err := io.WriteString(c,time.Now().In(lo).Format("15:04:05\n"))
+				if err != nil {
+					return
+				}
+				time.Sleep(time.Second)
+			}
+		}(conn)
+	}
+}
+
+//clockwall
+type wallStr struct {
+	ch chan []byte
+}
+
+var ws  = NewWallStr(3)
+func gor25()  {
+	var wg sync.WaitGroup
+
+	if NewYork != "" {
+		wg.Add(1)
+		go clockwall(NewYork,wg,[]byte("NewYork:["))
+	}
+	if Tokyo != "" {
+		wg.Add(1)
+		go clockwall(Tokyo,wg,[]byte("Tokyo:["))
+	}
+	if London != "" {
+		wg.Add(1)
+		go clockwall(London,wg,[]byte("London:["))
+	}
+
+	go func() {
+		i := 0
+		for {
+			i++
+			a := ws.Read()
+			if len(a) > 0 {
+				a = append(a,' ')
+				if i == 3 {
+					a = append(a,'\r')
+					i = 0
+				}
+				os.Stdout.Write(a)
+			}
+		}
+	}()
+
+	wg.Wait()
+}
+func clockwall(address string,wg sync.WaitGroup,tz []byte)  {
+	defer wg.Done()
+
+	c,e := net.Dial("tcp",address)
+	if e != nil {
+		log.Fatal(e)
+	}
+	defer  c.Close()
+
+
+	mustCopy(ws,c,tz)
+}
+func mustCopy(w io.Writer,r io.Reader,tz []byte)  {
+	//if _,e := io.Copy(w,r); e != nil {
+	//	log.Fatal(e)
+	//}
+
+	p := make([]byte,1024)
+	for {
+		i,e := r.Read(p)
+
+		if e != nil {
+			break
+		}
+
+		all := tz
+		all = append(all,p[0:i-1]...)
+		all = append(all,']')
+		if _,e = w.Write(all);e != nil {
+			break
+		}
+
+	}
+}
+func NewWallStr(num int) *wallStr {
+	return &wallStr{ch:make(chan []byte,num)}
+}
+func (ws wallStr)Read() []byte {
+	var res []byte
+	select {
+	case res = <-ws.ch:
+	case <-time.Tick(time.Second*5):
+	}
+	return res
+}
+func (ws wallStr)Write(s []byte) (int,error) {
+	ws.ch <- s
+	return len(s),nil
+}
+
+/**
+https://gocn.vip/topics/1569
+实参,形参
+实参: 实参其实就是将参数的值复制到函数里来(参数在函数内外,地址是不同的)
+形参: 实参其实就是将参数的地址传递到函数里来(参数在函数内外,地址是相同的)
+切片和映射只有实参,并且不用加*号
+
+https://www.ardanlabs.com/blog/2017/05/language-mechanics-on-stacks-and-pointers.html
+1.指针变量存储的值是变量地址,自身也有一个地址
+2.函数调用的时候,需要在当前协程上面的对战分配新的内存,2个函数帧之间会有一个转换(值传递还是指针传递(贡献变量地址),函数帧内逃逸分析,协程内有效内存与无效内存)
+*/
+func gor26()  {
+	runtime.GOMAXPROCS(runtime.NumCPU())
+	wg := sync.WaitGroup{}
+	wg.Add(12)
+	//将变量放在堆还是栈上,是由go的逃逸分析机制决定的
+
+	//形参
+	//1.会将变量移动到heap中,因为两个goroutine都要用到该变量
+	//2.并发安全性,外部变量的改变会影响内部变量的改变
+	for i := 0;  i < 6; i++ {
+		go func() {
+			defer wg.Done()
+			fmt.Println("T1:",i)
+		}()
+	}
+
+	//实参
+	//1.会将i放到groutine的stack上
+	//2.外部变量的改变不会影响内部变量的改变
+	for i := 0;  i < 6; i++ {
+		go func(i int) {
+			defer wg.Done()
+			fmt.Println("T2:",i)
+		}(i)
+	}
+	wg.Wait()
 }

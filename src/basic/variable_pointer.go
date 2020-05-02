@@ -24,10 +24,13 @@ func main() {
 	execute(args[1])
 }
 func execute(n string) {
+	pointer5()
 	funs := map[string]func(){
 		"pointer1": pointer1,
 		"pointer2": pointer2,
 		"pointer3": pointer3,
+		"pointer4": pointer4,
+		"pointer5": pointer5,
 	}
 	funs[n]()
 }
@@ -120,4 +123,53 @@ func pointer3() {
 	st1 := st.exchange2()
 	fmt.Println(st)
 	fmt.Println(st1)
+}
+
+/**
+https://www.ardanlabs.com/blog/2017/05/language-mechanics-on-stacks-and-pointers.html
+指针变量:存储的值是变量的地址,自身有一个地址
+
+1.栈和指针
+协程内存分为2块
+[堆内存] : 存放全局变量
+[栈内存] : 存放函数栈帧,分为[活动内存][非活动内存]
+[活动内存] : 函数调用时在活动内存中进行,调用完成返回后在[非活动内存]区域
+2个函数栈帧之间的调用存在一个转换过程(活动内存和非活动内存区域之间的转换)
+
+2.变量逃逸分析(可使用 go build -gcflags "-m -m" 追踪代码中是否存在逃逸的变量)
+变量逃逸: 函数栈帧中的局部变量 因 与函数栈帧之间共享 导致该局部变量从函数栈内存逃逸到堆内存中去
+可能导致变量逃逸的情况: 1.多个函数栈帧之间共享变量地址 2.使用interface作为接受参数 3.使用make关键词的长度不确定
+
+3.内存管理(go test -run none -bench banmark函数名 -benchtime 测试的秒数 -benchmem)
+ */
+
+func pointer4()  {
+	u1 := createUserV1()
+	u2 := createUserV2()
+	println("u1 address:",&u1,"u2 address:",&u2,"u2 value",u2)
+}
+
+type user struct {
+	name string
+	email string
+}
+func createUserV1() user {
+	v1 := user{"a","b"}
+	println("v1 address:",&v1)
+	return v1
+}
+func createUserV2() *user {
+	v2 := user{"a1","b1"}
+	println("v2 address:",&v2)
+	return &v2
+}
+
+//逃逸分析的可能情况: 1.会导致编译器不知道分配内存多少导致该变量逃逸到堆内存中去
+func pointer5()  {
+	pointer5_1(10)
+}
+func pointer5_1(size int)  {
+	b := make([]byte,size)
+	b = append(b,'a')
+	fmt.Println(string(b))
 }

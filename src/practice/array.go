@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	uuid "github.com/satori/go.uuid"
+	"log"
 	"math"
 	"os"
 	"reflect"
@@ -44,6 +45,7 @@ func execute(n string) {
 		"slice10" : slice10,
 		"slice11" : slice11,
 		"slice12" : slice12,
+		"slice13" : slice13,
 	}
 	if nil == funs[n] {
 		fmt.Println("func",n,"unregistered")
@@ -397,4 +399,31 @@ func slice12()  {
 		fmt.Println(a2[i])
 	}
 	fmt.Println(a2)
+}
+
+/**
+切片 或 数组 长度len和容量cap
+数组: 长度和容量相等,不可append
+切片: 长度和容量可不相等,可append
+例: s := make([]int,2,3) 的切片,索引赋值对长度,append对容量,超容量给双倍
+s[0] = 1 //1,2  len=2 cap=3
+s[1] = 2 //1,2  len=2 cap=3
+s = append(s,3) //1,2,3   len=3 cap=3  (s[2] = 3 //报错)
+s = append(s,4)//1,2,3,4  len=4 cap=6
+
+1234567(1月2日下午3点4分5秒06年UTC-0700) = 2006-01-02 15:04:05
+ */
+func slice13()  {
+	a := make([]int,2,3)
+	//a[0] = 1
+	//a[1] = 2
+	a = append(a,1)
+	a = append(a,2)
+
+	log.Println(a)
+	log.Println(cap(a))
+
+	a = append(a,3)
+	a = append(a,4)
+	log.Println(a,cap(a))
 }
