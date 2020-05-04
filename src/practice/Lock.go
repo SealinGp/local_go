@@ -67,6 +67,7 @@ func (l LockS)Unlock()  {
 }
 func NewLockS() LockS {
 	l :=  LockS{}
+	//缓存的数量表示可以接受多少个连接并行获取
 	l.c = make(chan struct{},1)
 	//l.c <- struct{}{}
 	l.c <- struct{}{}

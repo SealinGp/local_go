@@ -54,29 +54,28 @@ func fib1(n int) (res int) {
 //闭包(不使用递归) 生成斐波那契数列
 func rec2()  {
 	s      := time.Now()
-
-	fib    := fib2()
-	for i := 0; i <= 40; i++ {
-		var res int
-		if i <= 1 {
-			res = fib(1)
-		} else {
-			res = fib(i)
-		}
-		fmt.Println(res)
-	}
-
+	fib    := fib2(11)
+	println(fib)
 	fmt.Println(time.Now().Sub(s))
 }
-func fib2() func(int) int {
-	var c []int
-	return func(a int) int {
-		if lenc := len(c);lenc >= 2 {
-			a = c[lenc-1] + c[lenc-2]
+func fib2(n int) int {
+	fibNums := []int{}
+
+	fib     := func(n int) int {
+		if n <= 1 {
+			fibNums = append(fibNums,1)
+		} else {
+			len1   := len(fibNums)
+			num    := fibNums[len1-1] + fibNums[len1-2]
+			fibNums = append(fibNums,num)
 		}
-		c = append(c,a)
-		return c[len(c) - 1]
+		return fibNums[len(fibNums)-1]
 	}
+	res := 1
+	for i := 0; i <= n; i++ {
+		res = fib(i)
+	}
+	return res
 }
 
 //https://github.com/unknwon/the-way-to-go_ZH_CN/blob/master/eBook/06.12.md
