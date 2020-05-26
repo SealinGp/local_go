@@ -643,5 +643,18 @@ func (*Ref)LRUCache()  {
 	a.Put(4,4)
 	fmt.Println(a.kv,a.keys)
 }
-func sort(k int,ks []int)  {
+
+func (*Ref)FindDuplicate()  {
+	nums := [5]int{
+		1,3,4,2,2,
+	}
+	m := make(map[int]bool,len(nums))
+	for _, n := range nums {
+		if _,ok := m[n];!ok {
+			m[n] = true
+		} else {
+			fmt.Println(n)
+			return
+		}
+	}
 }
