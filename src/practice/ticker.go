@@ -7,6 +7,9 @@ import (
 	"time"
 )
 
+//简单时间轮实现
+//http://russellluo.com/2018/10/golang-implementation-of-hierarchical-timing-wheels.html
+
 func main()  {
 	log.Println("start")
 
@@ -24,7 +27,7 @@ func main()  {
 	tw.Stop()
 }
 
-//简单时间轮实现
+
 type timeWheel struct {
 	stopCh  chan bool
 	slots   []slot              //所有的槽
