@@ -519,6 +519,49 @@ func (*Ref)Message()  {
 	log.Println(math.Max(float64(dp0),float64(dp1)))
 }
 
+//https://leetcode-cn.com/problems/house-robber/
 func (*Ref)Rob()  {
+	nums := []int{2,1,1,2,3}
 
+	n    := len(nums)
+	max  := func(i,j int) int {
+		if i > j {
+			return i
+		}
+		return j
+	}
+	if n == 0 {
+		fmt.Println(0)
+		return
+	}
+	if n == 1 {
+		fmt.Println(nums[0])
+		return
+	}
+	if n == 2 {
+		fmt.Println(max(nums[0],nums[1]))
+		return
+	}
+
+	//i第i间房屋
+	//dp[i] 前i间房屋能偷到的最大金额
+	dp := map[int]int{}
+	dp[0] = nums[0]
+	dp[1] = max(nums[0],nums[1])
+
+	tp1  := nums[0]
+	tp2  := max(nums[0],nums[1])
+	for i := range nums  {
+		if i < 2 {
+			continue
+		}
+		dp[i] = max(dp[i-2]+nums[i],dp[i-1])
+
+		//tp1,tp2 = tp2,max(tp1 + nums[i],tp2)
+		tmp := tp1
+		tp1 = tp2
+		tp2 = max(tmp + nums[i],tp2)
+	}
+
+	fmt.Println(dp[n-1],tp2)
 }
