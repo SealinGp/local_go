@@ -3,6 +3,7 @@ package timewheel
 import (
 	"algorithm/timewheel/delayqueue"
 	"errors"
+	"sync/atomic"
 	"time"
 	"unsafe"
 )
@@ -57,4 +58,94 @@ func newTimingWheel(tickMs int64, wheelSize int64, startMs int64,queue *delayque
 		queue:queue,
 		exitC:make(chan struct{}),
 	}
+}
+
+//添加定时器到当前时间轮的槽中去
+func (tw *TimingWheel)add(t *Timer) bool {
+	currentTime := atomic.LoadInt64(&tw.currentTime)
+	
+	//过期时间不足1ms则添加失败,也就是说添加任务的过期时间至少要 >= 1ms
+	if t.expiration - currentTime < tw.tick {
+		return false
+
+	//过期时间小于时间轮1圈
+	} else if t.expiration < currentTime + tw.interval {
+		//散列放置任务到对应的槽上
+		virtualID := t.expiration / tw.tick //过期时间需要转动多少次
+		b   := tw.buckets[virtualID%tw.wheelSize]
+		b.Add(t)
+
+		//把这个槽的延迟队列过期时间更新
+		if b.SetExpiration(virtualID * tw.tick) {
+			tw.queue.Offer(b,b.expiration)
+		}
+		return true
+
+	//过期时间超出当前时间轮的总时间(interval)则新建一个大刻度的时间轮
+	} else {
+		overflowWheel := atomic.LoadPointer(&tw.overflowWheel)
+		if overflowWheel != nil {
+			atomic.CompareAndSwapPointer(
+				&tw.overflowWheel,
+				nil,
+				unsafe.Pointer(newTimingWheel(
+					tw.interval,
+					tw.wheelSize,
+					currentTime,
+					tw.queue,
+				)),
+			)
+			overflowWheel = atomic.LoadPointer(&tw.overflowWheel)
+		}
+		
+		return (*TimingWheel)(overflowWheel).add(t)
+	}
+}
+
+func (tw *TimingWheel)addOrRun(t *Timer)  {
+	//当添加的定时器超时时间不足 时间轮的最小精度的时候,则直接执行(< tw.tick)
+	if !tw.add(t) {
+		go t.task()
+	}
+}
+
+//高等级时间轮
+func (tw *TimingWheel)advanceClock(expiration int64)  {
+	currentTime := atomic.LoadInt64(&tw.currentTime)
+
+	//如果该定时器还未过期
+	if expiration >= currentTime + tw.tick {
+		currentTime = truncate(expiration,tw.tick)
+		atomic.StoreInt64(&tw.currentTime,currentTime)
+
+		overflowWheel := atomic.LoadPointer(&tw.overflowWheel)
+		if overflowWheel != nil {
+			(*TimingWheel)(overflowWheel).advanceClock(currentTime)
+		}
+	}
+}
+
+func (tw *TimingWheel)Start()  {
+	tw.waitGroup.Wrap(func() {
+		tw.queue.Poll(tw.exitC, func() int64 {
+			return timeToMs(time.Now().UTC())
+		})
+	})
+	tw.waitGroup.Wrap(func() {
+		for {
+			select {
+			case ele := <-tw.queue.C:
+				b := ele.(*bucket)
+				tw.advanceClock(b.expiration)
+				//随着时间的迁移,定时任务越来越近,当定时任务的精度到达最小时间轮的精度的时候,则将其从大时间轮移动到小时间轮中去
+				b.Flush(tw.addOrRun)
+			case <-tw.exitC:
+				return
+			}
+		}
+	})
+}
+
+func (tw *TimingWheel)Stop()  {
+	
 }
