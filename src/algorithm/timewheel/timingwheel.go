@@ -30,7 +30,7 @@ func NewTimingWheel(tick time.Duration,wheelSize int64) *TimingWheel {
 	tickMs := int64(tick / time.Millisecond)
 
 	//不足1ms报错
-	if tickMs < 0 {
+	if tickMs <= 0 {
 		panic(errors.New("required: tick >= 1ms"))
 	}
 
@@ -52,7 +52,7 @@ func newTimingWheel(tickMs int64, wheelSize int64, startMs int64,queue *delayque
 	return &TimingWheel{
 		tick:tickMs,
 		wheelSize:wheelSize,
-		currentTime:startMs,
+		currentTime:truncate(startMs,tickMs),
 		interval: tickMs * wheelSize,
 		buckets:buckets,
 		queue:queue,
@@ -63,9 +63,9 @@ func newTimingWheel(tickMs int64, wheelSize int64, startMs int64,queue *delayque
 //添加定时器到当前时间轮的槽中去
 func (tw *TimingWheel)add(t *Timer) bool {
 	currentTime := atomic.LoadInt64(&tw.currentTime)
-	
+
 	//过期时间不足1ms则添加失败,也就是说添加任务的过期时间至少要 >= 1ms
-	if t.expiration - currentTime < tw.tick {
+	if t.expiration < currentTime + tw.tick {
 		return false
 
 	//过期时间小于时间轮1圈
@@ -84,7 +84,7 @@ func (tw *TimingWheel)add(t *Timer) bool {
 	//过期时间超出当前时间轮的总时间(interval)则新建一个大刻度的时间轮
 	} else {
 		overflowWheel := atomic.LoadPointer(&tw.overflowWheel)
-		if overflowWheel != nil {
+		if overflowWheel == nil {
 			atomic.CompareAndSwapPointer(
 				&tw.overflowWheel,
 				nil,
@@ -97,7 +97,7 @@ func (tw *TimingWheel)add(t *Timer) bool {
 			)
 			overflowWheel = atomic.LoadPointer(&tw.overflowWheel)
 		}
-		
+
 		return (*TimingWheel)(overflowWheel).add(t)
 	}
 }
@@ -146,6 +146,47 @@ func (tw *TimingWheel)Start()  {
 	})
 }
 
+// 停止当前时间轮
+//
+// If there is any timer's task being running in its own goroutine, Stop does
+// not wait for the task to complete before returning. If the caller needs to
+// know whether the task is completed, it must coordinate with the task explicitly.
 func (tw *TimingWheel)Stop()  {
-	
+	close(tw.exitC)
+	tw.waitGroup.Wait()
+}
+
+func (tw *TimingWheel)AfterFunc(d time.Duration,f func()) *Timer {
+	t := &Timer{
+		expiration:timeToMs(time.Now().UTC().Add(d)),
+		task:f,
+	}
+	tw.addOrRun(t)
+	return t
+}
+
+type Scheduler interface {
+	Next(time.Time) time.Time
+}
+
+func (tw *TimingWheel)ScheduleFunc(s Scheduler,f func()) (t *Timer) {
+	expiration := s.Next(time.Now().UTC())
+	if expiration.IsZero() {
+		return
+	}
+
+	t = &Timer{
+		expiration:timeToMs(expiration),
+		task: func() {
+			expiration := s.Next(msToTime(t.expiration))
+			if !expiration.IsZero() {
+				t.expiration = timeToMs(expiration)
+				tw.addOrRun(t)
+			}
+			f()
+		},
+	}
+	tw.addOrRun(t)
+
+	return
 }

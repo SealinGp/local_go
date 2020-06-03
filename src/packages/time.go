@@ -38,6 +38,7 @@ func execute(funcN string)  {
 		"time7" : time7,
 		"time8" : time8,
 		"time9" : time9,
+		"time10" : time10,
 	}
 	funcMap[funcN]()
 }
@@ -263,4 +264,14 @@ func time9()  {
 	t2,_ := time.Parse(timeLayOut,t)
 	fmt.Println(now.Sub(t1))
 	fmt.Println(now.Sub(t2) + 8*time.Hour)
+}
+
+func time10()  {
+	t := time.Now()
+
+	fmt.Println(t.Format(timeLayOut))
+	//当前时间的整点
+	fmt.Println(t.Truncate(1*time.Hour).Format(timeLayOut)) //-
+	fmt.Println(t.Round(1*time.Hour).Format(timeLayOut))    //+
+
 }

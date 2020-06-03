@@ -142,12 +142,11 @@ func (pq *priorityQueue)Push(x interface{})  {
 		copy(npq,*pq)
 		*pq = npq
 	}
-	//n := len(*pq)
 
+	*pq = (*pq)[0:n+1]
 	item := x.(*item)
 	item.Index = n
 	(*pq)[n] = item
-	//*pq = append(*pq,x.(*item))
 }
 
 //移除并返回移除的元素
