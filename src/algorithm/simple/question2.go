@@ -61,3 +61,25 @@ func (*Ref)DecodeString()  {
 
 	fmt.Println(s == "abcabccdcdcdef")
 }
+
+func (*Ref)ProductExceptSelf()  {
+	//n > 1
+	nums := []int{1,2,3,4}
+	L    := len(nums)
+	a    := make([]int,L)
+	larr := make([]int,L)
+	rarr := make([]int,L)
+	larr[0]   = 1
+	rarr[L-1] = 1
+
+	for i := 1; i < L; i++ {
+		larr[i] = nums[i-1] * larr[i-1]
+	}
+	for i := L-2; i >= 0; i-- {
+		rarr[i] = nums[i+1] * rarr[i+1]
+	}
+	for i := range nums  {
+		a[i] = larr[i] * rarr[i]
+	}
+	fmt.Println(a)
+}
