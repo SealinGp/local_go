@@ -27,6 +27,14 @@ func (t *Timer)setBucket(b *bucket)  {
 	atomic.StorePointer(&t.b,unsafe.Pointer(b))
 }
 
+func (t *Timer)Stop() bool {
+	stopped := false
+	for b := t.getBucket(); b != nil; b = t.getBucket() {
+		stopped = b.Remove(t)
+	}
+	return stopped
+}
+
 //槽
 type bucket struct {
 	//64位(bit)原子性操作,32位不确定,所以我们必须让64位的字段作为结构体的第一个字段
