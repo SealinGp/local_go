@@ -19,6 +19,7 @@ func main() {
 		"hashTable" : hashTable,
 		"dsu" : dsu,
 		"Heap" : Heap,
+		"ds1" : ds1,
 	}
 	fun[os.Args[1]]()
 }
@@ -76,11 +77,20 @@ func linkTable()  {
 
 //栈: https://oi-wiki.org/ds/stack/ 规律: 坐电梯
 func stack()  {
-	sta := []int{}
-	sta  = append(sta,1,2,3)
-	for i := len(sta)-1;i >= 0; i-- {
-		log.Println(sta[i])
-	}
+	//sta := []int{}
+	//sta  = append(sta,1,2,3)
+	//for i := len(sta)-1;i >= 0; i-- {
+	//	log.Println(sta[i])
+	//}
+	sta1 := []int{}
+	sta1 = append(sta1,1,2)
+	fmt.Println(sta1[len(sta1)-1],sta1)
+
+	sta1 = sta1[:len(sta1)-1]
+	fmt.Println(sta1[len(sta1)-1],sta1)
+
+	sta1 = sta1[:len(sta1)-1]
+	fmt.Println(sta1)
 }
 
 //队列: https://oi-wiki.org/ds/queue/ 规律: 排队
@@ -255,6 +265,8 @@ func search(currentLeaf *Leaf,key int) bool {
 	}
 	return true
 }
+
+//中序
 func (t *T1)InOrderTraverse(f func(value int))  {
 	inOrderTraver(t.Root,f)
 }
@@ -265,6 +277,8 @@ func inOrderTraver(currentLeaf *Leaf,f func(value int))  {
 		inOrderTraver(currentLeaf.Right,f)
 	}
 }
+
+//前序 递归实现
 func (t *T1)PreOrderTraverse(f func(value int))  {
 	preOrderTraver(t.Root,f)
 }
@@ -275,6 +289,26 @@ func preOrderTraver(currentLeaf *Leaf,f func(value int))  {
 		preOrderTraver(currentLeaf.Right,f)
 	}
 }
+//前序栈实现
+func (t *T1)PreOrderTraverseStack(f func(value int))  {
+	stack := make([]*Leaf,0)
+	node  := t.Root
+	for node != nil || len(stack) != 0 {
+		for node != nil {
+			f(node.Value)
+			stack = append(stack,node)
+			node  = node.Left
+		}
+
+		if len(stack) != 0 {
+			node  = stack[len(stack)-1]
+			stack = stack[:len(stack)-1]
+			node  = node.Right
+		}
+	}
+}
+
+//后序
 func (t *T1)PostOrderTraverse(f func(value int))  {
 	postOrderTraver(t.Root,f)
 }
@@ -291,14 +325,38 @@ func (t *T1)String()  {
 	fmt.Println(" ---------------------------------------------------- ")
 }
 func stringify(currentLeaf *Leaf,level int)  {
+
 	if currentLeaf != nil {
 		format := ""
 		for i := 0; i < level; i++ {
 			format += "----["
 			level++
 			stringify(currentLeaf.Left, level)
-			fmt.Printf(format+"%d\n", n.Key)
+			fmt.Printf(format+"%d\n", currentLeaf.Key)
 			stringify(currentLeaf.Right, level)
 		}
 	}
+}
+
+func ds1()  {
+	t1 := T1{
+		Root:&Leaf{
+			Key:   0,
+			Value: 1,
+			Left:  nil,
+			Right: nil,
+		},
+	}
+	t1.Insert(1,2)
+	t1.Insert(2,3)
+	t1.Insert(3,4)
+	t1.Insert(4,5)
+	t1.Insert(6,6)
+	//stringify(t1.Root,1)
+	t1.PreOrderTraverseStack(func(value int) {
+		fmt.Println(value)
+	})
+	//t1.PreOrderTraverse(func(value int) {
+	//	fmt.Println(value)
+	//})
 }
