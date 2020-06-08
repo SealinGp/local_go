@@ -83,3 +83,52 @@ func (*Ref)ProductExceptSelf()  {
 	}
 	fmt.Println(a)
 }
+
+func (*Ref)EquationsPossible()  {
+	equations := []string{
+		"a==b","b!=c","c==a",
+	}
+
+	ma      := make([]byte,'z' - 'a' + 1)
+	for i   := range ma  {
+		ma[i] = byte(i)
+	}
+	for _, s := range equations {
+		if s[1] == '=' {
+			Union(s[0],s[3],ma)
+		}
+	}
+
+	is := true
+	for _, s := range equations {
+		if s[1] == '!' {
+			if findSet(s[0] - 'a',ma) == findSet(s[3] - 'a',ma) {
+				is = false
+				break
+			}
+		}
+	}
+
+	fmt.Println(is)
+}
+
+func makeSet(i byte,mab []byte)  {
+	index    := i - 'a'
+	mab[index] = index
+}
+
+func findSet(i byte,mab []byte) byte {
+	if mab[i] == i {
+		return i
+	}
+	return findSet(mab[i],mab)
+}
+func Union(i,j byte,mab []byte)  {
+	i = findSet(i - 'a',mab)
+	j = findSet(j - 'a',mab)
+	if i > j {
+		mab[j] = i
+	} else {
+		mab[i] = j
+	}
+}
