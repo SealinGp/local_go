@@ -1,6 +1,7 @@
 package main
 
 import (
+	"container/list"
 	"fmt"
 	"log"
 	"os"
@@ -20,6 +21,7 @@ func main() {
 		"dsu" : dsu,
 		"Heap" : Heap,
 		"ds1" : ds1,
+		"ds2" : ds2,
 	}
 	fun[os.Args[1]]()
 }
@@ -170,7 +172,7 @@ func Union(i,j int)  {
 func Heap()  {
 
 }
-
+// 深度优先遍历
 // 前序遍历:  根节点 ——> 左子树 ——> 右子树
 // 中序遍历:  左子树 ——> 根节点 ——> 右子树
 // 后序遍历:  左子树 ——> 右子树 ——> 根节点
@@ -266,7 +268,7 @@ func search(currentLeaf *Leaf,key int) bool {
 	return true
 }
 
-//中序
+//深度优先遍历-中序-递归实现
 func (t *T1)InOrderTraverse(f func(value int))  {
 	inOrderTraver(t.Root,f)
 }
@@ -278,7 +280,7 @@ func inOrderTraver(currentLeaf *Leaf,f func(value int))  {
 	}
 }
 
-//前序 递归实现
+//深度优先遍历-前序-递归实现
 func (t *T1)PreOrderTraverse(f func(value int))  {
 	preOrderTraver(t.Root,f)
 }
@@ -289,7 +291,8 @@ func preOrderTraver(currentLeaf *Leaf,f func(value int))  {
 		preOrderTraver(currentLeaf.Right,f)
 	}
 }
-//前序栈实现
+
+//深度优先遍历-前序-栈实现
 func (t *T1)PreOrderTraverseStack(f func(value int))  {
 	stack := make([]*Leaf,0)
 	node  := t.Root
@@ -308,7 +311,7 @@ func (t *T1)PreOrderTraverseStack(f func(value int))  {
 	}
 }
 
-//后序
+//深度优先遍历-后序-递归实现
 func (t *T1)PostOrderTraverse(f func(value int))  {
 	postOrderTraver(t.Root,f)
 }
@@ -319,6 +322,42 @@ func postOrderTraver(currentLeaf *Leaf,f func(value int))  {
 		f(currentLeaf.Value)
 	}
 }
+
+
+//广度优先遍历-队列实现
+func (t *T1)LevelOrderTraversal(f func(value int))  {
+	l := list.New()
+	l.PushBack(t.Root)
+	for l.Front() != nil {
+		leaf := l.Front().Value.(*Leaf)
+		f(leaf.Value)
+		l.Remove(l.Front())
+		if leaf.Left != nil {
+			l.PushBack(leaf.Left)
+		}
+		if leaf.Right != nil {
+			l.PushBack(leaf.Right)
+		}
+	}
+}
+//广度优先遍历-递归实现
+func (t *T1)LevelOrderTraversal1(f func(value int))  {
+	levelOrderTraversal1(t.Root,f)
+}
+func levelOrderTraversal1(current *Leaf,f func(value int))  {
+	if current == nil {
+		return
+	}
+	f(current.Value)
+	if current.Left != nil {
+		levelOrderTraversal1(current.Left,f)
+	}
+	if current.Right != nil {
+		levelOrderTraversal1(current.Right,f)
+	}
+}
+
+
 func (t *T1)String()  {
 	fmt.Println(" ---------------------------------------------------- ")
 	stringify(t.Root,0)
@@ -329,12 +368,16 @@ func stringify(currentLeaf *Leaf,level int)  {
 	if currentLeaf != nil {
 		format := ""
 		for i := 0; i < level; i++ {
-			format += "----["
-			level++
-			stringify(currentLeaf.Left, level)
-			fmt.Printf(format+"%d\n", currentLeaf.Key)
-			stringify(currentLeaf.Right, level)
+			format += "              "
 		}
+
+
+		format += "----["
+		level++
+		fmt.Println(level)
+		stringify(currentLeaf.Left, level)
+		fmt.Printf(format+"%d\n", currentLeaf.Key)
+		stringify(currentLeaf.Right, level)
 	}
 }
 
@@ -356,7 +399,31 @@ func ds1()  {
 	t1.PreOrderTraverseStack(func(value int) {
 		fmt.Println(value)
 	})
-	//t1.PreOrderTraverse(func(value int) {
-	//	fmt.Println(value)
-	//})
+	fmt.Println("-------------")
+	t1.PreOrderTraverse(func(value int) {
+		fmt.Println(value)
+	})
+}
+
+func ds2()  {
+	t1 := T1{}
+	t1.Insert(8,8)
+	t1.Insert(3,3)
+	t1.Insert(1,1)
+	t1.Insert(10,10)
+	t1.Insert(6,6)
+	t1.Insert(4,4)
+	t1.Insert(7,7)
+	t1.Insert(13,13)
+	t1.Insert(14,14)
+
+	t1.LevelOrderTraversal(func(value int) {
+		fmt.Println(value)
+	})
+
+	fmt.Println("-------------")
+
+	t1.LevelOrderTraversal1(func(value int) {
+		fmt.Println(value)
+	})
 }
