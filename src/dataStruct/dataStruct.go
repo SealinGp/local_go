@@ -167,11 +167,7 @@ func Union(i,j int)  {
 }
 
 
-//https://oi-wiki.org/ds/heap/
-//https://zhuanlan.zhihu.com/p/40294173
-func Heap()  {
 
-}
 // 深度优先遍历
 // 前序遍历:  根节点 ——> 左子树 ——> 右子树
 // 中序遍历:  左子树 ——> 根节点 ——> 右子树
@@ -426,4 +422,88 @@ func ds2()  {
 	t1.LevelOrderTraversal1(func(value int) {
 		fmt.Println(value)
 	})
+}
+
+
+//二叉堆 = 最大堆(顶点>左>右) + 最小堆(顶点<左<右) = 基于数组结构实现
+//下面以小顶堆为例 讲述堆的弹出,新增节点
+type heapType struct {
+	arr []int
+}
+func Heap()  {
+	arr := []int{1,3,2,6,5,7,8,9,10}
+	h   := NewHeap(arr)
+	h.Insert(0)
+	fmt.Println(h.arr)
+
+	arr1 := []int{1,3,2,6,5,7,8,9,10}
+	h1   := NewHeap(arr1)
+	fmt.Println(h1.Pop(),h1.arr)//1,[2,3,7,6,5,10,8,9]
+}
+func NewHeap(ar []int) heapType {
+	ht := heapType{
+		arr: ar,
+	}
+	for i := (len(ar)-2)/2; i >= 0; i-- {
+		ht.downAdjust(i)
+	}
+	return ht
+}
+
+//插入底部,向上调整
+func (h *heapType)upAdjust()  {
+	childIndex  := len(h.arr)-1       //最后一个节点索引
+	parentIndex := (childIndex - 1)/2 //左节点 = 2*parent+1 ,右节点 = 2*parent+2 => parent = (子节点-1)/2
+	tmp         := h.arr[childIndex]
+
+	for childIndex > 0 && tmp < h.arr[parentIndex]  {
+		//交换
+		h.arr[childIndex] = h.arr[parentIndex]
+		childIndex        = parentIndex
+		parentIndex       = (childIndex-1)/2
+	}
+	h.arr[childIndex] = tmp
+}
+//移除节点,把需要删除的节点跟顶部交换删除,然后把最后一个节点移动到顶部,然后做向下调整
+func (h *heapType)downAdjust(parentIndex int)  {
+	childIndex  := 2*parentIndex+1
+	len1        := len(h.arr)
+	tmp         := h.arr[parentIndex]
+
+	for childIndex < len1  {
+		//假设有右子节点并且右子节点比左子节点更小,则子节点为右子节点
+		if childIndex + 1 < len1 && h.arr[childIndex+1] < h.arr[childIndex] {
+			childIndex = childIndex+1
+		}
+
+		//假设父节点的值 < 子节点,则跳出
+		if tmp <= h.arr[childIndex] {
+			break
+		}
+
+
+		h.arr[parentIndex] = h.arr[childIndex]
+		parentIndex = childIndex
+		childIndex  = 2*childIndex + 1
+	}
+
+	h.arr[parentIndex] = tmp
+}
+func (h *heapType)Insert(ele int)  {
+	h.arr = append(h.arr,ele)
+	h.upAdjust()
+}
+func (h *heapType)Pop() int {
+	//拿出堆顶节点
+	last    := h.arr[0]
+
+	//把最后一个节点移动到堆顶节点
+	h.arr[0] = h.arr[len(h.arr)-1]
+
+	//堆长度调整
+	h.arr    = h.arr[:len(h.arr)-1]
+
+	//堆顶节点向下调整
+	h.downAdjust(0)
+	return  last
 }
