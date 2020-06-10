@@ -132,3 +132,15 @@ func Union(i,j byte,mab []byte)  {
 		mab[i] = j
 	}
 }
+
+//https://leetcode-cn.com/problems/01-matrix/
+func (*Ref)Matrix()  {
+	matrix := [][]int{
+		{0,0,0},
+		{0,1,0},
+		{1,1,1},
+	}
+
+
+	fmt.Println(matrix)
+}
