@@ -133,14 +133,25 @@ func Union(i,j byte,mab []byte)  {
 	}
 }
 
-//https://leetcode-cn.com/problems/01-matrix/
-func (*Ref)Matrix()  {
-	matrix := [][]int{
-		{0,0,0},
-		{0,1,0},
-		{1,1,1},
+//https://leetcode-cn.com/problems/daily-temperatures/
+func (*Ref)DT()  {
+	T := []int{
+		47,47,47,47,47,47,47,
 	}
+	T1  := make([]int,len(T))
 
 
-	fmt.Println(matrix)
+	for i, v := range T {
+		T1[i] = 0
+		if v > 100 {
+			continue
+		}
+		for j := i+1; j < len(T); j++ {
+			if T[j] > v {
+				T1[i] = j - i
+				break
+			}
+		}
+	}
+	fmt.Println(T1)
 }
