@@ -1,6 +1,7 @@
 package main
 
 import (
+	"container/list"
 	"fmt"
 	"log"
 	"os"
@@ -12,6 +13,7 @@ func main() {
 
 	fun := map[string]func(){
 		"ds3" : ds3,
+		"ds4" : ds4,
 	}
 	fun[os.Args[1]]()
 }
@@ -74,4 +76,88 @@ func (pq *priorityQueue)downAdjust()  {
 	}
 
 	(*pq)[parentIndex] = tmp
+}
+
+func ds4()  {
+	a := []int{4,7,6,5,3,2,8,1}
+	FastSortDouble(a,0,len(a)-1)
+	fmt.Println(a)
+
+	b := []int{4,7,3,5,6,2,8,1}
+	FastSortSingle(b,0,len(b)-1)
+	fmt.Println(b)
+}
+//快排(小->大)的双边循环交换法-递归实现-左右两个指针,左找比基准元素大的,右找币基准元素小的,然后交换直到左右指针重合,然后吧基准元素跟左指针对应的元素交换
+func FastSortDouble(arr []int,startIndex,endIndex int)  {
+	if startIndex >= endIndex {
+		return
+	}
+
+	privotIndex := partition(arr,startIndex,endIndex)
+	FastSortDouble(arr,startIndex,privotIndex - 1)
+	FastSortDouble(arr,privotIndex+1,endIndex)
+}
+func partition(arr []int,startIndex,endIndex int) int {
+	privot := arr[startIndex]
+	left   := startIndex
+	right  := endIndex
+	for right != left {
+		//右指针左移
+		for left < right && arr[right] > privot  {
+			right--
+		}
+		//左指针右移
+		for left < right && arr[left] <= privot  {
+			left++
+		}
+		if left < right {
+			arr[left],arr[right] = arr[right],arr[left]
+		}
+	}
+
+	//privot和指针重合点交换
+	arr[startIndex],arr[left] = arr[left],privot
+	return left
+}
+
+//快排(小->大)的单边循环法-递归实现
+func FastSortSingle(arr []int,startIndex,endIndex int)  {
+	if startIndex >= endIndex {
+		return
+	}
+	//mark是边界
+	privotIndex := partition1(arr,startIndex,endIndex)
+	FastSortSingle(arr,startIndex,privotIndex-1)
+	FastSortSingle(arr,privotIndex+1,endIndex)
+}
+func partition1(arr []int,startIndex,endIndex int) int {
+	privot := arr[startIndex]
+	mark   := startIndex
+
+	for i := startIndex + 1; i <= endIndex; i++ {
+		if arr[i] < privot {
+			mark++
+			arr[mark],arr[i] = arr[i],arr[mark]
+		}
+	}
+
+	arr[startIndex],arr[mark] = arr[mark],privot
+	return mark
+}
+
+//快排(小->大)的栈实现
+func FastSortStack(arr []int, startIndex,endIndex int)  {
+	stack := list.New()
+	ma    := make(map[string]int)
+	ma["startIndex"] = startIndex
+	ma["endIndex"]   = endIndex
+
+	stack.PushBack(ma)
+	for stack.Len() != 0  {
+		ma1   := stack.Remove(stack.Back())
+		param := ma1.(map[string]int)
+	}
+}
+func partition2(arr []int,startIndex,endIndex int)  {
+	//取第一个元素为基准元素的位置,也可以取随机一个
 }
