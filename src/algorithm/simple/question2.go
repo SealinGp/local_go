@@ -136,22 +136,19 @@ func Union(i,j byte,mab []byte)  {
 //https://leetcode-cn.com/problems/daily-temperatures/
 func (*Ref)DT()  {
 	T := []int{
-		47,47,47,47,47,47,47,
+		73, 74, 75, 71, 69, 72, 76, 73,
 	}
-	T1  := make([]int,len(T))
+	Len   := len(T)
+	stack := make([]int,0)
+	T1    := make([]int,Len)
 
-
-	for i, v := range T {
-		T1[i] = 0
-		if v > 100 {
-			continue
+	for i := 0; i < Len; i++ {
+		for len(stack) > 0 && T[i] > T[stack[len(stack)-1]] {
+			prevIndex := stack[len(stack)-1]
+			stack = stack[:len(stack)-1]
+			T1[prevIndex] = i - prevIndex
 		}
-		for j := i+1; j < len(T); j++ {
-			if T[j] > v {
-				T1[i] = j - i
-				break
-			}
-		}
+		stack = append(stack,i)
 	}
-	fmt.Println(T1)
+
 }
