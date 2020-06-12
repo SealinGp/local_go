@@ -152,3 +152,30 @@ func (*Ref)DT()  {
 	}
 
 }
+
+//https://leetcode-cn.com/problems/1-bit-and-2-bit-characters/
+func (*Ref)IBC()  {
+	bits    := []int{1,1,1,0}
+
+	bitsLen := len(bits)
+	is2Bit  := true
+	if len(bits) == 1 {
+		is2Bit = bits[0] == 0
+	}
+	startIndex := 0
+
+	F : for i := startIndex; i < bitsLen-1; i++ {
+		if i < bitsLen-2 {
+			if bits[i] == 1 {
+				startIndex = i+2
+				goto F
+			}
+		}
+
+		if i == bitsLen-2 && bits[i] != 0 {
+			is2Bit = false
+		}
+	}
+
+	fmt.Println(is2Bit)
+}
