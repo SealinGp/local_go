@@ -86,6 +86,10 @@ func ds4()  {
 	b := []int{4,7,3,5,6,2,8,1}
 	FastSortSingle(b,0,len(b)-1)
 	fmt.Println(b)
+
+	c := []int{4,7,3,5,6,2,8,1}
+	FastSortStack(c,0,len(c)-1)
+	fmt.Println(c)
 }
 //快排(小->大)的双边循环交换法-递归实现-左右两个指针,左找比基准元素大的,右找币基准元素小的,然后交换直到左右指针重合,然后吧基准元素跟左指针对应的元素交换
 func FastSortDouble(arr []int,startIndex,endIndex int)  {
@@ -147,17 +151,29 @@ func partition1(arr []int,startIndex,endIndex int) int {
 
 //快排(小->大)的栈实现
 func FastSortStack(arr []int, startIndex,endIndex int)  {
-	stack := list.New()
-	ma    := make(map[string]int)
+	stack           := list.New()
+	ma              := make(map[string]int)
 	ma["startIndex"] = startIndex
 	ma["endIndex"]   = endIndex
 
 	stack.PushBack(ma)
 	for stack.Len() != 0  {
-		ma1   := stack.Remove(stack.Back())
-		param := ma1.(map[string]int)
+		ma1         := stack.Remove(stack.Back())
+		param       := ma1.(map[string]int)
+		privotIndex := partition1(arr,param["startIndex"],param["endIndex"])
+		if param["startIndex"] < privotIndex - 1 {
+			leftParam := map[string]int{
+				"startIndex" : param["startIndex"],
+				"endIndex"   : privotIndex - 1,
+			}
+			stack.PushBack(leftParam)
+		}
+		if privotIndex + 1 < param["endIndex"] {
+			rightParam := map[string]int{
+				"startIndex" : privotIndex + 1,
+				"endIndex"   : endIndex,
+			}
+			stack.PushBack(rightParam)
+		}
 	}
-}
-func partition2(arr []int,startIndex,endIndex int)  {
-	//取第一个元素为基准元素的位置,也可以取随机一个
 }
