@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"sort"
 )
 func main() {
 	if len(os.Args) <= 1 {
@@ -14,6 +15,8 @@ func main() {
 	fun := map[string]func(){
 		"ds3" : ds3,
 		"ds4" : ds4,
+		"ds5" : ds5,
+		"ds6" : ds6,
 	}
 	fun[os.Args[1]]()
 }
@@ -176,4 +179,118 @@ func FastSortStack(arr []int, startIndex,endIndex int)  {
 			stack.PushBack(rightParam)
 		}
 	}
+}
+
+//计数排序(稳定排序=基于计数排序的优化版本)-适用场景:1.已知数组范围 2.最大值和最小值间隔不大 3.整数数组
+//n = 数组长度, m = 数组最大值和最小值的间隔,时间复杂度O(n) = 3n+m = n + m 空间复杂度O(n) = m
+func CountSort(arr []int) []int {
+	//找出数组最大值
+	max := arr[0]
+	min := arr[0]
+	for i := 1; i < len(arr); i++ {
+		if arr[i] > max {
+			max = arr[i]
+		}
+		if arr[i] < min {
+			min = arr[i]
+		}
+	}
+
+	//确定数组长度
+	countArr := make([]int,max - min + 1)
+	for i := range arr {
+		countArr[arr[i] - min]++
+	}
+
+	//变形累加前面的值
+	for i := range countArr  {
+		if i > 0 {
+			countArr[i] = countArr[i] + countArr[i-1]
+		}
+	}
+
+	//倒序遍历原数组,
+	sortArr := make([]int,len(arr))
+	for i := len(arr)-1; i >= 0 ; i-- {
+		//找到该值的索引(索引-1=表示当前值在排序后的数组中的索引)
+		index := countArr[arr[i] - min]
+		index--
+		countArr[arr[i] - min] = index
+
+		sortArr[index]         = arr[i]
+	}
+
+	return sortArr
+}
+func ds5()  {
+	arr := []int{
+		9,3,5,4,9,1,2,7,8,1,3,6,5,3,4,0,10,9,7,9,
+	}
+	arr = CountSort(arr)
+	fmt.Println(arr)
+
+	arr1 := []int{
+		95,94,91,98,99,90,99,93,91,92,
+	}
+	fmt.Println(CountSort(arr1))
+
+	arr2 := []float64{
+		4.12,6.421,0.0023,3.0,2.123,8.122,4.12,10.09,
+	}
+	fmt.Println(BucketSort(arr2))
+}
+
+//桶排序
+func BucketSort(arr []float64) []float64 {
+	if len(arr) < 1 {
+		return arr
+	}
+
+	//1.找出最大和最小值
+	max := arr[0]
+	min := arr[0]
+	for i := range arr  {
+		if i > 0 {
+			if arr[i] > max {
+				max = arr[i]
+			}
+			if arr[i] < min {
+				min = arr[i]
+			}
+		}
+	}
+
+
+	//2.创建桶
+	bucketLen := len(arr)
+	buckets := make([][]float64,bucketLen)           //桶的数量 = 数组的长度
+	//jg      := (max - min)/(float64(len(arr)) - 1)   //每个桶的区间间隔
+	d       := max - min
+
+	//3.将每个元素放到对应的范围的桶中
+	for i := range arr  {
+		index := ( (arr[i] - min) * (float64(bucketLen) - 1) ) / d
+		buckets[int(index)] = append(buckets[int(index)],arr[i])
+	}
+
+	//4.对每个桶进行排序
+	for i := range buckets  {
+		sort.Float64s(buckets[i])
+	}
+
+	//5.输出全部元素
+	sortedArr := make([]float64,len(arr))
+	j := 0
+	for i := range buckets {
+		for i1 := range buckets[i] {
+			sortedArr[j] = buckets[i][i1]
+			j++
+		}
+	}
+	return sortedArr
+}
+func ds6()  {
+
+	fmt.Println(1^1)
+	fmt.Println(0^1)
 }

@@ -179,3 +179,39 @@ func (*Ref)IBC()  {
 
 	fmt.Println(is2Bit)
 }
+
+
+type TreeNode struct {
+    Val int
+    Left *TreeNode
+    Right *TreeNode
+}
+
+func (*Ref)IT()  {
+	t := &TreeNode{
+		Val:   1,
+		Left:  nil,
+		Right: &TreeNode{
+			Val:   2,
+			Left:  &TreeNode{
+				Val:   3,
+				Left:  nil,
+				Right: nil,
+			},
+			Right: nil,
+		},
+	}
+
+	arr := []int{}
+	it(t, func(val int) {
+		arr = append(arr,val)
+	})
+	fmt.Println(arr)
+}
+func it(currentNode *TreeNode,f func(val int))  {
+	if currentNode != nil {
+		it(currentNode.Left,f)
+		f(currentNode.Val)
+		it(currentNode.Right,f)
+	}
+}
