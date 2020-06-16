@@ -17,6 +17,8 @@ func main() {
 		"ds4" : ds4,
 		"ds5" : ds5,
 		"ds6" : ds6,
+		"ds7" : ds7,
+		"ds8" : ds8,
 	}
 	fun[os.Args[1]]()
 }
@@ -289,8 +291,193 @@ func BucketSort(arr []float64) []float64 {
 	}
 	return sortedArr
 }
-func ds6()  {
 
-	fmt.Println(1^1)
-	fmt.Println(0^1)
+//链表环的问题
+type SingleList struct {
+	Root    *Node1
+	Last    *Node1
+}
+type Node1 struct {
+	Val int
+	Next *Node1
+}
+
+func (s *SingleList)Push(n *Node1)  {
+	s.Last.Next = n
+	s.Last      = n
+}
+func NewSL(root *Node1) *SingleList {
+	s := &SingleList{
+		Root: root,
+		Last: root,
+	}
+	return s
+}
+
+
+//单向链表关于环的问题
+func ds6()  {
+	two := &Node1{Val:  2}
+
+	sl := NewSL(&Node1{Val:  5})
+	sl.Push(&Node1{Val:  3})
+	sl.Push(&Node1{Val:  7})
+	sl.Push(two)
+	sl.Push(&Node1{Val:  6})
+	sl.Push(&Node1{Val:  8})
+	sl.Push(&Node1{Val:  1})
+	sl.Push(two)
+
+	fmt.Println(isCycle(sl))
+	fmt.Println(CycleLen(sl))
+	fmt.Println(CycleEntry(sl),two)
+}
+
+//是否有环
+func isCycle(l *SingleList) bool {
+	first := l.Root
+	next  := first
+	for next != nil && next.Next != nil {
+		first = first.Next
+		next  = next.Next.Next
+
+		if first == nil || next == nil  {
+			break
+		}
+		if first.Val == next.Val {
+			return true
+		}
+	}
+	return false
+}
+
+//延伸问题-环长度是多少 => 首次相遇后开始计数,第二次相遇时计数的长度 = 环长度
+func CycleLen(l *SingleList) int {
+	first := l.Root
+	next  := first
+	lLen  := 0
+	isMet := false
+	for first != nil && next.Next != nil  {
+		first = first.Next
+		next  = next.Next.Next
+		if first == nil || next == nil {
+			break
+		}
+
+		if first.Val == next.Val {
+			if lLen != 0 {
+				break
+			}
+			isMet = true
+		}
+		if isMet {
+			lLen++
+		}
+	}
+	return lLen
+}
+
+//延伸问题-入环点在哪里 => p1(速度v1)和p2(速度v2 = 2*v1) => 在首次相遇后,将两者速度均调整为1,将p1移动到首节点,p2继续在环内行走,后续相遇的位置则为入环点
+func CycleEntry(l *SingleList) *Node1 {
+	p1 := l.Root
+	p2 := p1
+	var (
+		entry *Node1
+		speed = 2
+	)
+	for p1 != nil && p2.Next != nil {
+		p1 = p1.Next
+		if speed == 1 {
+			p2 = p2.Next
+		} else {
+			p2 = p2.Next.Next
+		}
+		if p1 == nil || p2 == nil {
+			break
+		}
+
+		if p1.Val == p2.Val {
+			//第二次相遇后的位置,则为入环点
+			if speed == 1 {
+				entry = p1
+				break
+
+			//首次相遇,将p2的速度改为1,调整p1的位置到首节点继续行走
+			} else if speed == 2 {
+				speed = 1
+				p1    = l.Root
+			}
+		}
+	}
+	return entry
+}
+
+//最小栈的实现
+type minStack struct {
+	l    *list.List
+	minL *list.List
+}
+func NewStack1() *minStack {
+	return &minStack{
+		l    : list.New(),
+		minL : list.New(),
+	}
+}
+func (this *minStack)Push(val int)  {
+	this.l.PushBack(val)
+	//最小栈为空 或 最小栈的栈顶元素 大于 插入的元素 则插入最小栈中
+	if this.minL.Len() == 0 || val < this.minL.Back().Value.(int) {
+		this.minL.PushBack(val)
+	}
+}
+func (this *minStack)Pop() int {
+	if this.l.Back() != nil && this.minL.Back() != nil {
+		last    := this.l.Back()
+		lastVal := last.Value.(int)
+		this.l.Remove(last)
+
+		minEle    := this.minL.Back()
+		minEleVal := minEle.Value.(int)
+		if minEleVal == lastVal {
+			this.minL.Remove(minEle)
+		}
+		return lastVal
+	}
+	return 0
+}
+func (this *minStack)GetMin() int {
+	if this.minL.Back() != nil {
+		return  this.minL.Back().Value.(int)
+	}
+	return 0
+}
+
+//最小栈面试题
+func ds7()  {
+	minS := NewStack1()
+	minS.Push(4)
+	minS.Push(9)
+	minS.Push(7)
+	minS.Push(3)
+	fmt.Println(minS.GetMin())
+	fmt.Println(minS.Pop())
+	fmt.Println(minS.GetMin())
+}
+
+//求最大公约数的最优解法
+func ds8()  {
+	fmt.Println(MaxYue(12,16))
+}
+func MaxYue(a, b int) int {
+	max    := a
+	maxYue := 1
+	if max < b {
+		max = b
+	}
+	for i := 2; i < max + 1 ; i++ {
+		if a % i == 0 && b % i == 0{
+			maxYue = i
+		}
+	}
+	return maxYue
 }
