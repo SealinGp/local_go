@@ -1,9 +1,12 @@
 # local_go
-learn go lang by myself from:<br>
-+ [Online Document](https://github.com/chai2010/advanced-go-programming-book/blob/master/SUMMARY.md)
-+ [Go Micro book](https://item.jd.com/68857349166.html)
-+ [leetcode](https://item.jd.com/68857349166.html)
-+ 目录结构说明 <br>
+Learn golang from:<br>
++ [Go Basic Book Online](https://github.com/golang-china/gopl-zh)
++ [Go Advanced Book Online](https://github.com/chai2010/advanced-go-programming-book)
++ [Go语言高并发与微服务实战](https://item.jd.com/68857349166.html)
++ [漫画算法 小灰的算法之旅](https://item.jd.com/12823242.html)
++ [Leetcode Online](https://leetcode-cn.com)
+
+Directory Instructions <br>
 ```
 |-- pkg
 |-- src
