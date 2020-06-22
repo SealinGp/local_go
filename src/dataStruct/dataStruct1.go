@@ -22,6 +22,8 @@ func main() {
 		"ds9" : ds9,
 		"ds10" : ds10,
 		"ds11" : ds11,
+		"ds12" : ds12,
+		"ds13" : ds13,
 	}
 	fun[os.Args[1]]()
 }
@@ -625,4 +627,128 @@ func ds11()  {
 	fmt.Println(ds3.Out())
 	fmt.Println(ds3.Out())
 	fmt.Println(ds3.Out())
+}
+
+//寻找全排列的下一个数 = 在一个整数包含的数字的全部组合中,找出一个大于且仅大于原数的新整数
+//https://leetcode-cn.com/problems/next-permutation/
+//12345 -> 12354
+//12435 -> 12453
+func ds12()  {
+	nums := []int{1,2,4,3,2}
+
+
+	findTransferPoint := func(a []int) int {
+		for i := len(a)-1; i > 0; i-- {
+			if a[i] > a[i-1] {
+				return i
+			}
+		}
+		return 0
+	}
+
+	//1.找到逆序区域的索引
+	index := findTransferPoint(nums)
+	if index == 0 {
+		sort.Ints(nums)
+		return
+	}
+
+	//2.吧逆序区域的索引的前一位和逆序区域中大于他的最小数字交换位置
+	minIndex := index
+	for i := index + 1; i < len(nums) ; i++ {
+		if nums[i] > nums[index-1] && nums[i] < nums[minIndex] {
+			minIndex = i
+		}
+	}
+	nums[index-1],nums[minIndex] = nums[minIndex],nums[index-1]
+
+
+	//3.把逆序区域顺序排序
+	if index < len(nums) - 1 {
+		sort.Ints(nums[index:])
+	}
+	fmt.Println(nums)
+}
+
+//删除k个数字后的最小值
+func ds13()  {
+	nums := []int{3,0,2,0,0}
+	k    := 1
+	fmt.Println(DelKMin(nums,k))
+	fmt.Println(DelKMin1(nums,k))
+
+	nums1 := []int{5,4,1,2,7,0,9,3,6}
+	k1    := 3
+	fmt.Println(DelKMin(nums1,k1))
+	fmt.Println(DelKMin1(nums1,k1))
+}
+
+//实现方法1
+func DelKMin(nums []int,k int) []int {
+	if len(nums) == k {
+		nums = []int{0}
+		return nums
+	}
+
+	//记录上一次的位置
+	lastIndex := 0
+	for k > 0  {
+		hasCut := false
+
+		//从左到右,找到左边数字 > 右边的位置,删除该左位置的值
+		for i := lastIndex; i < len(nums); i++ {
+			if i+1 > len(nums)-1 {
+				break
+			}
+			if nums[i] > nums[i+1] {
+				if i-1 > 0 {
+					lastIndex = i-1
+				}
+				hasCut    = true
+				a := make([]int,0)
+				a = append(a,nums[:i]...)
+				a = append(a,nums[i+1:]...)
+				for a[0] == 0  {
+					a = a[1:]
+				}
+				nums = a
+				break
+			}
+		}
+
+		//没找到则删除最后一个
+		if !hasCut {
+			nums      = nums[:len(nums)-1]
+			lastIndex = len(nums) - 1
+		}
+		k--
+	}
+	return nums
+}
+
+//实现方法2 -- 栈实现
+func DelKMin1(nums []int,k int) []int {
+	if len(nums) == k {
+		return []int{0}
+	}
+	stack := BaseStack{}
+	for i,v := range nums  {
+		if i == 0 {
+			stack.Push(v)
+			continue
+		}
+
+		if stack[len(stack)-1] > v && k > 0 {
+			k--
+			stack.Pop()
+		}
+
+		stack.Push(v)
+	}
+
+	for stack[0] == 0  {
+		stack = stack[1:]
+	}
+
+	return stack
 }
