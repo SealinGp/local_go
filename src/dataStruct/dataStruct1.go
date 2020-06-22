@@ -19,6 +19,9 @@ func main() {
 		"ds6" : ds6,
 		"ds7" : ds7,
 		"ds8" : ds8,
+		"ds9" : ds9,
+		"ds10" : ds10,
+		"ds11" : ds11,
 	}
 	fun[os.Args[1]]()
 }
@@ -464,20 +467,162 @@ func ds7()  {
 	fmt.Println(minS.GetMin())
 }
 
-//求最大公约数的最优解法
+//求最大公约数解法
 func ds8()  {
 	fmt.Println(MaxYue(12,16))
+	fmt.Println(MaxYue1(12,16))
+	fmt.Println(MaxYue2(12,16))
 }
+//辗转相除法
 func MaxYue(a, b int) int {
-	max    := a
-	maxYue := 1
-	if max < b {
-		max = b
+	if a < b {
+		a, b = b, a
 	}
-	for i := 2; i < max + 1 ; i++ {
-		if a % i == 0 && b % i == 0{
-			maxYue = i
+	y := a % b
+	if y == 0 || b <= 1 {
+		return b
+	}
+	return MaxYue(y,b)
+}
+//辗转相减法
+func MaxYue1(a, b int) int {
+	if a == b {
+		return a
+	}
+	if a < b {
+		a, b = b, a
+	}
+	return MaxYue1(a - b,b)
+}
+
+func MaxYue2(a, b int) int {
+	if a == b {
+		return a
+	}
+	if a < b {
+		a, b = b, a
+	}
+	a1 := a % 2
+	b1 := b % 2
+	if a1 == 0 && b1 == 0 {
+		return MaxYue2(a >> 1,b >> 1) << 1
+	} else if a1 == 0 && b1 != 0 {
+		return MaxYue2(a >> 1,b)
+	} else if a1 != 0 && b1 == 0 {
+		return MaxYue2(a,b >> 1)
+	} else if a1 != 0 && b1 != 0 {
+		return MaxYue2(b, a-b)
+	}
+	return 1
+}
+
+//求给定一个正整数n,判断是否是2的整数次幂
+func ds9()  {
+	fmt.Println(Mi(1))
+	fmt.Println(Mi(2))
+	fmt.Println(Mi(3))
+	fmt.Println(Mi(4))
+}
+func Mi(n int) bool {
+	return n&(n-1) == 0
+}
+
+//无序数组排序后的最大相邻差
+func ds10()  {
+	arr := []int{2,6,3,4,5,10,9}
+	fmt.Println(BucketMaxGap(arr))
+}
+
+//利用桶排序的思想
+type bucket struct {
+	min int
+	max int
+}
+func BucketMaxGap(arr []int) int {
+	//计算最大值+最小值
+	min,max := 0,0
+	arrLen  := 0
+	for _, v := range arr  {
+		arrLen++
+		if v < min {
+			min = v
+		}
+		if v > max {
+			max = v
 		}
 	}
-	return maxYue
+	d := max - min
+
+	buckets   := make([]bucket,arrLen)
+	for _, v := range arr  {
+		index := ((v - min) * (arrLen - 1)) / d
+		if buckets[index].min == 0 || buckets[index].min > v {
+			buckets[index].min = v
+		}
+		if buckets[index].max == 0 || buckets[index].max < v {
+			buckets[index].max = v
+		}
+	}
+
+	fmt.Println(buckets)
+	leftbu := buckets[0].max
+	maxGap := 0
+	for i := 1; i < arrLen; i++ {
+		if buckets[i].min == 0 && buckets[i].max == 0 {
+			continue
+		}
+
+		if buckets[i].min - leftbu > maxGap {
+			maxGap = buckets[i].min - leftbu
+		}
+		leftbu = buckets[i].max
+	}
+
+	return  maxGap
+}
+
+//用栈实现队列
+type BaseStack []int
+func (this *BaseStack)Push(ele int)  {
+	*this = append(*this,ele)
+}
+func (this *BaseStack)Pop() int {
+	last := (*this)[len(*this)-1]
+	*this = (*this)[:len(*this)-1]
+	return last
+}
+type stackQueue struct {
+	s1 BaseStack
+	s2 BaseStack
+}
+
+func NewStackQueue() *stackQueue {
+	return &stackQueue{
+		s1: make(BaseStack,0),
+		s2: make(BaseStack,0),
+	}
+}
+
+func (this *stackQueue)In(ele int)  {
+	this.s1.Push(ele)
+}
+func (this *stackQueue)Out() int {
+	if len(this.s2) == 0 {
+		for len(this.s1) != 0  {
+			this.s2.Push(this.s1.Pop())
+		}
+		if len(this.s2) == 0 {
+			return 0
+		}
+	}
+	return this.s2.Pop()
+}
+func ds11()  {
+	ds3 := NewStackQueue()
+	ds3.In(1)
+	ds3.In(2)
+	ds3.In(3)
+	fmt.Println(ds3.Out())
+	fmt.Println(ds3.Out())
+	fmt.Println(ds3.Out())
 }
