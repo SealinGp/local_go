@@ -6,6 +6,7 @@ import (
 	"log"
 	"os"
 	"sort"
+	"strconv"
 )
 func main() {
 	if len(os.Args) <= 1 {
@@ -19,6 +20,13 @@ func main() {
 		"ds6" : ds6,
 		"ds7" : ds7,
 		"ds8" : ds8,
+		"ds9" : ds9,
+		"ds10" : ds10,
+		"ds11" : ds11,
+		"ds12" : ds12,
+		"ds13" : ds13,
+		"ds14" : ds14,
+		"ds15" : ds15,
 	}
 	fun[os.Args[1]]()
 }
@@ -464,20 +472,433 @@ func ds7()  {
 	fmt.Println(minS.GetMin())
 }
 
-//求最大公约数的最优解法
+//求最大公约数解法
 func ds8()  {
 	fmt.Println(MaxYue(12,16))
+	fmt.Println(MaxYue1(12,16))
+	fmt.Println(MaxYue2(12,16))
 }
+//辗转相除法
 func MaxYue(a, b int) int {
-	max    := a
-	maxYue := 1
-	if max < b {
-		max = b
+	if a < b {
+		a, b = b, a
 	}
-	for i := 2; i < max + 1 ; i++ {
-		if a % i == 0 && b % i == 0{
-			maxYue = i
+	y := a % b
+	if y == 0 || b <= 1 {
+		return b
+	}
+	return MaxYue(y,b)
+}
+//辗转相减法
+func MaxYue1(a, b int) int {
+	if a == b {
+		return a
+	}
+	if a < b {
+		a, b = b, a
+	}
+	return MaxYue1(a - b,b)
+}
+
+func MaxYue2(a, b int) int {
+	if a == b {
+		return a
+	}
+	if a < b {
+		a, b = b, a
+	}
+	a1 := a % 2
+	b1 := b % 2
+	if a1 == 0 && b1 == 0 {
+		return MaxYue2(a >> 1,b >> 1) << 1
+	} else if a1 == 0 && b1 != 0 {
+		return MaxYue2(a >> 1,b)
+	} else if a1 != 0 && b1 == 0 {
+		return MaxYue2(a,b >> 1)
+	} else if a1 != 0 && b1 != 0 {
+		return MaxYue2(b, a-b)
+	}
+	return 1
+}
+
+//求给定一个正整数n,判断是否是2的整数次幂
+func ds9()  {
+	fmt.Println(Mi(1))
+	fmt.Println(Mi(2))
+	fmt.Println(Mi(3))
+	fmt.Println(Mi(4))
+}
+func Mi(n int) bool {
+	return n&(n-1) == 0
+}
+
+//无序数组排序后的最大相邻差
+func ds10()  {
+	arr := []int{2,6,3,4,5,10,9}
+	fmt.Println(BucketMaxGap(arr))
+}
+
+//利用桶排序的思想
+type bucket struct {
+	min int
+	max int
+}
+func BucketMaxGap(arr []int) int {
+	//计算最大值+最小值
+	min,max := 0,0
+	arrLen  := 0
+	for _, v := range arr  {
+		arrLen++
+		if v < min {
+			min = v
+		}
+		if v > max {
+			max = v
 		}
 	}
-	return maxYue
+	d := max - min
+
+	buckets   := make([]bucket,arrLen)
+	for _, v := range arr  {
+		index := ((v - min) * (arrLen - 1)) / d
+		if buckets[index].min == 0 || buckets[index].min > v {
+			buckets[index].min = v
+		}
+		if buckets[index].max == 0 || buckets[index].max < v {
+			buckets[index].max = v
+		}
+	}
+
+	fmt.Println(buckets)
+	leftbu := buckets[0].max
+	maxGap := 0
+	for i := 1; i < arrLen; i++ {
+		if buckets[i].min == 0 && buckets[i].max == 0 {
+			continue
+		}
+
+		if buckets[i].min - leftbu > maxGap {
+			maxGap = buckets[i].min - leftbu
+		}
+		leftbu = buckets[i].max
+	}
+
+	return  maxGap
+}
+
+//用栈实现队列
+type BaseStack []int
+func (this *BaseStack)Push(ele int)  {
+	*this = append(*this,ele)
+}
+func (this *BaseStack)Pop() int {
+	last := (*this)[len(*this)-1]
+	*this = (*this)[:len(*this)-1]
+	return last
+}
+type stackQueue struct {
+	s1 BaseStack
+	s2 BaseStack
+}
+
+func NewStackQueue() *stackQueue {
+	return &stackQueue{
+		s1: make(BaseStack,0),
+		s2: make(BaseStack,0),
+	}
+}
+
+func (this *stackQueue)In(ele int)  {
+	this.s1.Push(ele)
+}
+func (this *stackQueue)Out() int {
+	if len(this.s2) == 0 {
+		for len(this.s1) != 0  {
+			this.s2.Push(this.s1.Pop())
+		}
+		if len(this.s2) == 0 {
+			return 0
+		}
+	}
+	return this.s2.Pop()
+}
+func ds11()  {
+	ds3 := NewStackQueue()
+	ds3.In(1)
+	ds3.In(2)
+	ds3.In(3)
+	fmt.Println(ds3.Out())
+	fmt.Println(ds3.Out())
+	fmt.Println(ds3.Out())
+}
+
+//寻找全排列的下一个数 = 在一个整数包含的数字的全部组合中,找出一个大于且仅大于原数的新整数
+//https://leetcode-cn.com/problems/next-permutation/
+//12345 -> 12354
+//12435 -> 12453
+func ds12()  {
+	nums := []int{1,2,4,3,2}
+
+
+	findTransferPoint := func(a []int) int {
+		for i := len(a)-1; i > 0; i-- {
+			if a[i] > a[i-1] {
+				return i
+			}
+		}
+		return 0
+	}
+
+	//1.找到逆序区域的索引
+	index := findTransferPoint(nums)
+	if index == 0 {
+		sort.Ints(nums)
+		return
+	}
+
+	//2.吧逆序区域的索引的前一位和逆序区域中大于他的最小数字交换位置
+	minIndex := index
+	for i := index + 1; i < len(nums) ; i++ {
+		if nums[i] > nums[index-1] && nums[i] < nums[minIndex] {
+			minIndex = i
+		}
+	}
+	nums[index-1],nums[minIndex] = nums[minIndex],nums[index-1]
+
+
+	//3.把逆序区域顺序排序
+	if index < len(nums) - 1 {
+		sort.Ints(nums[index:])
+	}
+	fmt.Println(nums)
+}
+
+//删除k个数字后的最小值
+func ds13()  {
+	nums := []int{3,0,2,0,0}
+	k    := 1
+	fmt.Println(DelKMin(nums,k))
+	fmt.Println(DelKMin1(nums,k))
+
+	nums1 := []int{5,4,1,2,7,0,9,3,6}
+	k1    := 3
+	fmt.Println(DelKMin(nums1,k1))
+	fmt.Println(DelKMin1(nums1,k1))
+}
+
+//实现方法1
+func DelKMin(nums []int,k int) []int {
+	if len(nums) == k {
+		nums = []int{0}
+		return nums
+	}
+
+	//记录上一次的位置
+	lastIndex := 0
+	for k > 0  {
+		hasCut := false
+
+		//从左到右,找到左边数字 > 右边的位置,删除该左位置的值
+		for i := lastIndex; i < len(nums); i++ {
+			if i+1 > len(nums)-1 {
+				break
+			}
+			if nums[i] > nums[i+1] {
+				if i-1 > 0 {
+					lastIndex = i-1
+				}
+				hasCut    = true
+				a := make([]int,0)
+				a = append(a,nums[:i]...)
+				a = append(a,nums[i+1:]...)
+				for a[0] == 0  {
+					a = a[1:]
+				}
+				nums = a
+				break
+			}
+		}
+
+		//没找到则删除最后一个
+		if !hasCut {
+			nums      = nums[:len(nums)-1]
+			lastIndex = len(nums) - 1
+		}
+		k--
+	}
+	return nums
+}
+
+//实现方法2 -- 栈实现
+func DelKMin1(nums []int,k int) []int {
+	if len(nums) == k {
+		return []int{0}
+	}
+	stack := BaseStack{}
+	for i,v := range nums  {
+		if i == 0 {
+			stack.Push(v)
+			continue
+		}
+
+		if stack[len(stack)-1] > v && k > 0 {
+			k--
+			stack.Pop()
+		}
+
+		stack.Push(v)
+	}
+
+	for stack[0] == 0  {
+		stack = stack[1:]
+	}
+
+	return stack
+}
+
+//两个整数相加
+func ds14()  {
+	fmt.Println(Sum("1234","12345"))
+}
+func Sum(a,b string) string {
+	aLen := len(a)
+	if len(b) > aLen {
+		aLen = len(b)
+	}
+	arr1 := make([]int,aLen+1)
+	arr2 := make([]int,aLen+1)
+
+	j := 0
+	for i := len(a)-1; i >= 0; i-- {
+		arr1[j],_ = strconv.Atoi(string(a[i]))
+		j++
+	}
+	j = 0
+	for i := len(b)-1; i >= 0; i-- {
+		arr2[j],_ = strconv.Atoi(string(b[i]))
+		j++
+	}
+	arr3 := make([]int,aLen+1)
+	for i := range arr1 {
+		sum := arr1[i] + arr2[i]
+		if sum > 10 {
+			sum = sum % 10
+			if i+1 > aLen {
+				arr3 = append(arr3,1)
+			} else {
+				arr3[i+1]++
+			}
+
+		}
+		arr3[i] = arr3[i] + sum
+	}
+
+	s := ""
+	for i := len(arr3)-1; i >= 0; i-- {
+		if arr3[i] != 0 {
+			s += strconv.Itoa(arr3[i])
+		}
+	}
+
+	return s
+}
+
+//动态规划
+func ds15()  {
+	w := 10 //工人个数
+	//金矿含金量
+	g := []int{
+		400,500,200,300,350,
+	}
+	//挖金矿需要的工人数量
+	p := []int{
+		5,5,3,4,3,
+	}
+
+	fmt.Println(Wa(w,len(g),p,g))
+	fmt.Println(Wa1(w,len(g),p,g))
+	fmt.Println(Wa3(w,len(g),p,g))
+}
+
+func Ma(a,b int) int {
+	if b > a {
+		a = b
+	}
+	return a
+}
+
+//动态规划-递归
+// w 工人的数量
+// n 金矿的数量
+// p 挖金矿需要的工人数量
+// g 挖金矿的含金量
+
+// F(n,w) 表示 n个金矿,w个工人,挖矿的含金量最大时的函数
+// 边界1: 金矿 = 0 或 工人 = 0 的时候 F(n,w) = F(0,0) = 0
+
+// 情况1:当剩下的工人不足挖金矿需要的工人数量时(n >= 1, w < p[n-1]) =>  F(n,w) = F(n-1,w)
+// 常规情况: (n >= 1, w >= p[n-1]) => F(n,w) = max(F(n-1,w),F(n-1,w-p[n-1]) + g[n-1])
+func Wa(w,n int,p,g []int) int {
+	//边界值---------
+	//挖矿工人为0 或者 金矿数量为0
+	if w == 0 || n == 0 {
+		return 0
+	}
+	//挖矿工人数量 < 第n-1个金矿需要的工人数量
+	if w < p[n-1] {
+		return Wa(w,n-1,p,g)
+	}
+	//边界值---------
+
+	//情况2, 不挖最后一个金矿
+	b := Wa(w,n-1,p,g)
+
+	//情况1, 挖最后一个金矿
+	a := Wa(w - p[n-1],n-1,p,g) + g[n-1]
+
+	return Ma(a,b)
+}
+
+//动态规划-自底向上-空间换时间
+//i : 金矿数量
+//j : 工人数量
+//时间复杂度O(nw)
+//空间复杂度O(nw)
+func Wa1(w,n int,p,g []int) int {
+	table := make([][]int,len(g)+1)
+	for i := range table {
+		table[i] = make([]int,w+1)
+	}
+	//p[i-1] : 第i-1个金矿需要的人数
+	//i : 第几个金矿
+	//j : 工人的数量
+	for i := 1; i <= len(g); i++ {
+		for j := 1; j<=w ; j++ {
+			//如果工人的数量 < 挖矿需要的工人数量
+			if j < p[i-1] {
+				table[i][j] = table[i-1][j]
+			} else {
+				table[i][j] = Ma(table[i-1][j],table[i-1][j-p[i-1]] + g[i-1])
+			}
+		}
+	}
+
+	return table[len(g)][w]
+}
+
+//时间复杂度O(nw)
+//空间复杂度O(w)
+func Wa3(w,n int,p,g []int) int {
+	result := make([]int,w+1)
+	for i := 1; i < len(g); i++ {
+		for j:= w; j >= 1 ; j-- {
+			if j >= p[i-1] {
+				result[j] = Ma(
+					result[j],
+					result[j-p[i-1]] + g[i-1],
+				)
+			}
+		}
+	}
+	return result[w]
 }
