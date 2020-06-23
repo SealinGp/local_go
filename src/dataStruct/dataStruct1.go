@@ -6,6 +6,7 @@ import (
 	"log"
 	"os"
 	"sort"
+	"strconv"
 )
 func main() {
 	if len(os.Args) <= 1 {
@@ -24,6 +25,8 @@ func main() {
 		"ds11" : ds11,
 		"ds12" : ds12,
 		"ds13" : ds13,
+		"ds14" : ds14,
+		"ds15" : ds15,
 	}
 	fun[os.Args[1]]()
 }
@@ -751,4 +754,151 @@ func DelKMin1(nums []int,k int) []int {
 	}
 
 	return stack
+}
+
+//两个整数相加
+func ds14()  {
+	fmt.Println(Sum("1234","12345"))
+}
+func Sum(a,b string) string {
+	aLen := len(a)
+	if len(b) > aLen {
+		aLen = len(b)
+	}
+	arr1 := make([]int,aLen+1)
+	arr2 := make([]int,aLen+1)
+
+	j := 0
+	for i := len(a)-1; i >= 0; i-- {
+		arr1[j],_ = strconv.Atoi(string(a[i]))
+		j++
+	}
+	j = 0
+	for i := len(b)-1; i >= 0; i-- {
+		arr2[j],_ = strconv.Atoi(string(b[i]))
+		j++
+	}
+	arr3 := make([]int,aLen+1)
+	for i := range arr1 {
+		sum := arr1[i] + arr2[i]
+		if sum > 10 {
+			sum = sum % 10
+			if i+1 > aLen {
+				arr3 = append(arr3,1)
+			} else {
+				arr3[i+1]++
+			}
+
+		}
+		arr3[i] = arr3[i] + sum
+	}
+
+	s := ""
+	for i := len(arr3)-1; i >= 0; i-- {
+		if arr3[i] != 0 {
+			s += strconv.Itoa(arr3[i])
+		}
+	}
+
+	return s
+}
+
+//动态规划
+func ds15()  {
+	w := 10 //工人个数
+	//金矿含金量
+	g := []int{
+		400,500,200,300,350,
+	}
+	//挖金矿需要的工人数量
+	p := []int{
+		5,5,3,4,3,
+	}
+
+	fmt.Println(Wa(w,len(g),p,g))
+	fmt.Println(Wa1(w,len(g),p,g))
+	fmt.Println(Wa3(w,len(g),p,g))
+}
+
+func Ma(a,b int) int {
+	if b > a {
+		a = b
+	}
+	return a
+}
+
+//动态规划-递归
+// w 工人的数量
+// n 金矿的数量
+// p 挖金矿需要的工人数量
+// g 挖金矿的含金量
+
+// F(n,w) 表示 n个金矿,w个工人,挖矿的含金量最大时的函数
+// 边界1: 金矿 = 0 或 工人 = 0 的时候 F(n,w) = F(0,0) = 0
+
+// 情况1:当剩下的工人不足挖金矿需要的工人数量时(n >= 1, w < p[n-1]) =>  F(n,w) = F(n-1,w)
+// 常规情况: (n >= 1, w >= p[n-1]) => F(n,w) = max(F(n-1,w),F(n-1,w-p[n-1]) + g[n-1])
+func Wa(w,n int,p,g []int) int {
+	//边界值---------
+	//挖矿工人为0 或者 金矿数量为0
+	if w == 0 || n == 0 {
+		return 0
+	}
+	//挖矿工人数量 < 第n-1个金矿需要的工人数量
+	if w < p[n-1] {
+		return Wa(w,n-1,p,g)
+	}
+	//边界值---------
+
+	//情况2, 不挖最后一个金矿
+	b := Wa(w,n-1,p,g)
+
+	//情况1, 挖最后一个金矿
+	a := Wa(w - p[n-1],n-1,p,g) + g[n-1]
+
+	return Ma(a,b)
+}
+
+//动态规划-自底向上-空间换时间
+//i : 金矿数量
+//j : 工人数量
+//时间复杂度O(nw)
+//空间复杂度O(nw)
+func Wa1(w,n int,p,g []int) int {
+	table := make([][]int,len(g)+1)
+	for i := range table {
+		table[i] = make([]int,w+1)
+	}
+	//p[i-1] : 第i-1个金矿需要的人数
+	//i : 第几个金矿
+	//j : 工人的数量
+	for i := 1; i <= len(g); i++ {
+		for j := 1; j<=w ; j++ {
+			//如果工人的数量 < 挖矿需要的工人数量
+			if j < p[i-1] {
+				table[i][j] = table[i-1][j]
+			} else {
+				table[i][j] = Ma(table[i-1][j],table[i-1][j-p[i-1]] + g[i-1])
+			}
+		}
+	}
+
+	return table[len(g)][w]
+}
+
+//时间复杂度O(nw)
+//空间复杂度O(w)
+func Wa3(w,n int,p,g []int) int {
+	result := make([]int,w+1)
+	for i := 1; i < len(g); i++ {
+		for j:= w; j >= 1 ; j-- {
+			if j >= p[i-1] {
+				result[j] = Ma(
+					result[j],
+					result[j-p[i-1]] + g[i-1],
+				)
+			}
+		}
+	}
+	return result[w]
 }
