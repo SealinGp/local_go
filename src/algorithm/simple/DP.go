@@ -180,6 +180,12 @@ func (*Ref)Msa()  {
 }
 
 //https://leetcode-cn.com/problems/climbing-stairs/
+func min(i,j int) int {
+	if j < i {
+		i = j
+	}
+	return i
+}
 func (*Ref)Cs()  {
 	n   := 44
 
@@ -202,4 +208,18 @@ func (*Ref)Cs()  {
 
 	//长度为n,但是索引为n-1
 	fmt.Println(tmp[n-1])
+}
+func (*Ref)Mccs()  {
+	cost := []int{10,15,20}
+
+	tmp  := make([]int,len(cost))
+	tmp[0] = 0
+	tmp[1] = min(cost[0],cost[1])
+	for i := range cost {
+		if i < 2 {
+			continue
+		}
+		tmp[i] = min(tmp[i-1] + cost[i],tmp[i-2] + cost[i-1])
+	}
+	fmt.Println(tmp[len(tmp)-1])
 }
