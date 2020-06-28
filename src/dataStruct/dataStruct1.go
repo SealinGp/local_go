@@ -468,8 +468,10 @@ func ds7()  {
 	minS.Push(7)
 	minS.Push(3)
 	fmt.Println(minS.GetMin())
-	fmt.Println(minS.Pop())
+	minS.Pop()
+
 	fmt.Println(minS.GetMin())
+	minS.Pop()
 }
 
 //求最大公约数解法
