@@ -189,25 +189,18 @@ func min(i,j int) int {
 func (*Ref)Cs()  {
 	n   := 44
 
-	tmp := make([]int,n)
+	a,b,c := 1,2,0
+	//tmp := 0
+	//tmp := make([]int,n)
 	//动态规划状态转移方程 F(i) = F(i-1) + F[i-2] , F(i) 表示阶梯为i的时候,有多少种方法爬到楼顶
-	for i := 1; i <= n ; i++ {
-		//边界 i < 3 (i = 2,F(2) = 2  i = 1,F(1) = 1, F(3) = F(2) + F(1) = 3)
-		if i-1 == 0 {
-			tmp[i-1] = 1
-			continue
-		}
-		if i-3 < 0 {
-			tmp[i-1] = 2
-			continue
-		}
-
-		//i >= 3
-		tmp[i-1] = tmp[i-2] + tmp[i-3]
+	for i := 3; i <= n ; i++ {
+		c = a + b
+		a = b
+		b = c
 	}
 
 	//长度为n,但是索引为n-1
-	fmt.Println(tmp[n-1])
+	fmt.Println(c)
 }
 func (*Ref)Mccs()  {
 	cost := []int{10,15,20}
@@ -222,4 +215,42 @@ func (*Ref)Mccs()  {
 		tmp[i] = min(tmp[i-1] + cost[i],tmp[i-2] + cost[i-1])
 	}
 	fmt.Println(tmp[len(tmp)-1])
+}
+
+func (*Ref)Wts()  {
+	n     := 76
+	res   := 1000000007
+	a,b,c := 1,2,4
+	tmp   := 0
+
+	//F(i) = F(i-1) + F(i-2) + F(i-3)
+	for i := 4; i <= n; i++ {
+		tmp = a + b + c
+		a = b
+		b = c
+		c = tmp % res
+	}
+
+	fmt.Println(c)
+}
+
+//https://leetcode-cn.com/problems/counting-bits/
+func (*Ref)Cb()  {
+	num := 5
+	arr := make([]int,num+1)
+	arr[0] = 0
+	for i := 1; i <= num ; i++  {
+		if i == 2 {
+			arr[i] = 1
+			continue
+		}
+		//偶数: 2 跟 i/2 的值的最大值 F[i] = max(F[i/2],F[2])
+		if i % 2 == 0 {
+			arr[i] = max(arr[2],arr[i / 2])
+		//奇数: 前一个数+1 F[i] = F[i-1] + 1
+		} else {
+			arr[i] = arr[i-1] + 1
+		}
+	}
+	fmt.Println(arr)
 }
