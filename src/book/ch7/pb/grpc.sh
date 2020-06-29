@@ -1,1 +1,0 @@
-protoc --go_out=plugins=grpc:. ch7/pb/string.proto
