@@ -254,3 +254,46 @@ func (*Ref)Cb()  {
 	}
 	fmt.Println(arr)
 }
+
+//https://leetcode-cn.com/problems/count-square-submatrices-with-all-ones/
+func (*Ref)CountS()  {
+	matrix := [][]int{
+		{0,1,1,1},
+		{1,1,1,1},
+		{0,1,1,1},
+	}
+
+	x    := len(matrix)    //长
+	y    := len(matrix[0]) //宽
+	dp := make([][]int,x)
+	for i := range dp {
+		dp[i] = make([]int,y)
+	}
+	for i := range matrix {
+		for j := range matrix[i] {
+			if matrix[i][j] == 0 {
+				continue
+			}
+
+			//i-1 >= 0
+			//j-1 >= 0
+			//状态转移方程
+			if i -1 >= 0 && j-1 >= 0 {
+				dp[i][j] = min(
+					dp[i-1][j-1],
+					min(dp[i-1][j],dp[i][j-1]),
+				) + 1
+			} else {
+				dp[i][j] = 1
+			}
+		}
+	}
+	answer := 0
+	for i := range dp {
+		for j := range dp[i] {
+			answer += dp[i][j]
+		}
+	}
+
+	fmt.Println(answer)
+}
