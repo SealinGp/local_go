@@ -336,21 +336,12 @@ func (t *T1)LevelOrderTraversal(f func(value int))  {
 		}
 	}
 }
-//广度优先遍历-递归实现
+//广度优先遍历-递归实现 ?
 func (t *T1)LevelOrderTraversal1(f func(value int))  {
 	levelOrderTraversal1(t.Root,f)
 }
 func levelOrderTraversal1(current *Leaf,f func(value int))  {
-	if current == nil {
-		return
-	}
-	f(current.Value)
-	if current.Left != nil {
-		levelOrderTraversal1(current.Left,f)
-	}
-	if current.Right != nil {
-		levelOrderTraversal1(current.Right,f)
-	}
+
 }
 
 

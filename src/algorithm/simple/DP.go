@@ -297,3 +297,41 @@ func (*Ref)CountS()  {
 
 	fmt.Println(answer)
 }
+
+//https://leetcode-cn.com/problems/stone-game/
+type pair struct {
+	first  int
+	second int
+}
+func (*Ref)Sg()  {
+	piles := []int{4,5,7,1,10,6,3,5}
+	//dp[i][j] 表示从数组索引 i~j 里面 先手|后手 选择拿到的最优数字
+	dp    := make([][]pair,len(piles))
+	for i := range dp  {
+		dp[i] = make([]pair,len(piles))
+		dp[i][i].first  = piles[i]
+		dp[i][i].second = 0
+	}
+
+	for j := 1; j < len(piles) ; j++ {
+		i := 0
+		for jx := j; jx < len(piles) ;jx++  {
+			left  := piles[i]  + dp[i+1][jx].second
+			right := piles[jx] + dp[i][jx-1].second
+
+			//先手选左边
+			if left > right {
+				dp[i][jx].first  = left
+				dp[i][jx].second = dp[i+1][jx].first
+			} else {
+				dp[i][jx].first  = right
+				dp[i][jx].second = dp[i][jx-1].first
+			}
+			i++
+		}
+	}
+
+	first := dp[0][len(piles)-1].first
+	right := dp[0][len(piles)-1].second
+	fmt.Println(first > right)
+}
