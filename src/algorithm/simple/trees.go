@@ -50,6 +50,12 @@ func (this *stack)Pop() interface{} {
 	}
 	return nil
 }
+func (this *stack)GetLast() interface{} {
+	if len(this.arr) > 0 {
+		return this.arr[len(this.arr)-1]
+	}
+	return nil
+}
 func (this *stack)Len() int {
 	return len(this.arr)
 }
@@ -320,4 +326,166 @@ func sum(root *TreeNode,L,R,ans int) int {
 		}
 	}
 	return ans
+}
+
+// https://leetcode-cn.com/problems/merge-two-binary-trees/
+func (*Ref)MergeTrees() {
+	t1  := ArrToNode([]int{1,3,2,5})
+	t2  := ArrToNode([]int{2,1,3,-1,4,-1,7})
+
+	t1 = preOrder1(t1,t2)
+	t1.LevelOrder(func(node *TreeNode) {
+		fmt.Println(node.Val)
+	})
+}
+func preOrder1(n1 *TreeNode,n2 *TreeNode) *TreeNode {
+	if n1 == nil {
+		return n2
+	}
+	if n2 == nil {
+		return n1
+	}
+	n1.Val  += n2.Val
+	n1.Left  = preOrder1(n1.Left,n2.Left)
+	n1.Right = preOrder1(n1.Right,n2.Right)
+	return n1
+}
+
+//https://leetcode-cn.com/problems/invert-binary-tree/
+func (*Ref)InvertTree()  {
+	root := ArrToNode([]int{4,2,7,1,3,6,9})
+	mirror(root)
+	root.LevelOrder(func(node *TreeNode) {
+		fmt.Println(node.Val)
+	})
+}
+func mirror(node *TreeNode)  {
+	if node == nil {
+		return
+	}
+	if node.Left == nil && node.Right == nil {
+		return
+	}
+
+	tmp       := node.Left
+	node.Left  = node.Right
+	node.Right = tmp
+	mirror(node.Left)
+	mirror(node.Right)
+}
+
+//https://leetcode-cn.com/problems/search-in-a-binary-search-tree/
+func (*Ref)SearchBST()  {
+	root := ArrToNode([]int{4,2,7,1,3})
+	val  := 2
+
+	var valNode *TreeNode
+	valNode = bstFindTree(root,val)
+
+	if valNode != nil {
+		valNode.LevelOrder(func(node *TreeNode) {
+			fmt.Println(node.Val)
+		})
+	}
+}
+func bstFindTree(node *TreeNode,val int) *TreeNode {
+	if node == nil {
+		return nil
+	}
+	if node.Val == val {
+		return node
+	}
+
+	if val > node.Val {
+		return bstFindTree(node.Right,val)
+	}
+	return bstFindTree(node.Left,val)
+}
+
+type Node struct {
+    Val int
+    Children []*Node
+}
+//https://leetcode-cn.com/problems/n-ary-tree-postorder-traversal/
+func (*Ref)PO()  {
+	root := &Node{
+		Val:      1,
+		Children: []*Node{
+			{3,[]*Node{
+				{5,nil},
+				{6,nil},
+			}},
+			{2,nil},
+			{4,nil},
+		},
+	}
+
+	arr := []int{}
+	Npo1(root, func(cn *Node) {
+		arr = append(arr,cn.Val)
+	})
+	sta2 := NewStack()
+	for _,v := range arr  {
+		sta2.Push(v)
+	}
+	i := 0
+	for sta2.Len() > 0 {
+		arr[i] = sta2.Pop().(int)
+		i++
+	}
+	fmt.Println(arr)
+}
+//递归实现
+func Npo(n *Node,f func(cn *Node))  {
+	if n == nil {
+		return
+	}
+
+	for len(n.Children) > 0 {
+		Npo(n.Children[0],f)
+		n.Children = n.Children[1:]
+	}
+	f(n)
+}
+//栈实现
+func Npo1(root *Node,f func(cn *Node))  {
+	sta := NewStack()
+	sta.Push(root)
+	for sta.Len() > 0  {
+		n := sta.Pop().(*Node)
+		f(n)
+
+		if n.Children != nil {
+			for _,v := range n.Children {
+				sta.Push(v)
+			}
+		}
+	}
+}
+
+func (*Ref)KthLargest()  {
+	root := ArrToNode([]int{3,1,4,-1,2})
+	k    := 4
+
+	val  := 0
+
+}
+func inOrderOp(node *TreeNode,k int) int {
+	if node == nil {
+		return -1
+	}
+
+	ri := inOrderOp(node.Right,k)
+	if ri != -1 && k < 1 {
+		return ri
+	}
+	k--
+	if k < 1 {
+		return node.Val
+	}
+	le := inOrderOp(node.Left,k)
+	if le != -1 && k < 1 {
+		return le
+	}
+	return 0
 }
