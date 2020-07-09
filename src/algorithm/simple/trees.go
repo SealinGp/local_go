@@ -468,24 +468,127 @@ func (*Ref)KthLargest()  {
 	k    := 4
 
 	val  := 0
-
+	root.InOrder(func(curNode *TreeNode) {
+		if k < 1 {
+			return
+		}
+		val = curNode.Val
+		k--
+	})
+	fmt.Println(val)
 }
-func inOrderOp(node *TreeNode,k int) int {
-	if node == nil {
-		return -1
+
+//https://leetcode-cn.com/problems/n-ary-tree-preorder-traversal/
+func (*Ref)Pre()  {
+	root := &Node{
+		Val:      1,
+		Children: []*Node{
+			{3,[]*Node{
+				{5,nil},
+				{6,nil},
+			}},
+			{2,nil},
+			{4,nil},
+		},
 	}
 
-	ri := inOrderOp(node.Right,k)
-	if ri != -1 && k < 1 {
-		return ri
+	//递归
+	arr := []int{}
+	pre1(root, func(node *Node) {
+		arr = append(arr,node.Val)
+	})
+
+	arr2 := []int{}
+	pre2(root, func(node *Node) {
+		arr2 = append(arr2,node.Val)
+	})
+
+	fmt.Println(arr)
+	fmt.Println(arr2)
+}
+//递归实现
+func pre1(n *Node,f func(node *Node))  {
+	if n == nil {
+		return
 	}
-	k--
-	if k < 1 {
-		return node.Val
+
+	f(n)
+	if n.Children != nil {
+		for i := 0; i < len(n.Children); i++ {
+			pre1(n.Children[i],f)
+		}
 	}
-	le := inOrderOp(node.Left,k)
-	if le != -1 && k < 1 {
-		return le
+}
+
+//迭代实现
+func pre2(root *Node,f func(node *Node))  {
+	sta := NewStack()
+	sta.Push(root)
+	for sta.Len() > 0 {
+		cur := sta.Pop().(*Node)
+		f(cur)
+		if cur.Children != nil {
+			for i := len(cur.Children)-1; i >= 0; i--  {
+				sta.Push(cur.Children[i])
+			}
+		}
 	}
-	return 0
+}
+
+//https://leetcode-cn.com/problems/convert-sorted-array-to-binary-search-tree/
+func (*Ref)SAToBST()  {
+	nums := []int{-10,-3,0,5,9}
+	tree := SortArrToBst(nums,0,len(nums)-1)
+	tree.LevelOrder(func(node *TreeNode) {
+		fmt.Println(node.Val)
+	})
+}
+
+//把小->大的数组转换成BST(二叉搜索树)
+func SortArrToBst(arr []int,left int,right int) *TreeNode {
+	if left > right {
+		return nil
+	}
+	rootIndex := (left + right + 1)/2
+	root      := &TreeNode{
+		Val:   arr[rootIndex],
+		Left:  nil,
+		Right: nil,
+	}
+	root.Left = SortArrToBst(arr,left,rootIndex -1)
+	root.Right = SortArrToBst(arr,rootIndex+1,right)
+	return root
+}
+
+
+//https://leetcode-cn.com/problems/maximum-depth-of-n-ary-tree/
+func (*Ref)MaxNDepth()  {
+	root := &Node{
+		Val:      1,
+		Children: []*Node{
+			{3,[]*Node{
+				{5,nil},
+				{6,nil},
+			}},
+			{2,nil},
+			{4,nil},
+		},
+	}
+	fmt.Println(Ndepth(root))
+}
+func Ndepth(root *Node) int {
+	if root == nil {
+		return 0
+	}
+	
+	max1 := 0
+	if root.Children != nil {
+		for _,c := range root.Children {
+			cDepth := Ndepth(c)
+			if max1 < cDepth {
+				max1 = cDepth
+			}
+		}
+	}
+	return max1 + 1
 }
