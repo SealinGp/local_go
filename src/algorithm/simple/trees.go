@@ -592,3 +592,64 @@ func Ndepth(root *Node) int {
 	}
 	return max1 + 1
 }
+
+//https://leetcode-cn.com/problems/increasing-order-search-tree/
+func (*Ref)ICBST()  {
+	root := ArrToNode([]int{5,3,6,2,4,-1,8,1,-1,-1,-1,7,9})
+	ToRight(root).InOrder(func(curNode *TreeNode) {
+		fmt.Println(curNode.Val)
+	})
+}
+func ToRight(root *TreeNode) *TreeNode {
+	var rootNew  *TreeNode
+	var tmp  *TreeNode
+
+	root.InOrder(func(curNode *TreeNode) {
+		if rootNew == nil {
+			rootNew = curNode
+			tmp     = rootNew
+		} else {
+			tmp.Right = &TreeNode{
+				Val:   curNode.Val,
+				Left:  nil,
+				Right: nil,
+			}
+			tmp       = tmp.Right
+		}
+	})
+	return rootNew
+}
+
+//https://leetcode-cn.com/problems/cong-shang-dao-xia-da-yin-er-cha-shu-ii-lcof/
+func (*Ref)LO()  {
+	root := ArrToNode([]int{3,9,20,-1,-1,15,7})
+	fmt.Println(lo(root))
+}
+func lo(root *TreeNode) [][]int {
+	arr := make([][]int,0)
+
+	que := NewQueue()
+	que.InQueue(root)
+	tmp := NewQueue()
+	arr1 := []int{}
+	for que.Len() > 0 || tmp.Len() > 0  {
+		if que.Len() == 0 {
+			que  = tmp
+			tmp  = NewQueue()
+			arr  = append(arr,arr1)
+			arr1 = []int{}
+		}
+
+		node := que.OutQueue().(*TreeNode)
+		arr1  = append(arr1,node.Val)
+		if node.Left != nil {
+			tmp.InQueue(node.Left)
+		}
+		if node.Right != nil {
+			tmp.InQueue(node.Right)
+		}
+	}
+
+	arr = append(arr,arr1)
+	return arr
+}

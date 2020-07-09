@@ -25,7 +25,27 @@ func main() {
 	}
 	fun[os.Args[1]]()
 }
-
+//栈-数组实现-----------------------------------
+type stack1 struct {
+	arr []interface{}
+}
+func NewStack() *stack1 {
+	return &stack1{arr:make([]interface{},0)}
+}
+func (this *stack1)Push(val interface{})  {
+	this.arr = append(this.arr,val)
+}
+func (this *stack1)Pop() interface{} {
+	if len(this.arr) > 0 {
+		val     := this.arr[len(this.arr)-1]
+		this.arr = this.arr[:len(this.arr)-1]
+		return val
+	}
+	return nil
+}
+func (this *stack1)Len() int {
+	return len(this.arr)
+}
 
 //单向链表
 type Node struct {
@@ -290,19 +310,18 @@ func preOrderTraver(currentLeaf *Leaf,f func(value int))  {
 
 //深度优先遍历-前序-栈实现
 func (t *T1)PreOrderTraverseStack(f func(value int))  {
-	stack := make([]*Leaf,0)
+	stack := NewStack()
 	node  := t.Root
-	for node != nil || len(stack) != 0 {
+	for node != nil || stack.Len() > 0 {
 		for node != nil {
 			f(node.Value)
-			stack = append(stack,node)
+			stack.Push(node)
 			node  = node.Left
 		}
 
-		if len(stack) != 0 {
-			node  = stack[len(stack)-1]
-			stack = stack[:len(stack)-1]
-			node  = node.Right
+		if stack.Len() > 0 {
+			node = stack.Pop().(*Leaf)
+			node = node.Right
 		}
 	}
 }
