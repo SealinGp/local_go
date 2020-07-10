@@ -50,12 +50,6 @@ func (this *stack)Pop() interface{} {
 	}
 	return nil
 }
-func (this *stack)GetLast() interface{} {
-	if len(this.arr) > 0 {
-		return this.arr[len(this.arr)-1]
-	}
-	return nil
-}
 func (this *stack)Len() int {
 	return len(this.arr)
 }
@@ -652,4 +646,203 @@ func lo(root *TreeNode) [][]int {
 
 	arr = append(arr,arr1)
 	return arr
+}
+
+func (*Ref)TrimTree() {
+	root := ArrToNode([]int{1,0,2})
+	L    := 1
+	R    := 2
+
+	root = tt(root,L,R)
+	root.LevelOrder(func(node *TreeNode) {
+		fmt.Println(node.Val)
+	})
+}
+func tt(treeNode *TreeNode,L,R int) *TreeNode {
+	if treeNode == nil {
+		return nil
+	}
+
+	if  treeNode.Val > R {
+		return tt(treeNode.Left,L,R)
+	} else if treeNode.Val < L {
+		return tt(treeNode.Right,L,R)
+	}
+
+	treeNode.Left  = tt(treeNode.Left,L,R)
+	treeNode.Right = tt(treeNode.Right,L,R)
+	return treeNode
+}
+
+//https://leetcode-cn.com/problems/binary-tree-level-order-traversal-ii/
+func (*Ref)LOB()  {
+	root := ArrToNode([]int{3,9,20,-1,-1,15,7})
+	fmt.Println(levelOrder1(root))
+}
+func levelOrder1(root *TreeNode) [][]int {
+	que1 := NewQueue()
+	next := NewQueue()
+	que1.InQueue(root)
+	sta := NewStack()
+	arr := []int{}
+	for que1.Len() > 0 || next.Len() > 0 {
+		if que1.Len() == 0 {
+			que1 = next
+			next = NewQueue()
+			sta.Push(arr)
+			arr = []int{}
+		}
+
+		no := que1.OutQueue().(*TreeNode)
+		arr = append(arr,no.Val)
+		if no.Left != nil {
+			next.InQueue(no.Left)
+		}
+		if no.Right != nil {
+			next.InQueue(no.Right)
+		}
+	}
+	sta.Push(arr)
+
+	arr1 := make([][]int,0)
+	for sta.Len() > 0  {
+		arr1 = append(arr1,sta.Pop().([]int))
+	}
+	return arr1
+}
+
+//https://leetcode-cn.com/problems/average-of-levels-in-binary-tree/
+func (*Ref)Aof()  {
+	root := ArrToNode([]int{3,9,20,-1,-1,15,7})
+	fmt.Println(levelOrder2(root))
+}
+func levelOrder2(root *TreeNode) []float64 {
+	que1 := NewQueue()
+	next := NewQueue()
+	que1.InQueue(root)
+	arr1 := []float64{}
+	arr  := []int{}
+	for que1.Len() > 0 || next.Len() > 0 {
+		if que1.Len() == 0 {
+			que1 = next
+			next = NewQueue()
+			var av float64
+			for _,v := range arr  {
+				av += float64(v)
+			}
+			arr1 = append(arr1,av/float64(len(arr)))
+			arr  = []int{}
+		}
+
+		no := que1.OutQueue().(*TreeNode)
+		arr = append(arr,no.Val)
+		if no.Left != nil {
+			next.InQueue(no.Left)
+		}
+		if no.Right != nil {
+			next.InQueue(no.Right)
+		}
+	}
+	var av float64
+	for _,v := range arr  {
+		av += float64(v)
+	}
+	arr1 = append(arr1,av/float64(len(arr)))
+
+	return arr1
+}
+
+//https://leetcode-cn.com/problems/lowest-common-ancestor-of-a-binary-search-tree/
+func (*Ref)Lca()  {
+	root := ArrToNode([]int{6,2,8,0,4,7,9,-1,-1,3,5})
+	p := &TreeNode{Val:2}
+	q := &TreeNode{Val:3}
+
+	fmt.Println(lca(root,p,q).Val)
+	fmt.Println(lca1(root,p,q).Val)
+}
+//数组
+func lca(root,p,q *TreeNode) *TreeNode {
+	if root == nil {
+		return nil
+	}
+
+	//a > b
+	if p.Val > q.Val {
+		p,q = q,p
+	}
+	arrA,arrB := []*TreeNode{},[]*TreeNode{}
+	tmp  := root
+	for {
+		if tmp.Val == p.Val {
+			arrA = append(arrA,tmp)
+			break
+		}
+
+		arrA = append(arrA,tmp)
+		if p.Val < tmp.Val {
+			tmp = tmp.Left
+		} else {
+			tmp = tmp.Right
+		}
+	}
+
+
+	tmp  = root
+	for {
+		if tmp.Val == q.Val {
+			arrB = append(arrB,tmp)
+			break
+		}
+		arrB = append(arrB,tmp)
+		if q.Val < tmp.Val {
+			tmp = tmp.Left
+		} else {
+			tmp = tmp.Right
+		}
+	}
+
+	if len(arrA) > len(arrB) {
+		arrA,arrB = arrB,arrA
+	}
+
+	tmp = nil
+	for i := range arrA  {
+		if arrA[i].Val == arrB[i].Val {
+			tmp = arrA[i]
+		}
+	}
+
+	return tmp
+}
+//递归 N N
+func lca1(root,p,q *TreeNode) *TreeNode {
+	parentV := root.Val
+	pVal    := p.Val
+	qVal    := q.Val
+	if pVal > parentV && qVal > parentV {
+		return lca1(root.Right,p,q)
+	} else if pVal < parentV && qVal < parentV {
+		return lca1(root.Left,p,q)
+	} else {
+		return root
+	}
+}
+//迭代
+func lca2(root,p,q *TreeNode) *TreeNode {
+	pVal    := p.Val
+	qVal    := q.Val
+	parent  := root
+
+
+	for parent != nil {
+		if pVal > parent.Val && qVal > parent.Val {
+			parent = parent.Right
+		} else if pVal < parent.Val && qVal < parent.Val {
+			parent = parent.Left
+		} else {
+			return parent
+		}
+	}
+	return nil
 }
