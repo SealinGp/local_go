@@ -3,6 +3,7 @@ package simple
 import (
 	"container/list"
 	"fmt"
+	"strconv"
 )
 
 //二叉树专题
@@ -845,4 +846,29 @@ func lca2(root,p,q *TreeNode) *TreeNode {
 		}
 	}
 	return nil
+}
+
+//https://leetcode-cn.com/problems/binary-tree-paths/
+func (*Ref)Btp()  {
+	root := ArrToNode([]int{1,2,3,-1,5,6})
+	if root == nil {
+		return
+	}
+
+	fmt.Println(btp(root,"",[]string{}))
+}
+func btp(root *TreeNode,path string,paths []string) []string {
+	if root == nil {
+		return paths
+	}
+
+	path += strconv.Itoa(root.Val)
+	if root.Left == nil && root.Right == nil {
+		paths = append(paths,path)
+	} else {
+		path += "->"
+		paths = btp(root.Left,path,paths)
+		paths = btp(root.Right,path,paths)
+	}
+	return paths
 }
