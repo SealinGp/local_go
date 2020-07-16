@@ -119,9 +119,12 @@ func postOrder(current *TreeNode,f func(curNode *TreeNode))  {
 
 //广度优先遍历-队列实现
 func (this *TreeNode)LevelOrder(f func(node *TreeNode))  {
+	levelOrder(this,f)
+}
+func levelOrder(root *TreeNode,f func(node *TreeNode))  {
 	//根节点入队
 	qu := NewQueue()
-	qu.InQueue(this)
+	qu.InQueue(root)
 
 	for {
 		first := qu.OutQueue()
@@ -137,7 +140,6 @@ func (this *TreeNode)LevelOrder(f func(node *TreeNode))  {
 			qu.InQueue(current.Right)
 		}
 	}
-
 }
 func (this *TreeNode)DepthLevel() int {
 	return depth1(this)
@@ -872,3 +874,102 @@ func btp(root *TreeNode,path string,paths []string) []string {
 	}
 	return paths
 }
+
+//https://leetcode-cn.com/problems/sum-of-root-to-leaf-binary-numbers/
+func (*Ref)SRTL()  {
+	root := ArrToNode([]int{1,0,1,0,1,0,1})
+
+	fmt.Println(srtl(root,0,[]int{}))
+}
+func srtl(root *TreeNode,sum int,qu []int) int {
+	if root == nil {
+		return sum
+	}
+
+	qu = append(qu,root.Val)
+	if root.Left == nil && root.Right == nil {
+		Len     := len(qu) - 1
+		for _,v := range qu {
+			if v > 0 {
+				sum += 1 << uint(Len)
+			}
+			Len--
+		}
+	} else {
+		sum = srtl(root.Left,sum,qu)
+		sum = srtl(root.Right,sum,qu)
+	}
+	return sum
+}
+
+//https://leetcode-cn.com/problems/leaf-similar-trees/
+func (*Ref)LS()  {
+	root1 := ArrToNode([]int{})
+	root2 := ArrToNode([]int{})
+
+	l1 := []int{}
+	preOrder(root1, func(curNode *TreeNode) {
+		if curNode.Left == nil && curNode.Right == nil {
+			l1 = append(l1,curNode.Val)
+		}
+	})
+	l2 := []int{}
+	preOrder(root2, func(curNode *TreeNode) {
+		if curNode.Left == nil && curNode.Right == nil {
+			l2 = append(l2,curNode.Val)
+		}
+	})
+	if len(l1) != len(l2) {
+		return
+	}
+	for i := range l1 {
+		if l1[i] != l2[i] {
+			return
+		}
+	}
+	return
+}
+
+func (*Ref)CBST()  {
+	root := ArrToNode([]int{5,2,13})
+	val := 0
+	InOrderReverse(root, func(curNode *TreeNode) {
+		curNode.Val += val
+		val          = curNode.Val
+	})
+}
+func InOrderReverse(node *TreeNode,f func(curNode *TreeNode))  {
+	if node == nil {
+		return
+	}
+	InOrderReverse(node.Right,f)
+	f(node)
+	InOrderReverse(node.Left,f)
+}
+
+//https://leetcode-cn.com/problems/same-tree/submissions/
+func (*Ref)SameTree()  {
+	p := ArrToNode([]int{1,2,1})
+	q := ArrToNode([]int{1,1,2})
+	a := true
+	preOrder2(p,q, func(node1 *TreeNode, node2 *TreeNode) {
+		if node1 == nil || node2 == nil {
+			if node1 != nil || node2 != nil {
+				a = false
+			}
+		} else {
+			if node1.Val != node2.Val {
+				a = false
+			}
+		}
+	})
+	fmt.Println(a)
+}
+func preOrder2(n1,n2 *TreeNode,f func(node1 *TreeNode,node2 *TreeNode))  {
+	f(n1,n2)
+	if n1 != nil && n2 != nil {
+		preOrder2(n1.Left,n2.Left,f)
+		preOrder2(n1.Right,n2.Right,f)
+	}
+}
+
