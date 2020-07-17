@@ -3,6 +3,7 @@ package simple
 import (
 	"container/list"
 	"fmt"
+	"math"
 	"strconv"
 )
 
@@ -973,3 +974,126 @@ func preOrder2(n1,n2 *TreeNode,f func(node1 *TreeNode,node2 *TreeNode))  {
 	}
 }
 
+
+//https://leetcode-cn.com/problems/ping-heng-er-cha-shu-lcof/
+func (*Ref)IsBan()  {
+	root  := ArrToNode([]int{1,2,2,3,-1,-1,3,4,-1,-1,4})
+	fmt.Println(levelOrderHigh(root) != -1)
+}
+func levelOrderHigh(root *TreeNode) int {
+	if root == nil {
+		return 0
+	}
+	left := levelOrderHigh(root.Left)
+	if left == -1 {
+		return  -1
+	}
+	right := levelOrderHigh(root.Right)
+	if right == -1 {
+		return  -1
+	}
+
+	if abs(left-right) < 2 {
+		return max(left,right) + 1
+	}
+	return -1
+}
+func abs(a int) int {
+	if a < 0 {
+		return -a
+	}
+	return a
+}
+
+//https://leetcode-cn.com/problems/dui-cheng-de-er-cha-shu-lcof/
+func (*Ref)IsSymm()  {
+	root := ArrToNode([]int{1,2,2,3,4,4,3})
+	sym  := true
+	defer func() {
+		fmt.Println(sym)
+	}()
+
+	if root == nil {
+		return
+	}
+	symm(root.Left,root.Right, func(cn1, cn2 *TreeNode) {
+		if cn1 == nil || cn2 == nil {
+			if cn1 != nil || cn2 != nil {
+				sym = false
+			}
+		}
+		if cn1 != nil && cn2 != nil {
+			if cn1.Val != cn2.Val {
+				sym = false
+			}
+		}
+	})
+}
+func symm(n1,n2 *TreeNode,f func(cn1,cn2 *TreeNode))  {
+	f(n1,n2)
+	if n1 != nil && n2 != nil {
+		symm(n1.Left,n2.Right,f)
+		symm(n1.Right,n2.Left,f)
+	}
+}
+
+//https://leetcode-cn.com/problems/minimum-absolute-difference-in-bst/
+func (*Ref)Gmd()  {
+	root := ArrToNode([]int{})
+
+	prev := -1
+	gap  := math.MaxInt64
+	inOrder(root, func(curNode *TreeNode) {
+		if prev >= 0 {
+			gap = min(gap,abs(curNode.Val - prev))
+		}
+		prev = curNode.Val
+	})
+}
+
+//https://leetcode-cn.com/problems/binary-tree-tilt/
+func (*Ref)FindTilt()  {
+	root := ArrToNode([]int{1,2,3,4})
+
+	tilt := 0
+	after(root, func(ls, rs int) {
+		tilt += abs(ls-rs)
+	})
+	fmt.Println(tilt)
+}
+func after(node *TreeNode,f func(ls,rs int)) int {
+	if node == nil {
+		return 0
+	}
+
+	leftSum  := after(node.Left,f)
+	rightSum := after(node.Right,f)
+	f(leftSum,rightSum)
+	return leftSum + rightSum + node.Val
+}
+
+//https://leetcode-cn.com/problems/two-sum-iv-input-is-a-bst/
+func (*Ref)FindTarget()  {
+	root := ArrToNode([]int{2,1,3})
+	k    := 1
+
+	exists := false
+	inOrder(root, func(curNode *TreeNode) {
+		if inBst(root,k-curNode.Val,curNode) {
+			exists = true
+		}
+	})
+	fmt.Println(exists)
+}
+func inBst(root *TreeNode,target int,avoid *TreeNode) bool {
+	if root == nil {
+		return false
+	}
+
+	if target > root.Val {
+		return inBst(root.Right,target,avoid)
+	} else if target < root.Val {
+		return inBst(root.Left,target,avoid)
+	}
+	return target == root.Val && root != avoid
+}
