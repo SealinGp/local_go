@@ -1097,3 +1097,98 @@ func inBst(root *TreeNode,target int,avoid *TreeNode) bool {
 	}
 	return target == root.Val && root != avoid
 }
+
+
+//https://leetcode-cn.com/problems/path-sum-iii/
+func (*Ref)PathSum()  {
+	root := ArrToNode([]int{10,5,-3,3,2,-1,11,3,-2,-1,1})
+	sum  := 8
+	fmt.Println(pathSum1(root,sum,[]int{}))
+	//[5,4,8,11,null,13,4,7,2,null,null,5,1]
+	//22
+}
+
+func pathSum1(root *TreeNode, sum int,pathSum []int) int {
+	if root == nil {
+		return 0
+	}
+	tmp := root.Val
+	n   := 0
+	if root.Val == sum {
+		n++
+	}
+	for i := len(pathSum)-1; i >= 0; i-- {
+		tmp += pathSum[i]
+		if tmp == sum {
+			n++
+		}
+	}
+	pathSum = append(pathSum,root.Val)
+
+
+	return n + pathSum1(root.Left,sum,pathSum) + pathSum1(root.Right,sum,pathSum)
+}
+
+//https://leetcode-cn.com/problems/sum-of-left-leaves/
+func (*Ref)SLL()  {
+	root := ArrToNode([]int{3,9,20,-1,-1,15,7})
+	fmt.Println(sll(root,0,""))
+}
+
+func sll(n *TreeNode,sum int, ty string) int {
+	if n == nil {
+		return sum
+	}
+	if ty == "left" && n.Left == nil && n.Right == nil {
+		return sum + n.Val
+	}
+	sum = sll(n.Left,sum,"left")
+	sum = sll(n.Right,sum,"right")
+	return sum
+}
+
+//https://leetcode-cn.com/problems/symmetric-tree/
+func (*Ref)IsSym()  {
+	root := ArrToNode([]int{1,2,2,3,4,4,3})
+
+	sym  := true
+	if root == nil {
+		return
+	}
+	symm(root.Left,root.Right, func(cn1, cn2 *TreeNode) {
+		if cn1 == nil || cn2 == nil {
+			if cn1 != nil || cn2 != nil {
+				sym = false
+			}
+		}
+		if cn1 != nil && cn2 != nil {
+			if cn1.Val != cn2.Val {
+				sym = false
+			}
+		}
+	})
+}
+
+//https://leetcode-cn.com/problems/balanced-binary-tree/
+func (*Ref)IsBalanced()  {
+	root := ArrToNode([]int{3,9,20,-1,-1,15,7})
+	fmt.Println(isBalanced1(root))
+}
+func isBalanced1(root *TreeNode) bool {
+	if root == nil {
+		return true
+	}
+	if isBalanced1(root.Left) && isBalanced1(root.Right) &&
+		abs(height(root.Left) - height(root.Right)) <= 1 {
+		return true
+	}
+	return false
+}
+func height(root *TreeNode) int {
+	if root == nil {
+		return -1
+	}
+	leftHeight := height(root.Left)
+	rightHeight := height(root.Right)
+	return max(leftHeight,rightHeight) + 1
+}
