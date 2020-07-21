@@ -1192,3 +1192,60 @@ func height(root *TreeNode) int {
 	rightHeight := height(root.Right)
 	return max(leftHeight,rightHeight) + 1
 }
+
+//https://leetcode-cn.com/problems/maximum-binary-tree/
+func (*Ref)CMB()  {
+	nums := []int{3,2,1,6,0,5}
+	root := cmb(nums)
+	if root != nil {
+		root.LevelOrder(func(node *TreeNode) {
+			fmt.Println(node.Val)
+		})
+	}
+}
+func cmb(a []int) *TreeNode {
+	if len(a) < 1 {
+		return nil
+	}
+
+	left  := 0
+	right := len(a)-1
+	maxI  := left
+	for left <= right  {
+		if a[left] > a[maxI] {
+			maxI = left
+		}
+		if a[right] > a[maxI] {
+			maxI = right
+		}
+		left++
+		right--
+	}
+
+	n := &TreeNode{
+		Val:   a[maxI],
+		Left:  nil,
+		Right: nil,
+	}
+	n.Left  = cmb(a[:maxI])
+	n.Right = cmb(a[maxI+1:])
+	return n
+}
+
+//https://leetcode-cn.com/problems/sum-of-nodes-with-even-valued-grandparent/submissions/
+func (*Ref)SEG()  {
+	root := ArrToNode([]int{})
+	fmt.Println(seg(root,1,1))
+}
+func seg(node *TreeNode,parentVal,grandparentVal int) int {
+	if node == nil {
+		return 0
+	}
+	ans := 0
+	if grandparentVal % 2 == 0 {
+		ans += node.Val
+	}
+	ans += seg(node.Left,node.Val,parentVal)
+	ans += seg(node.Right,node.Val,parentVal)
+	return ans
+}
