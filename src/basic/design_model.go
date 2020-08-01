@@ -12,9 +12,9 @@ import (
 设计模式
 
 创建模式: 简单工厂,抽象工厂,单例...
-行为模式: 观察者模式...
-结构模式: 适配器模式...
-同步模式: 信号量模式
+行为模式: 观察者模式(1发多接收),发布订阅模式(1发订阅了的才接收)...
+结构模式: 适配器模式(token接口服务=存储接口+加解密接口)...
+同步模式: 消费生产者模式,信号量模式,
  */
 
 func main() {
@@ -29,11 +29,12 @@ func main() {
 		"m3":m3,
 		"m4":m4,
 		"m5":m5,
+		"m6":m6,
 	}
 	fun[os.Args[1]]()
 }
 
-//1.简单工厂
+//1.创建模式-简单工厂
 type Product interface {
 	Create()
 }
@@ -64,7 +65,7 @@ func m1()  {
 	ProB.Create()
 }
 
-//2.抽象工厂(工厂方法)
+//2.创建模-抽象工厂(工厂方法)
 type ProductsFactory interface {
 	GetProduct(productT string) Product
 }
@@ -112,15 +113,23 @@ func m2()  {
 	zf.GetProduct("B").Create()
 }
 
-//3.单例模式
+//3.创建模式-单例模式
 func m3()  {
+	ch := make(chan *in)
+
 	//1.使用锁+全局变量
-	i1,i2 := m3_1(),m3_1()
-	println(i1.ran,i2.ran)
+	i1  := m3_1()
+	go func() {
+		ch <- m3_1()
+	}()
+	println(i1,<-ch) //查看地址是否一样
 
 	//2.使用锁+atomic+全局变量+int
-	i3,i4 := m3_2(),m3_2()
-	println(i3.ran,i4.ran)
+	go func() {
+		ch <- m3_2()
+	}()
+	i3 := m3_2()
+	println(i3,<-ch)
 
 	//3.使用sync.Once+全局变量 (原理=atomic)
 	i5,i6 := m3_3(),m3_3()
@@ -164,7 +173,7 @@ func m3_3() *in {
 	return instance2
 }
 
-//4.消费者-生产者模式
+//4.同步模式-消费者-生产者模式
 func m4()  {
 	ch := make(chan int)
 	go produser(ch)
@@ -182,7 +191,7 @@ func produser(ch chan<-int)  {
 	}
 }
 
-//5.观察者模式
+//5.行为模式-观察者模式
 func m5()  {
 	oba := new(ObserverA)
 	obb := new(ObserverB)
@@ -213,4 +222,40 @@ func (c *Company)change()  {
 	for _,o := range c.obs {
 		o.Receive()
 	}
+}
+
+//结构模式-适配器模式
+type TokenSvc struct {
+	store    TokenStore
+	enhancer TokenEnhancer
+}
+type TokenStore interface {
+	Store()
+	Load()
+}
+type TokenEnhancer interface {
+	Encode()
+	Decode()
+}
+type RedisStore struct {}
+func (tokenStore *RedisStore)Store()  {
+
+}
+func (tokenStore *RedisStore)Load()  {
+
+}
+type BaseEncode struct {}
+func (tokenEnhancer *BaseEncode)Encode()  {}
+func (tokenEnhancer *BaseEncode)Decode()  {}
+func m6()  {
+	tokenSvc := TokenSvc{store:&RedisStore{},enhancer:&BaseEncode{}}
+	tokenSvc.store.Store()
+	tokenSvc.store.Load()
+	tokenSvc.enhancer.Encode()
+	tokenSvc.enhancer.Decode()
+}
+
+//信号量模式
+func m7()  {
+	
 }

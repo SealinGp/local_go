@@ -275,7 +275,7 @@ func gor7()  {
 
 	for i,xi := range data  {
 		go func(i int, xi float64) {
-			res[i] = xi + 1
+			res[i] = float64(i)
 			sem <- res[i]
 		}(i,xi)
 	}
