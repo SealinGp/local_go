@@ -16,6 +16,7 @@ wrk:http压测工具,底层封装了epoll和kqueue
 graphviz : 把二进制的pprof文件转换为svg
 
 pprof    : golang性能能分析包
+命令     : go tool pprof
 
 参数说明:
 heap    : 堆内存分析
