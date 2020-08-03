@@ -295,6 +295,39 @@ func ArrToNode(arr []int) *TreeNode {
 	}
 	return rootNode
 }
+func PreArrToNode(arr []int) *TreeNode {
+	rootList := list.New()
+	for _, v := range arr {
+		rootList.PushBack(v)
+	}
+	return preArrToNode(rootList)
+}
+func preArrToNode(list2 *list.List) *TreeNode {
+	var node *TreeNode
+	if list2.Len() <= 0 {
+		return nil
+	}
+	ele := list2.Front()
+	list2.Remove(ele)
+
+	data := ele.Value.(int)
+	if data >= 0 {
+		node = &TreeNode{
+			Val:data,
+		}
+		node.Left  = preArrToNode(list2)
+		node.Right = preArrToNode(list2)
+	}
+	return node
+}
+
+func (*Ref)Test()  {
+	arr := []int{3,2,9,-1,-1,10,-1,-1,8,-1,4}
+	node := PreArrToNode(arr)
+	node.PreOrder(func(curNode *TreeNode) {
+		fmt.Println(curNode.Val)
+	})
+}
 
 //https://leetcode-cn.com/problems/er-cha-shu-de-shen-du-lcof/
 func (*Ref)Md()  {
