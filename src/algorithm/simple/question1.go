@@ -6,7 +6,6 @@ import (
 	"log"
 	"strconv"
 	"strings"
-	"sync"
 )
 
 //https://leetcode-cn.com/problems/median-of-two-sorted-arrays/
@@ -565,84 +564,84 @@ func (*Ref)GOF()  {
 }
 
 //https://leetcode-cn.com/problems/lru-cache/
-type LRUCache struct {
-	kv   map[int]*node
-	mu   sync.Mutex
-	ca   int
-	keys []int
-}
-type node struct {
-	value      int
-}
-func Constructor(capacity int) LRUCache {
-	return LRUCache{
-		kv: make(map[int]*node,capacity),
-		mu: sync.Mutex{},
-		ca:capacity,
-		keys:make([]int,capacity),
-	}
-}
-func (this *LRUCache) Get(key int) int {
-	this.mu.Lock()
-	defer func() {
-		this.mu.Unlock()
-	}()
-	if this.kv[key] == nil {
-		return -1
-	}
-	this.keysSort(key,false)
-
-	return this.kv[key].value
-}
-func (this *LRUCache) Put(key int, value int)  {
-	this.mu.Lock()
-	defer func() {
-		this.mu.Unlock()
-	}()
-
-	if this.kv[key] != nil {
-		this.kv[key].value = value
-		this.keysSort(key,false)
-		return
-	}
-	//超出阀值,删除旧的
-	if len(this.kv) >= this.ca {
-		delete(this.kv,this.keys[0])
-	}
-	this.keysSort(key,true)
-
-	this.kv[key] = &node{
-		value:      value,
-	}
-	return
-}
-func (this *LRUCache)keysSort(key int,delFirst bool)  {
-	findI := this.ca
-	if delFirst {
-		findI = -1
-	}
-	for i,v := range this.keys {
-		if v == key {
-			findI = i
-		}
-		if i > findI && i-1 >= 0 {
-			this.keys[i-1] = this.keys[i]
-		}
-	}
-	this.keys[this.ca-1] = key
-	return
-}
-
-func (*Ref)LRUCache()  {
-	a := Constructor(3)
-	a.Put(1,1)
-	a.Put(2,2)
-	a.Put(3,3)
-	a.Get(2)
-	a.Get(1)
-	a.Put(4,4)
-	fmt.Println(a.kv,a.keys)
-}
+//type LRUCache struct {
+//	kv   map[int]*node
+//	mu   sync.Mutex
+//	ca   int
+//	keys []int
+//}
+//type node struct {
+//	value      int
+//}
+//func Constructor(capacity int) LRUCache {
+//	return LRUCache{
+//		kv: make(map[int]*node,capacity),
+//		mu: sync.Mutex{},
+//		ca:capacity,
+//		keys:make([]int,capacity),
+//	}
+//}
+//func (this *LRUCache) Get(key int) int {
+//	this.mu.Lock()
+//	defer func() {
+//		this.mu.Unlock()
+//	}()
+//	if this.kv[key] == nil {
+//		return -1
+//	}
+//	this.keysSort(key,false)
+//
+//	return this.kv[key].value
+//}
+//func (this *LRUCache) Put(key int, value int)  {
+//	this.mu.Lock()
+//	defer func() {
+//		this.mu.Unlock()
+//	}()
+//
+//	if this.kv[key] != nil {
+//		this.kv[key].value = value
+//		this.keysSort(key,false)
+//		return
+//	}
+//	//超出阀值,删除旧的
+//	if len(this.kv) >= this.ca {
+//		delete(this.kv,this.keys[0])
+//	}
+//	this.keysSort(key,true)
+//
+//	this.kv[key] = &node{
+//		value:      value,
+//	}
+//	return
+//}
+//func (this *LRUCache)keysSort(key int,delFirst bool)  {
+//	findI := this.ca
+//	if delFirst {
+//		findI = -1
+//	}
+//	for i,v := range this.keys {
+//		if v == key {
+//			findI = i
+//		}
+//		if i > findI && i-1 >= 0 {
+//			this.keys[i-1] = this.keys[i]
+//		}
+//	}
+//	this.keys[this.ca-1] = key
+//	return
+//}
+//
+//func (*Ref)LRUCache()  {
+//	a := Constructor(3)
+//	a.Put(1,1)
+//	a.Put(2,2)
+//	a.Put(3,3)
+//	a.Get(2)
+//	a.Get(1)
+//	a.Put(4,4)
+//	fmt.Println(a.kv,a.keys)
+//}
 
 func (*Ref)FindDuplicate()  {
 	nums := [5]int{
