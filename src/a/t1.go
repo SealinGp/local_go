@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"regexp"
 	"strings"
+	"time"
 )
 var (
 	domain    = "http://www.xyw234.com/"
@@ -26,6 +27,24 @@ type QmInfo struct {
 }
 
 func main() {
+	go func() {
+		defer func() {
+			if err := recover();err != nil {
+				fmt.Println(err)
+			}
+		}()
+		for range time.Tick(time.Second) {
+			proc()
+		}
+	}()
+
+	select {}
+}
+func proc()  {
+	panic("ok")
+}
+
+func Pipei()  {
 	//匹配到所有详情页
 	AllDetailPages := []string{
 		"forum.php?mod=viewthread&tid=36183",
@@ -81,11 +100,11 @@ func main() {
 
 
 		Qms = append(Qms,info)
-	}
-	fmt.Println(Qms)
 
+	}
 	//str := `<em>[<a href="forum.php?mod=forumdisplay&fid=334&amp;filter=typeid&amp;typeid=197">龙岗区</a>]</em> <a href="forum.php?mod=viewthread&amp;tid=36183&amp;extra=page%3D1" onclick="atarget(this)" class="s xst">小御姐范的36C妍妍</a>`
 	//re(str,`href=(\"([^<>"\']*)\"|\'([^<>"\']*)\')`)
+	fmt.Println(Qms)
 }
 
 //正则匹配
