@@ -28,13 +28,15 @@ type QmInfo struct {
 
 func main() {
 	go func() {
-		defer func() {
-			if err := recover();err != nil {
-				fmt.Println(err)
-			}
-		}()
 		for range time.Tick(time.Second) {
-			proc()
+			go func() {
+				defer func() {
+					if err := recover();err != nil {
+						fmt.Println(err)
+					}
+				}()
+				proc()
+			}()
 		}
 	}()
 
