@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"math/rand"
 	"os"
 	"sync"
@@ -225,34 +226,34 @@ func (c *Company)change()  {
 }
 
 //结构模式-适配器模式
-type TokenSvc struct {
-	store    TokenStore
-	enhancer TokenEnhancer
+type MusicPlayer interface {
+	Play(fType, fName string)
 }
-type TokenStore interface {
-	Store()
-	Load()
+type MPlayer struct {}
+func (this *MPlayer)PlayMp3()  {
+	fmt.Println("play mp3")
 }
-type TokenEnhancer interface {
-	Encode()
-	Decode()
+func (this *MPlayer)PlayMp4()  {
+	fmt.Println("play mp4")
 }
-type RedisStore struct {}
-func (tokenStore *RedisStore)Store()  {
-
+type PlayerAdapter struct {
+	mp MPlayer
 }
-func (tokenStore *RedisStore)Load()  {
-
+func (this *PlayerAdapter)Play(fType, fName string)  {
+	switch fType {
+	case "mp3":
+		this.mp.PlayMp3()
+	case "mp4":
+		this.mp.PlayMp4()
+	default:
+		fmt.Println("not supported")
+	}
 }
-type BaseEncode struct {}
-func (tokenEnhancer *BaseEncode)Encode()  {}
-func (tokenEnhancer *BaseEncode)Decode()  {}
 func m6()  {
-	tokenSvc := TokenSvc{store:&RedisStore{},enhancer:&BaseEncode{}}
-	tokenSvc.store.Store()
-	tokenSvc.store.Load()
-	tokenSvc.enhancer.Encode()
-	tokenSvc.enhancer.Decode()
+	player := PlayerAdapter{}
+	player.Play("mp3","1")
+	player.Play("mp4","2")
+	player.Play("mp5","3")
 }
 
 //信号量模式
