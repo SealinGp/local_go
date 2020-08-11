@@ -1282,3 +1282,29 @@ func seg(node *TreeNode,parentVal,grandparentVal int) int {
 	ans += seg(node.Right,node.Val,parentVal)
 	return ans
 }
+
+//https://leetcode-cn.com/problems/deepest-leaves-sum/
+var maxDep = -1
+var total  = 0
+func (*Ref)DLS() {
+	root := ArrToNode([]int{1,2,3,4,5,-1,6,7,-1,-1,-1,-1,8})
+	preOrderDLS(root, 0,-1)
+	fmt.Println(total)
+}
+func preOrderDLS(current *TreeNode,dep,total int) {
+	if current != nil {
+		if dep > maxDep {
+			maxDep = dep
+			total = current.Val
+		} else if dep == maxDep {
+			total += current.Val
+		}
+		preOrderDLS(current.Left,dep+1,total)
+		preOrderDLS(current.Right,dep+1,total)
+	}
+}
+
+//https://leetcode-cn.com/problems/binary-search-tree-iterator/
+func (*Ref)BSTIF()  {
+
+}
