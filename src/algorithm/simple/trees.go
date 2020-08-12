@@ -1308,3 +1308,41 @@ func preOrderDLS(current *TreeNode,dep,total int) {
 func (*Ref)BSTIF()  {
 
 }
+
+//https://leetcode-cn.com/problems/all-elements-in-two-binary-search-trees/
+func (*Ref)GAE() {
+	root1 := ArrToNode([]int{2, 1, 4})
+	root2 := ArrToNode([]int{1, 0, 3})
+
+	arr1 := []int{}
+	inOrder(root1, func(curNode *TreeNode) {
+		arr1 = append(arr1, curNode.Val)
+	})
+
+	arr2 := []int{}
+	inOrder(root2, func(curNode *TreeNode) {
+		arr2 = append(arr2,curNode.Val)
+	})
+
+	arr3 := make([]int,len(arr1) + len(arr2))
+	i,j,x  := 0,0,0
+	for i < len(arr1) || j < len(arr2) {
+		if i >= len(arr1) {
+			arr3[x] = arr2[j]
+			j++
+		} else if j >= len(arr2) {
+			arr3[x] = arr1[i]
+			i++
+		} else {
+			if arr1[i] <= arr2[j] {
+				arr3[x] = arr1[i]
+				i++
+			} else {
+				arr3[x] = arr2[j]
+				j++
+			}
+		}
+		x++
+	}
+	fmt.Println(arr3)
+}
