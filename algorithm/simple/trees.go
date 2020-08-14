@@ -1346,3 +1346,25 @@ func (*Ref)GAE() {
 	}
 	fmt.Println(arr3)
 }
+
+//https://leetcode-cn.com/problems/insert-into-a-binary-search-tree/
+func (*Ref)IBST()  {
+	root := ArrToNode([]int{4,2,7,1,3})
+	val  := 5
+	ibst(root,val).LevelOrder(func(node *TreeNode) {
+		fmt.Println(node.Val)
+	})
+
+}
+func ibst(root *TreeNode,val int)  *TreeNode {
+	if root == nil {
+		return &TreeNode{Val:val}
+	}
+	if root.Val < val {
+		root.Right = ibst(root.Right,val)
+	} else {
+		root.Left = ibst(root.Left,val)
+	}
+
+	return root
+}
