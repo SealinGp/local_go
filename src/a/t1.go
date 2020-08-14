@@ -27,6 +27,10 @@ type QmInfo struct {
 	Phone   string
 }
 
+func getQmInfo(q *QmInfo) *QmInfo {
+	fmt.Println(fmt.Sprintf("in:%p",q))
+	return q
+}
 func main() {
 	publish := &pub{
 		mu:   sync.RWMutex{},

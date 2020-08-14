@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"os"
+	"reflect"
+	"unsafe"
 )
 
 /*
@@ -31,6 +33,7 @@ func execute(n string) {
 		"pointer3": pointer3,
 		"pointer4": pointer4,
 		"pointer5": pointer5,
+		"pointer6": pointer6,
 	}
 	funs[n]()
 }
@@ -172,4 +175,30 @@ func pointer5_1(size int)  {
 	b := make([]byte,size)
 	b = append(b,'a')
 	fmt.Println(string(b))
+}
+
+
+
+func pointer6()  {
+	//unsafe.Pointer: 可以跟任意指针类型互转,可以跟uintptr类型互转
+	v1 := uint(12)
+	v2 := int(13)
+	fmt.Println(reflect.TypeOf(&v1),reflect.TypeOf(&v2))
+	p  := &v1
+	fmt.Println(reflect.TypeOf(p))//*uint
+	//*int -> *uint,类型转换
+	p  = (*uint)(unsafe.Pointer(&v2))
+	fmt.Println(reflect.TypeOf(p))//*uint
+
+	//uintptr : 内置类型,能存储指针的整型,可用于指针运算,在64bit平台上底层的数据类型是:typedef uint64 uintptr;
+	type x struct {
+		a bool
+		b int16
+		c []int
+	}
+	x1 := x{}
+	//pb := &x1.b
+	pb := (*int16)(unsafe.Pointer(uintptr(unsafe.Pointer(&x1)) + unsafe.Offsetof(x1.b)))
+	*pb = 42
+	fmt.Println(x1.b)
 }
