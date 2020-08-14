@@ -22,6 +22,7 @@ DUPOK表示该变量对应的标识符可能有多个，在链接时只选择其
 GLOBL ·VarName(SB),[flags...,]$width
 2.声明变量值,变量地址
 DATA ·VarName+offset(SB)/width,$VarVal
+
 */
 var (
 	Id int

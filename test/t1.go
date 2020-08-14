@@ -6,8 +6,6 @@ import (
 	"net/http"
 	"regexp"
 	"strings"
-	"sync"
-	"time"
 )
 var (
 	domain    = "http://www.xyw234.com/"
@@ -32,92 +30,9 @@ func getQmInfo(q *QmInfo) *QmInfo {
 	return q
 }
 func main() {
-	publish := &pub{
-		mu:   sync.RWMutex{},
-		subs: make(map[sub]topicFunc),
-	}
-	var wg sync.WaitGroup
-	sub1 := publish.Sub(func(topic interface{}) bool {
-		return true
-	})
-	sub2 := publish.Sub(func(topic interface{}) bool {
-		if s,ok := topic.(string);ok {
-			return strings.Contains(s,"golang")
-		}
-		return false
-	})
 
-
-	wg.Add(2)
-	go func() {
-		defer wg.Done()
-		for msg := range sub1 {
-			fmt.Println("sub1:",msg)
-		}
-	}()
-	go func() {
-		defer wg.Done()
-		for msg := range sub2 {
-			fmt.Println("sub2:",msg)
-		}
-	}()
-
-	publish.SendTopic("hello")
-	publish.SendTopic("hello golang")
-	publish.Close()
-
-	wg.Wait()
-}
-type sub chan interface{}
-type topicFunc func(topic interface{}) bool
-type pub struct {
-	mu sync.RWMutex
-	subs map[sub]topicFunc
 }
 
-func (this *pub)Sub(tf topicFunc) chan interface{} {
-	curPub := make(chan interface{})
-
-	this.mu.Lock()
-	defer this.mu.Unlock()
-	this.subs[curPub] = tf
-	return curPub
-}
-func (this *pub)SendTopic(v interface{})  {
-	this.mu.RLock()
-	defer this.mu.RUnlock()
-	var wg sync.WaitGroup
-	for sub,top := range this.subs {
-		if top(v) {
-			wg.Add(1)
-			go this.sendTopic(sub,v,&wg)
-		}
-	}
-	wg.Wait()
-}
-func (this *pub)sendTopic(s sub,v interface{},wg *sync.WaitGroup)  {
-	defer wg.Done()
-	select {
-	case s <- v:
-		fmt.Println("send success!")
-	case <-time.After(time.Second*30):
-		fmt.Println("send time out after 30s")
-	}
-}
-func (this *pub)Evit(sub chan interface{})  {
-	this.mu.Lock()
-	this.mu.Unlock()
-	delete(this.subs,sub)
-	close(sub)
-}
-func (this *pub)Close()  {
-	this.mu.Lock()
-	this.mu.Unlock()
-	for sub := range this.subs {
-		delete(this.subs,sub)
-		close(sub)
-	}
-}
 
 func Pipei()  {
 	//匹配到所有详情页
