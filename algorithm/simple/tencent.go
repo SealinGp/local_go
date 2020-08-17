@@ -63,3 +63,27 @@ func mtsl(l1,l2 *ListNode) *ListNode {
 	}
 	return l1
 }
+
+//https://leetcode-cn.com/problems/two-sum/
+func (*Ref)TS()  {
+	nums   := []int{3,3}
+	target := 6
+
+	m      := make(map[int]int,len(nums))
+	for i := range nums {
+		m[nums[i]] = i
+	}
+
+	a := []int{}
+	for i,v := range nums {
+		left := target - v
+		a = []int{i}
+		if leftI,ok := m[left];ok {
+			if leftI != i {
+				a = append(a,leftI)
+				break
+			}
+		}
+	}
+	fmt.Println(a)
+}
