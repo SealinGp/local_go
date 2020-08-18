@@ -22,6 +22,7 @@ func execute(n string) {
 		"create_slice": create_slice,
 		"for_slice":    for_slice,
 		"fun_slice":    fun_slice,
+		"fs1":    fs1,
 	}
 	funs[n]()
 }
@@ -109,4 +110,37 @@ func echo_str_slice(sli []string) {
 }
 func echo_int_slice(sli []int) {
 	fmt.Printf("len=%d cap=%d slice=%v\n", len(sli), cap(sli), sli)
+}
+
+//切片扩容机制
+//从源码看: 1.期望容量 > 旧容量*2 ,则新容量=期望容量 2.期望容量 < 旧容量*2 && 旧容量<1024 则新容量=旧容量*2 3.期望容量 < 旧容量*2 && 旧容量>=1024 新容量=旧容量*1.25
+//从实际看: 根据切片类型,扩容机制有所不同
+//https://juejin.im/post/6844903812331732999
+func fs1()  {
+	//byte
+	a := []byte{1,8}
+	a = append(a,1,1,1)
+	fmt.Println(cap(a)) //8
+
+	//int expectCap+1
+	b := []int{23,51}
+	b = append(b,4,5,6)
+	fmt.Println(cap(b)) //6
+
+	//int32
+	c := []int32{1,23}
+	c = append(c,2,5,6)
+	fmt.Println(cap(c)) //8
+
+	//struct
+	type D struct {
+		age byte
+		name string
+	}
+	d := []D{
+		{1,"123"},
+		{2,"234"},
+	}
+	d = append(d,D{3,"456"},D{4,"567"},D{4,"678"})
+	fmt.Println(cap(d)) //5
 }
