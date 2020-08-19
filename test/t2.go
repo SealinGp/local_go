@@ -5,8 +5,7 @@ import (
 	"reflect"
 )
 
-//docker的环境隔离，文件隔离什么的
-//1.11和1.12有不一样的
+//docker的环境隔离，文件隔离什么的cgroups:资源隔离 namespace:
 func main() {
 	i := "S"
 	v := reflect.ValueOf(&i)
