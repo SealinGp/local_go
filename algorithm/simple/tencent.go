@@ -90,6 +90,81 @@ func (*Ref)TS()  {
 	fmt.Println(a)
 }
 
+//https://leetcode-cn.com/problems/3sum/
+func (*Ref)TreeSum()  {
+	nums     := []int{-4,-2,-2,-2,0,1,2,2,2,3,3,4,4,6,6}
+
+	numsMaxI := len(nums)-1
+	//先排序
+	dobuleFastSort(nums,0,numsMaxI)
+	tmp := make(map[int]int,len(nums))
+	for i,v := range nums  {
+		tmp[v] = i
+	}
+
+	arr  := [][]int{}
+	tmp1 := make(map[int]int)
+	for i,v := range nums  {
+		a  := v
+		bi := i+1
+		ci := numsMaxI
+
+		//避免重复
+		for bi + 1 <= ci {
+			b := nums[bi]
+			c := nums[ci]
+
+
+			if a + b + c == 0 {
+				_,ok1 := tmp1[a]
+				_,ok2 := tmp1[b]
+				_,ok3 := tmp1[c]
+				if !ok1 || !ok2 || !ok3 {
+					arr = append(arr,[]int{a,b,c})
+					tmp1[a] = i
+					tmp1[b] = bi
+					tmp1[c] = ci
+				}
+				bi++
+			} else if a + b < -c {
+				bi++
+			} else {
+				ci--
+			}
+		}
+	}
+	fmt.Println(arr)
+}
+func dobuleFastSort(arr []int,startIndex,endIndex int) {
+	if startIndex >= endIndex {
+		return
+	}
+
+	privotIndex := dfs(arr,startIndex,endIndex)
+	dobuleFastSort(arr,startIndex,privotIndex-1)
+	dobuleFastSort(arr,privotIndex+1,endIndex)
+}
+func dfs(arr []int,startIndex,endIndex int) int {
+	privot := arr[startIndex]
+	left   := startIndex
+	right  := endIndex
+	for right != left {
+		//右指针左移
+		for left < right && arr[right] > privot  {
+			right--
+		}
+		//左指针右移
+		for left < right && arr[left] <= privot  {
+			left++
+		}
+		if left < right {
+			arr[left],arr[right] = arr[right],arr[left]
+		}
+	}
+	arr[startIndex],arr[left] = arr[left],privot
+	return left
+}
+
 //https://leetcode-cn.com/problems/linked-list-cycle/
 func (*Ref)HC()  {
 	head := &ListNode{
