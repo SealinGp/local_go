@@ -103,33 +103,22 @@ func (*Ref)TreeSum()  {
 	}
 
 	arr  := [][]int{}
-	tmp1 := make(map[int]int)
 	for i,v := range nums  {
-		a  := v
-		bi := i+1
-		ci := numsMaxI
-
-		//避免重复
-		for bi + 1 <= ci {
-			b := nums[bi]
-			c := nums[ci]
-
-
-			if a + b + c == 0 {
-				_,ok1 := tmp1[a]
-				_,ok2 := tmp1[b]
-				_,ok3 := tmp1[c]
-				if !ok1 || !ok2 || !ok3 {
-					arr = append(arr,[]int{a,b,c})
-					tmp1[a] = i
-					tmp1[b] = bi
-					tmp1[c] = ci
+		//跟上一个元素不同,避免重复
+		if i == 0 || v != nums[i-1] {
+			third := numsMaxI
+			for second := i+1; second <= numsMaxI; second++ {
+				if second == i+1 || nums[second-1] != nums[second] {
+					for second < third && nums[i] + nums[second] + nums[third] > 0 {
+						third--
+					}
+					if second == third {
+						break
+					}
+					if nums[i] + nums[second] + nums[third] == 0 {
+						arr = append(arr,[]int{nums[i],nums[second],nums[third]})
+					}
 				}
-				bi++
-			} else if a + b < -c {
-				bi++
-			} else {
-				ci--
 			}
 		}
 	}
