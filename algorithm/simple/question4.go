@@ -40,3 +40,4 @@ func part(arr []int,left,right int) int {
 	arr[tmpIndex],arr[left] = arr[left],tmp
 	return left
 }
+

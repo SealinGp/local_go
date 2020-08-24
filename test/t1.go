@@ -29,9 +29,6 @@ func getQmInfo(q *QmInfo) *QmInfo {
 	fmt.Println(fmt.Sprintf("in:%p",q))
 	return q
 }
-func main() {
-
-}
 
 
 func Pipei()  {
