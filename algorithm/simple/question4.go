@@ -1,6 +1,8 @@
 package simple
 
-import "fmt"
+import (
+	"fmt"
+)
 
 //面试算法题
 
@@ -41,3 +43,24 @@ func part(arr []int,left,right int) int {
 	return left
 }
 
+//随机数问题
+//https://leetcode-cn.com/problems/implement-rand10-using-rand7/
+func (*Ref)R10()  {
+	c := 0
+	for  {
+		a := rand7()
+		b := rand7()
+		c = (a-1)*7 + b
+		if c <= 40 {
+			break
+		}
+	}
+	fmt.Println((c % 10) + 1)
+}
+
+
+//倒水问题 gcd?
+//https://leetcode-cn.com/problems/water-and-jug-problem/
+func (*Ref)PourWater()  {
+
+}

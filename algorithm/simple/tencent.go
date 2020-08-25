@@ -194,6 +194,7 @@ func (*Ref)HC()  {
 	fmt.Println(isCycle)
 }
 
+//https://leetcode-cn.com/problems/implement-rand10-using-rand7/
 func (*Ref)Rand10()  {
 	fmt.Println(rand10())
 }
