@@ -64,3 +64,17 @@ func (*Ref)R10()  {
 func (*Ref)PourWater()  {
 
 }
+
+//https://leetcode-cn.com/leetbook/read/top-interview-questions-easy/x2zsx1/
+func (*Ref)Mp()  {
+	prices := []int{7,6,4,3,1}
+
+	maxPro := 0
+	for i := 1; i < len(prices); i++ {
+		tmp := prices[i] - prices[i-1]
+		if tmp > 0  {
+			maxPro += tmp
+		}
+	}
+	fmt.Println(maxPro)
+}
