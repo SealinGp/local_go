@@ -78,3 +78,44 @@ func (*Ref)Mp()  {
 	}
 	fmt.Println(maxPro)
 }
+
+//https://leetcode-cn.com/leetbook/read/top-interview-questions-easy/x2skh7/
+func (*Ref)Rotate()  {
+	nums     := []int{-1,-100,3,99}
+	k        := 2
+
+	if k <= 0 {
+		return
+	}
+	L    := len(nums)
+	move := L
+
+	curI  := 0
+	tmp   := nums[curI]
+	first := true
+	for move > 0 ||  {
+		newI       := (curI + k)%L
+
+		if first {
+			tmp         = nums[newI]
+			nums[newI]  = nums[curI]
+			first = false
+		} else {
+			tmp1       := nums[newI]
+			nums[newI]  = tmp
+			tmp         = tmp1
+		}
+		curI        = newI
+
+		move--
+	}
+
+	//for newI :=  range nums {
+	//	oldI := (newI - k) % L
+	//	if oldI < 0 {
+	//		oldI += L
+	//	}
+	//	fmt.Print(nums[oldI])
+	//}
+	fmt.Println(nums)
+}
