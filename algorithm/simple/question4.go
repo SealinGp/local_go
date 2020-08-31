@@ -21,17 +21,16 @@ func fs(arr []int,start,end int)  {
 	fs(arr,privotIndex+1,end)
 }
 
-func part(arr []int,left,right int) int {
-	if len(arr) <= 1 {
-		return left
-	}
-	tmpIndex := left
-	tmp := arr[left]
-	for left < right {
-		for left < right && arr[right] > tmp {
+func part(arr []int,startIndex,endIndex int) int {
+	privot     := arr[startIndex]
+	left,right := startIndex,endIndex
+
+
+	for right != left {
+		for left < right && arr[right] > privot {
 			right--
 		}
-		for left < right && arr[left] <= tmp {
+		for left < right && arr[left] <= privot {
 			left++
 		}
 		if left < right {
@@ -39,7 +38,7 @@ func part(arr []int,left,right int) int {
 		}
 	}
 
-	arr[tmpIndex],arr[left] = arr[left],tmp
+	arr[startIndex],arr[left] = arr[left],privot
 	return left
 }
 
@@ -93,7 +92,7 @@ func (*Ref)Rotate()  {
 	curI  := 0
 	tmp   := nums[curI]
 	first := true
-	for move > 0 ||  {
+	for move > 0 {
 		newI       := (curI + k)%L
 
 		if first {
@@ -118,4 +117,15 @@ func (*Ref)Rotate()  {
 	//	fmt.Print(nums[oldI])
 	//}
 	fmt.Println(nums)
+}
+
+func (*Ref)ContainsDup(nums []int) bool {
+	tmp  := make(map[int]int)
+	for _, v := range nums {
+		tmp[v]++
+		if tmp[v] > 1 {
+			return true
+		}
+	}
+	return false
 }
