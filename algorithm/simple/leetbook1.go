@@ -40,3 +40,14 @@ func removeDuplicates(nums []int) int {
 func (*Ref)Mp2()  {
 
 }
+
+//https://leetcode-cn.com/leetbook/read/top-interview-questions-easy/x21ib6/
+func (*Ref)SN()  {
+	nums := []int{2,2,1}
+
+	s := 0
+	for i := range nums {
+		s = s ^ nums[i]
+	}
+	fmt.Println(s)
+}
