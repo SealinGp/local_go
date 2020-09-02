@@ -2,7 +2,10 @@ package main
 
 import (
 	"context"
-	"fmt"
+	"log"
+	"os"
+	"os/signal"
+	"sync"
 	"time"
 )
 
@@ -12,24 +15,50 @@ context 上下文使用(控制 多个goroutine执行超时/错误时 提前结�
 */
 
 func main() {
+	Cond()
+}
+func Cond()  {
+	c := sync.NewCond(&sync.Mutex{})
+	for i := 0; i < 10; i++ {
+		go listen(c,i)
+	}
+	time.Sleep(time.Second*1)
+
+	go broadcast(c)
+	ch := make(chan os.Signal,1)
+	signal.Notify(ch,os.Interrupt)
+	<-ch
+}
+func listen(c *sync.Cond,i int)  {
+	c.L.Lock()
+	c.Wait()
+	log.Println("listen",i)
+	c.L.Unlock()
+}
+func broadcast(c *sync.Cond)  {
+	c.L.Lock()
+	c.Broadcast()
+	c.L.Unlock()
+}
+
+func Ctx()  {
 	ctx,cf := context.WithTimeout(context.Background(),time.Second*1)
-	ctx,cf1 := context.WithCancel(ctx)
+	ctx     = context.WithValue(ctx,"k","v")
 	defer cf()
-	defer cf1()
 
-
-	go doSth(ctx,time.Millisecond*1500)
+	go doSth(ctx,time.Second*4)
 	select {
 	case <-ctx.Done():
-		fmt.Println("main",ctx.Err())
+		log.Println("main",ctx.Err())
 	}
 }
 
 func doSth(ctx context.Context,dur time.Duration)  {
 	select {
 	case <-ctx.Done():
-		fmt.Println("handle",ctx.Err())
+		log.Println("handle",ctx.Err())
 	case <-time.After(dur):
-		fmt.Println("process request with",dur)
+		log.Println("process request with",dur)
 	}
 }
+
