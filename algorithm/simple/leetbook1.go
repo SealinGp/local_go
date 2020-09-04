@@ -164,3 +164,21 @@ func plusOne(digits []int) []int {
 	}
 	return digits
 }
+func (*Ref)MoveZeros()  {
+	num := []int{0,1,0,3,12}
+	MoveZeros(num)
+	fmt.Println(num)
+}
+func MoveZeros(nums []int)  {
+	tmp := 0
+	for i := range nums {
+		if nums[i] != 0 {
+			nums[tmp] = nums[i]
+			tmp++
+		}
+	}
+	numsL := len(nums)
+	for i := tmp; i < numsL; i++ {
+		nums[i] = 0
+	}
+}
