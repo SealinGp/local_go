@@ -199,3 +199,35 @@ func twoSum1(nums []int,target int) []int {
 	}
 	return nil
 }
+
+func (*Ref)IsValidSudo()  {
+
+}
+func isValidSudo(board [][]byte) bool {
+	rowsMap   := make([][]bool,9)
+	columnMap := make([][]bool,9)
+	boxes     := make([][]bool,9)
+	for i := 0; i < 9; i++ {
+		rowsMap[i] = make([]bool,9)
+		columnMap[i] = make([]bool,9)
+		boxes[i] = make([]bool,9)
+	}
+
+	for row := range board {
+		for column := range board[row] {
+			if board[row][column] == '.' {
+				continue
+			}
+			val := board[row][column] - '0' - 1
+
+			boxIndex := (row/3)*3 + column/3
+			if rowsMap[row][val] || columnMap[column][val] || boxes[boxIndex][val] {
+				return false
+			}
+			rowsMap[row][val]      = true
+			columnMap[column][val] = true
+			boxes[boxIndex][val]  = true
+		}
+	}
+	return true
+}
