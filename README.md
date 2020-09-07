@@ -9,7 +9,7 @@ Learn golang from:<br>
 
 Directory Instructions <br>
 ```
-    |-- algroithm     算法相关
+    |-- algroithm     算法相关~~~~
         |-- simple    leetcode相关题目
         |-- timewheel 时间轮实现(二叉堆的最小堆+延迟队列+优先级队列)
     |-- assembler     Go汇编基础

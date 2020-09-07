@@ -182,3 +182,20 @@ func MoveZeros(nums []int)  {
 		nums[i] = 0
 	}
 }
+
+func (*Ref)TwoSum1()  {
+	fmt.Println(twoSum1([]int{2,7,11,15},9))
+}
+func twoSum1(nums []int,target int) []int {
+	numsMap := make(map[int]int)
+	for i := range nums {
+		numsMap[nums[i]] = i
+	}
+	for i := range nums {
+		tmp := target - nums[i]
+		if i1,ok := numsMap[tmp];ok && i1 != i {
+			return []int{i,i1}
+		}
+	}
+	return nil
+}
