@@ -1,30 +1,40 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"strconv"
+	"sync"
+)
 
 func main() {
-	c1 := make(chan bool,1)
-	c2 := make(chan bool)
-	d  := make(chan bool)
+	c1 := make(chan string)
+	c2 := make(chan string)
+	var wg sync.WaitGroup
 
-	c1 <- true
-
+	wg.Add(2)
 	go func() {
+		defer func() {
+			wg.Done()
+		}()
 		for i := 0; i < 3; i++ {
-			<-c1
-			fmt.Print(i)
-			c2<-true
+			c1 <- strconv.Itoa(i)
+
+			s := <-c2
+			fmt.Print(s)
 		}
 	}()
 	go func() {
+		defer func() {
+			wg.Done()
+		}()
 		for i := 'a'; i < 'd'; i++ {
-			<-c2
-			fmt.Print(string(i))
-			c1<-true
+			v := <-c1
+
+			fmt.Print(v)
+
+			c2 <- string(i)
 		}
-		d<-true
 	}()
-
-
-	<-d
+	wg.Wait()
+	fmt.Println("")
 }

@@ -231,3 +231,46 @@ func isValidSudo(board [][]byte) bool {
 	}
 	return true
 }
+
+func (*Ref)Rotate1()  {
+	matrix := [][]int{
+		{1,2,3},
+		{4,5,6},
+		{7,8,9},
+	}
+	rotate(matrix)
+	fmt.Println(matrix)
+}
+func rotate(matrix [][]int)  {
+	n := len(matrix)
+
+	for i := range matrix {
+		for j := i; j < n; j++ {
+			matrix[i][j],matrix[j][i] = matrix[j][i],matrix[i][j]
+		}
+	}
+
+	for i := 0; i < n; i++ {
+		for j := 0; j < n /2;j++ {
+			j1 := n - j - 1
+			matrix[i][j],matrix[i][j1] = matrix[i][j1],matrix[i][j]
+		}
+	}
+}
+
+func (*Ref)ReverseStr()  {
+	s := []byte{'h','e','l','l','o','a'}
+	reverseString(s)
+	fmt.Println(string(s))
+}
+func reverseString(s []byte)  {
+	reverStr(s,0,len(s)-1)
+}
+
+func reverStr(s []byte,left,right int)  {
+	if left >= right {
+		return
+	}
+	s[left],s[right] = s[right],s[left]
+	reverStr(s,left+1,right-1)
+}

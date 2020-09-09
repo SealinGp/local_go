@@ -1,4 +1,5 @@
 package main
+
 import (
 	"fmt"
 	"os"
@@ -7,7 +8,7 @@ import (
 
 /**
 https://github.com/cdoco/learn-regex-zh
-
+\u4e00-\u9fa5
 特殊字符
 $ 匹配以前面的子表达式结尾
 ()标记一个子表达式的开始和结束为止
@@ -62,6 +63,7 @@ func main() {
 		"regex1":regex1,
 		"regex2":regex2,
 		"regex3":regex3,
+		"regex4":regex4,
 	}
 	fun[os.Args[1]]()
 }
@@ -108,5 +110,13 @@ func regex3()  {
 func re(str,pattern string)  {
 	reg  := regexp.MustCompile(pattern)
 	str1 := reg.FindAllString(str,-1)
-	fmt.Println(str1,len(str1))
+	for _,s := range str1 {
+		fmt.Println(s)
+	}
+}
+
+func regex4()  {
+	input   := "a"
+	pattern := fmt.Sprintf(`(\[')%s([a-z',\(\p{Han}\)']+)(\])`,input)
+	re(`var _arrusers = [['aaaroncai','aaaroncai(蔡程)'],['aaaronguo','aaaronguo(郭益诚)'],['bbbronguo','bbbronguo(郭益诚)']]`,pattern)
 }
