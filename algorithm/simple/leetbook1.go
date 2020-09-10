@@ -3,6 +3,7 @@ package simple
 import (
 	"container/list"
 	"fmt"
+	"math"
 	"sort"
 )
 
@@ -273,4 +274,26 @@ func reverStr(s []byte,left,right int)  {
 	}
 	s[left],s[right] = s[right],s[left]
 	reverStr(s,left+1,right-1)
+}
+
+//https://leetcode-cn.com/leetbook/read/top-interview-questions-easy/xnx13t/
+func (*Ref)Reverse1()  {
+	reverse(-123)
+}
+func reverse(x int) int {
+	var x1 int
+	for x != 0 {
+		pop := x % 10
+		x /= 10
+
+		if x1 > math.MaxInt32/10 || (x1 == math.MaxInt32/10 && pop > 7) {
+			return 0
+		}
+		if x1 < math.MinInt32/10 || (x1 == math.MinInt32/10 && pop < -8) {
+			return 0
+		}
+		x1 = x1 * 10 + pop
+	}
+
+	return x1
 }
