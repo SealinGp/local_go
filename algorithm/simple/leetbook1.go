@@ -297,3 +297,21 @@ func reverse(x int) int {
 
 	return x1
 }
+
+//https://leetcode-cn.com/leetbook/read/top-interview-questions-easy/xn5z8r/
+func (*Ref)FirstUniqChar()  {
+	fmt.Println(firstUniqChar("leetcode"))
+}
+func firstUniqChar(s string) int {
+	c := make([]uint,26,26)
+	for _,c1 := range s {
+		c[c1 - 'a']++
+	}
+
+	for i,c1 := range s  {
+		if c[c1 - 'a'] == 1 {
+			return i
+		}
+	}
+	return -1
+}
