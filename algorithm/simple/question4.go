@@ -164,7 +164,7 @@ func IPv4ToInt(ipv4 string) int64 {
 		//ipv4Int64
 		start :=  j * 8
 		for v != 0 {
-			ipv4Int64 = ipv4Int64 + int64((v % 2) << start)
+			ipv4Int64 = ipv4Int64 + int64(v % 2 << uint(start))
 			v /= 2
 			start++
 		}

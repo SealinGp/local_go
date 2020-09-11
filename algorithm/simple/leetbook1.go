@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"math"
 	"sort"
+	"strings"
 )
 
 //https://leetcode-cn.com/leetbook/read/top-interview-questions-easy/x2gy9m/
@@ -333,6 +334,54 @@ func isAnagram(s string, t string) bool {
 		if tmp[v - 'a'] < 0 {
 			return false
 		}
+	}
+	return true
+}
+
+func (*Ref)IPD()  {
+	fmt.Println(strings.TrimSpace("a b c"))
+	fmt.Println(isPalindrome("A man, a plan, a canal: Panama"))
+}
+func isPalindrome(s string) bool {
+	if s == "" {
+		return true
+	}
+	s = strings.TrimFunc(s, func(r rune) bool {
+		if r >= 'a' && r <= 'z' {
+			return false
+		}
+		if r >= 'A' && r <= 'Z' {
+			return false
+		}
+		if r >= '0' && r <= '9' {
+			return false
+		}
+		return true
+	})
+	fmt.Println(s)
+
+	sL    := len(s)
+	left  := 0
+	right := sL-1
+	for left <= sL/2 - 1 && left < right {
+		leftV  := s[left]
+		rightV := s[right]
+
+		//统一转小写
+		if leftV >= 'A' && leftV <= 'Z' {
+			leftV += 32
+		}
+		if rightV >= 'A' && rightV <= 'Z' {
+			rightV += 32
+		}
+
+		if leftV != rightV {
+			fmt.Println(left,string(leftV),right,string(rightV))
+			return false
+		}
+
+		left++
+		right--
 	}
 	return true
 }
