@@ -126,6 +126,7 @@ func execute(n string) {
 }
 
 /*
+//
 	int int8 int16 int32(rune) int64
 
 	uint8(byte) uint16 uint32 uint64
@@ -139,22 +140,28 @@ func execute(n string) {
 		[]rune(s string) 可以将s转为 unicode code point
     byte:
 		raw data, alias for uint8
+占用内存
+1 int8  = 1 uint8 = 1 byte = 8 bit
+1 int16 = 1 uint16 = 2 byte
+1 int32 = 1 uint32 = 4 byte
+1 int64 = 6 byte
 */
 func number_type() {
-	var i1 int = 1   //int32
-	var i2 int8 = 2  //-128~127
-	var i3 int16 = 3 //-32768~32767
-	var i4 int32 = 3 //-2147483648~2147483647
-	var i5 int64 = 4 //-9223372036854775808~9223372036854775807
-					 					  //18446744073709551616
+	var i1 int = 1 << 31 - 1 //int32                                    [-2^31,2^31-1]
+	var i4 int32 = 1 << 31-1 //-2147483648~2147483647                   [-2^31,2^31-1]
+	var ui5 rune = 7   //int32                  [-2^31,2^31-1]
+
+	var i2 int8 = 1 << 7-1   //-128~127                                 [-2^7,2^7-1]
+	var i3 int16 = 1 << 15-1 //-32768~32767                             [-2^15,2^15-1]
+	var i5 int64 = 1 << 63-1 //-9223372036854775808~9223372036854775807 [-2^63,2^63-1]
 	fmt.Println(i1, i2, i3, i4, i5)
 
-	var ui1 uint8 = 5  //0~255
-	var ui2 byte = 5   //0~255
-	var ui3 uint16 = 6 //0~65535
-	var ui4 uint32 = 7 //0~4294967295
-	var ui5 rune = 7   //int32
-	var ui6 uint64 = 8 //0~18446744073709551615
+	var ui1 uint8 = 1 << 8  //0~255(2^8)
+	var ui2 byte = 1 << 8   //0~255
+
+	var ui3 uint16 = 6 //0~65535                [0,2^16]
+	var ui4 uint32 = 7 //0~4294967295           [0,2^32]
+	var ui6 uint64 = 8 //0~18446744073709551615 [0,2^64]
 	fmt.Println(ui1, ui2, ui3, ui4, ui5, ui6)
 
 	var f1 float32 = 0.1    //IEEE-754 32位实数(小数点后6位)

@@ -2,6 +2,8 @@ package simple
 
 import (
 	"fmt"
+	"strconv"
+	"strings"
 )
 
 //面试算法题
@@ -128,4 +130,44 @@ func (*Ref)ContainsDup(nums []int) bool {
 		}
 	}
 	return false
+}
+
+/**
+链接：https://www.nowcoder.com/questionTerminal/66ca0e28f90c42a196afd78cc9c496ea
+来源：牛客网
+原理：ip地址的每段可以看成是一个0-255的整数,把每段拆分成一个二进制形式组合起来,然后把这个二进制数转变成
+一个长整数。
+举例：一个ip地址为10.0.3.193
+每段数字             相对应的二进制数
+10                   00001010
+0                    00000000
+3                    00000011
+193                  11000001
+组合起来即为：00001010 00000000 00000011 11000001,转换为10进制数就是：167773121,即该IP地址转换后的数字就是它了
+的每段可以看成是一个0-255的整数,需要对IP地址进行校验
+ */
+
+func (*Ref)IPv4ToInt64()  {
+	ipv4 := "192.168.1.0"
+	fmt.Println(IPv4ToInt(ipv4))
+}
+func IPv4ToInt(ipv4 string) int64 {
+	ipv4StrSli    := strings.Split(ipv4,".")
+	ipv4StrSliLen := len(ipv4StrSli)
+
+	var ipv4Int64 int64
+	var j = 3
+	for i := 0; i < ipv4StrSliLen; i++ {
+		v, _  := strconv.Atoi(ipv4StrSli[i])
+
+		//ipv4Int64
+		start :=  j * 8
+		for v != 0 {
+			ipv4Int64 = ipv4Int64 + int64((v % 2) << start)
+			v /= 2
+			start++
+		}
+		j--
+	}
+	return ipv4Int64
 }
