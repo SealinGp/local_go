@@ -315,3 +315,24 @@ func firstUniqChar(s string) int {
 	}
 	return -1
 }
+
+//https://leetcode-cn.com/problems/valid-anagram/
+func (*Ref)IsAnagram()  {
+	fmt.Println(isAnagram("rat","car"))
+}
+func isAnagram(s string, t string) bool {
+	if len(s) != len(t) {
+		return false
+	}
+	tmp := make([]int,26,26)
+	for _,v := range s {
+		tmp[v - 'a']++
+	}
+	for _,v := range t {
+		tmp[v - 'a']--
+		if tmp[v - 'a'] < 0 {
+			return false
+		}
+	}
+	return true
+}
