@@ -2,6 +2,8 @@ package simple
 
 import (
 	"fmt"
+	"math"
+	"sort"
 	"strconv"
 	"strings"
 )
@@ -146,7 +148,6 @@ func (*Ref)ContainsDup(nums []int) bool {
 组合起来即为：00001010 00000000 00000011 11000001,转换为10进制数就是：167773121,即该IP地址转换后的数字就是它了
 的每段可以看成是一个0-255的整数,需要对IP地址进行校验
  */
-
 func (*Ref)IPv4ToInt64()  {
 	ipv4 := "192.168.1.0"
 	fmt.Println(IPv4ToInt(ipv4))
@@ -170,4 +171,44 @@ func IPv4ToInt(ipv4 string) int64 {
 		j--
 	}
 	return ipv4Int64
+}
+/**
+zego面试题
+每次输入一个int数,一共输入100w次,请输出结果为前100大的数
+提示:最小堆
+ */
+func (*Ref)Top100()  {
+	max        := 100
+	inputCount := int(math.Pow10(6))
+	var input int
+	top100 := make([]int,max,max)
+	for i := 0; i < inputCount; i++ {
+
+		fmt.Scanf("%d",&input)
+		if i <= max-1 {
+			top100[i] = input
+			continue
+		}
+
+		if i == max {
+			sort.Ints(top100)
+		}
+		if input < top100[0] {
+			continue
+		}
+		for j := range top100  {
+			if j >= 1 {
+				top100[j-1] = top100[j]
+			}
+			if input <= top100[j] && j-1 >= 0 {
+				top100[j-1] = input
+				break
+			}
+			if j + 1 > max-1  {
+				top100[j] = input
+				break
+			}
+		}
+	}
+	fmt.Println(top100)
 }

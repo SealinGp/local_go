@@ -6,7 +6,14 @@ import (
 	"sync"
 )
 
+
 func main() {
+
+
+}
+
+//goroutine 交替打印
+func switchPrint()  {
 	c1 := make(chan string)
 	c2 := make(chan string)
 	var wg sync.WaitGroup
