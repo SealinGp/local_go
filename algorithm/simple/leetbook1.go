@@ -339,49 +339,29 @@ func isAnagram(s string, t string) bool {
 }
 
 func (*Ref)IPD()  {
-	fmt.Println(strings.TrimSpace("a b c"))
 	fmt.Println(isPalindrome("A man, a plan, a canal: Panama"))
 }
 func isPalindrome(s string) bool {
-	if s == "" {
-		return true
-	}
-	s = strings.TrimFunc(s, func(r rune) bool {
-		if r >= 'a' && r <= 'z' {
-			return false
+	s = strings.ToLower(s)
+	left, right := 0, len(s) - 1
+	for left < right {
+		for left < right && !isalnum(s[left]) {
+			left++
 		}
-		if r >= 'A' && r <= 'Z' {
-			return false
+		for left < right && !isalnum(s[right]) {
+			right--
 		}
-		if r >= '0' && r <= '9' {
-			return false
+		if left < right {
+			if s[left] != s[right] {
+				return false
+			}
+			left++
+			right--
 		}
-		return true
-	})
-	fmt.Println(s)
-
-	sL    := len(s)
-	left  := 0
-	right := sL-1
-	for left <= sL/2 - 1 && left < right {
-		leftV  := s[left]
-		rightV := s[right]
-
-		//统一转小写
-		if leftV >= 'A' && leftV <= 'Z' {
-			leftV += 32
-		}
-		if rightV >= 'A' && rightV <= 'Z' {
-			rightV += 32
-		}
-
-		if leftV != rightV {
-			fmt.Println(left,string(leftV),right,string(rightV))
-			return false
-		}
-
-		left++
-		right--
 	}
 	return true
+}
+
+func isalnum(ch byte) bool {
+	return (ch >= 'a' && ch <= 'z') || (ch >= '0' && ch <= '9')
 }
