@@ -365,3 +365,58 @@ func isPalindrome(s string) bool {
 func isalnum(ch byte) bool {
 	return (ch >= 'a' && ch <= 'z') || (ch >= '0' && ch <= '9')
 }
+
+func (*Ref)MyAtoi()  {
+	fmt.Println(myAtoi(" +0 123"))
+}
+func myAtoi(str string) int {
+	str = strings.TrimSpace(str)
+
+	var strI int
+	var negative bool
+
+	if len(str) < 1 {
+		return strI
+	}
+
+	//确认正负
+	switch str[0] {
+	case '+':
+		str = str[1:]
+	case '-':
+		negative = true
+		str = str[1:]
+	default:
+		if str[0] < '0' || str[0] > '9' {
+			return 0
+		}
+	}
+
+	for i := range str {
+		if v,ok := isNum(str[i]);ok {
+			if negative {
+				v = -v
+			}
+			if strI > math.MaxInt32/10 || (strI == math.MaxInt32/10 && v > 7) {
+				return math.MaxInt32
+			}
+			if strI < math.MinInt32/10 || (strI == math.MinInt32/10 && v < -8) {
+				return math.MinInt32
+			}
+
+			strI = strI * 10 + v
+		} else {
+			return strI
+		}
+	}
+
+
+	return strI
+}
+
+func isNum(rune2 uint8) (int,bool) {
+	if rune2 < '0' || rune2 > '9' {
+		return 0,false
+	}
+	return int(rune2 - '0'),true
+}
