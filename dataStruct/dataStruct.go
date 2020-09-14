@@ -517,3 +517,68 @@ func (h *heapType)Pop() int {
 	h.downAdjust(0)
 	return  last
 }
+
+//最小堆
+type miniHeap struct {
+	arr []int
+}
+func NewMiniHeap(a []int) *miniHeap {
+	mh := &miniHeap{
+		arr : a,
+	}
+
+	for i := (len(a)-2)/2; i >= 0; i-- {
+		mh.downAdjust(i)
+	}
+	return mh
+}
+func (mh *miniHeap)Pop() int {
+	if len(mh.arr) < 1 {
+		return -1
+	}
+	tmp      := mh.arr[0]
+	mh.arr[0] = mh.arr[len(mh.arr)-1]
+	mh.arr    = mh.arr[:len(mh.arr)-1]
+	mh.downAdjust(0)
+	return tmp
+}
+func (mh *miniHeap)Insert(val int)  {
+	mh.arr = append(mh.arr,val)
+	mh.upAdjust(len(mh.arr)-1)
+}
+func (mh *miniHeap)upAdjust(index int)  {
+	tmp         := mh.arr[index]
+	parentIndex := (index-1)/2
+
+	for index > 0 && tmp < mh.arr[parentIndex] {
+		mh.arr[index] = mh.arr[parentIndex]
+		index         = parentIndex
+		parentIndex   = (index-1)/2
+	}
+	mh.arr[index] = tmp
+}
+func (mh *miniHeap)downAdjust(index int)  {
+	arrLen     := len(mh.arr)
+	if index > arrLen -1 {
+		return
+	}
+	tmp        := mh.arr[index]
+	leftChild  := 2 * index + 1
+	rightChild := leftChild + 1
+	for leftChild < arrLen {
+		if rightChild < arrLen - 1 && mh.arr[rightChild] < mh.arr[leftChild] {
+			leftChild = rightChild
+		}
+
+		if tmp <= mh.arr[leftChild] {
+			break
+		}
+
+		mh.arr[index] = mh.arr[leftChild]
+		index         = leftChild
+		leftChild     = 2 * index + 1
+		rightChild    = leftChild + 1
+	}
+
+	mh.arr[index] = tmp
+}
