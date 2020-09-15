@@ -430,23 +430,12 @@ func strStr(haystack string, needle string) int {
 		return 0
 	}
 	findI := -1
-
-	hL    := len(haystack)-1
-	nL    := len(needle)-1
-	if hL < nL {
-		return findI
-	}
-	left  := 0
-	for left <= hL {
-		for left <= hL && haystack[left] != needle[0] {
-			left++
+	nL := len(needle)
+	hL := len(haystack)
+	for i := range haystack {
+		if i + nL <= hL && haystack[i:i + nL] == needle {
+			return i
 		}
-
-		if left+nL <= hL && haystack[left:left+nL+1] == needle {
-			return left
-		}
-		left++
 	}
-
 	return findI
 }
