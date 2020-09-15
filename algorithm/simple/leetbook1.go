@@ -420,3 +420,33 @@ func isNum(rune2 uint8) (int,bool) {
 	}
 	return int(rune2 - '0'),true
 }
+
+//https://leetcode-cn.com/leetbook/read/top-interview-questions-easy/xnr003/
+func (*Ref)Strstr()  {
+	fmt.Println(strStr("a","a"))
+}
+func strStr(haystack string, needle string) int {
+	if needle == "" {
+		return 0
+	}
+	findI := -1
+
+	hL    := len(haystack)-1
+	nL    := len(needle)-1
+	if hL < nL {
+		return findI
+	}
+	left  := 0
+	for left <= hL {
+		for left <= hL && haystack[left] != needle[0] {
+			left++
+		}
+
+		if left+nL <= hL && haystack[left:left+nL+1] == needle {
+			return left
+		}
+		left++
+	}
+
+	return findI
+}
