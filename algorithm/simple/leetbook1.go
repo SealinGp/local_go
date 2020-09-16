@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"math"
 	"sort"
+	"strconv"
 	"strings"
 )
 
@@ -438,4 +439,36 @@ func strStr(haystack string, needle string) int {
 		}
 	}
 	return findI
+}
+
+//https://leetcode-cn.com/leetbook/read/top-interview-questions-easy/xnpvdm/
+func (*Ref)CountAndSay()  {
+	countAndSay(2)
+}
+func countAndSay(n int) string {
+	if n <= 1 {
+		return "1"
+	}
+	pre    := countAndSay(n-1)
+	i,j    := 0,1
+	newStr := []uint8{}
+	preL   := len(pre)
+	for i < preL && j < preL {
+		for j < preL && pre[i] == pre[j]  {
+			j++
+		}
+
+		if i < preL {
+			L := uint8(j-i)    //int
+			v := pre[i]        //uint8
+			newStr = append(newStr,L,v)
+		}
+
+
+		i = j
+		j = i+1
+	}
+}
+func cas(n int,preStr string)  {
+
 }
