@@ -443,15 +443,16 @@ func strStr(haystack string, needle string) int {
 
 //https://leetcode-cn.com/leetbook/read/top-interview-questions-easy/xnpvdm/
 func (*Ref)CountAndSay()  {
-	countAndSay(2)
+	fmt.Println(countAndSay(6))
 }
+
 func countAndSay(n int) string {
 	if n <= 1 {
 		return "1"
 	}
 	pre    := countAndSay(n-1)
-	i,j    := 0,1
-	newStr := []uint8{}
+	i,j    := 0,0
+	newStr := ""
 	preL   := len(pre)
 	for i < preL && j < preL {
 		for j < preL && pre[i] == pre[j]  {
@@ -459,16 +460,13 @@ func countAndSay(n int) string {
 		}
 
 		if i < preL {
-			L := uint8(j-i)    //int
-			v := pre[i]        //uint8
-			newStr = append(newStr,L,v)
+			L := j-i
+			v := pre[i]
+			newStr += strconv.Itoa(L) + string(v)
 		}
 
 
 		i = j
-		j = i+1
 	}
-}
-func cas(n int,preStr string)  {
-
+	return newStr
 }
