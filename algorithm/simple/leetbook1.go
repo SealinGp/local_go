@@ -470,3 +470,29 @@ func countAndSay(n int) string {
 	}
 	return newStr
 }
+
+func (*Ref)LCP()  {
+	strs   := []string{"caa","","a","acb"}
+	fmt.Println(longestCommonPrefix(strs))
+}
+func longestCommonPrefix(strs []string) string {
+	if len(strs) < 1 {
+		return ""
+	}
+
+	comm := strs[0]
+	for i := range strs {
+		comm = findCommon(comm,strs[i])
+	}
+	return comm
+}
+
+func findCommon(str1,str2 string) string {
+	minL := min(len(str1),len(str2))
+	for i := 0; i < minL; i++ {
+		if str1[i] != str2[i] {
+			return str1[:i]
+		}
+	}
+	return str1[:minL]
+}
