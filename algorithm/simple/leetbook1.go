@@ -486,7 +486,6 @@ func longestCommonPrefix(strs []string) string {
 	}
 	return comm
 }
-
 func findCommon(str1,str2 string) string {
 	minL := min(len(str1),len(str2))
 	for i := 0; i < minL; i++ {
@@ -495,4 +494,45 @@ func findCommon(str1,str2 string) string {
 		}
 	}
 	return str1[:minL]
+}
+
+func (*Ref)DN()  {
+	head := &ListNode{
+		Val:  4,
+		Next: &ListNode{
+			Val:  5,
+			Next: &ListNode{
+				Val:  1,
+				Next: &ListNode{
+					Val:  9,
+					Next: nil,
+				},
+			},
+		},
+	}
+	root := deleteNode(head,5)
+	for root != nil  {
+		fmt.Println(root.Val)
+		root = root.Next
+	}
+}
+
+func deleteNode(head *ListNode, val int) *ListNode {
+	if head == nil {
+		return head
+	}
+	if head.Val == val {
+		return head.Next
+	}
+
+
+	curr := head
+	for curr.Next != nil  {
+		if curr.Next.Val == val {
+			curr.Next = curr.Next.Next
+			break
+		}
+		curr = curr.Next
+	}
+	return head
 }
