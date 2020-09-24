@@ -6,7 +6,7 @@ import (
 	"sync"
 )
 func main() {
-	wg_test()
+	//wg_test()
 }
 //1.waitGroup?
 //Add为什么要放在go关键字外面(放在wait之前)? 因为有可能wait执行结束了,add都还没添加进去

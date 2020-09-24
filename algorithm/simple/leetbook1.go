@@ -516,7 +516,6 @@ func (*Ref)DN()  {
 		root = root.Next
 	}
 }
-
 func deleteNode(head *ListNode, val int) *ListNode {
 	if head == nil {
 		return head
@@ -533,6 +532,50 @@ func deleteNode(head *ListNode, val int) *ListNode {
 			break
 		}
 		curr = curr.Next
+	}
+	return head
+}
+
+func (*Ref)RNFE()  {
+	head := &ListNode{
+		Val:  1,
+		Next: &ListNode{
+			Val:  2,
+			Next: &ListNode{
+				Val:  3,
+				Next: &ListNode{
+					Val:  4,
+					Next: &ListNode{
+						Val:  5,
+						Next: nil,
+					},
+				},
+			},
+		},
+	}
+	root := removeNthFromEnd(head,1)
+	for root != nil  {
+		fmt.Println(root.Val)
+		root = root.Next
+	}
+}
+func removeNthFromEnd(head *ListNode, n int) *ListNode {
+	first := head
+	cur   := head
+	for first != nil && n + 1 > 0 {
+		first = first.Next
+		n--
+	}
+
+	for first != nil  {
+		cur   = cur.Next
+		first = first.Next
+	}
+
+	if cur == head && n >= 0 {
+		head = head.Next
+	} else {
+		cur.Next = cur.Next.Next
 	}
 	return head
 }
