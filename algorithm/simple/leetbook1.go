@@ -579,3 +579,127 @@ func removeNthFromEnd(head *ListNode, n int) *ListNode {
 	}
 	return head
 }
+
+//https://leetcode-cn.com/leetbook/read/top-interview-questions-easy/xnnhm6/
+func (*Ref)RL()  {
+}
+func reverseList(head *ListNode) *ListNode {
+	if head == nil {
+		return head
+	}
+
+	left  := head
+	right := head.Next
+
+	for right != nil  {
+		if left == head {
+			left.Next = nil
+		}
+		tmp := right.Next
+		right.Next = left
+		left  = right
+		right = tmp
+	}
+	return left
+}
+
+//https://leetcode-cn.com/leetbook/read/top-interview-questions-easy/xnnbp2/
+//双指针
+func mergeTwoLists(l1 *ListNode, l2 *ListNode) *ListNode {
+	newN := &ListNode{
+		Val:  -1,
+		Next: nil,
+	}
+	head := newN
+	for l1 != nil || l2 != nil {
+		if l1 != nil && l2 != nil {
+			if l1.Val < l2.Val {
+				newN.Next = l1
+				l1 = l1.Next
+			} else {
+				newN.Next = l2
+				l2 = l2.Next
+			}
+		} else if l1 != nil {
+			newN.Next = l1
+			l1        = l1.Next
+		} else if l2 != nil {
+			newN.Next = l2
+			l2        = l2.Next
+		} else {
+			break
+		}
+		newN = newN.Next
+	}
+	return head.Next
+}
+//递归
+func mtl(l1 *ListNode,l2 *ListNode) *ListNode {
+	if l1 != nil && l2 != nil {
+		if l1.Val < l2.Val {
+			l1.Next = mtl(l1.Next,l2)
+			return l1
+		} else {
+			l2.Next = mtl(l1,l2.Next)
+			return l2
+		}
+	}
+
+	if l1 != nil {
+		return l1
+	}
+	return l2
+}
+
+//https://leetcode-cn.com/leetbook/read/top-interview-questions-easy/xnv1oc/
+func isPalindromeL(head *ListNode) bool {
+	if head == nil || head.Next == nil {
+		return true
+	}
+
+	cur     := head
+
+	newHead := &ListNode{
+		Val:-1,
+		Next:nil,
+	}
+	newHeadCur := newHead
+	for cur != nil  {
+		newHeadCur.Next = &ListNode{
+			Val:  cur.Val,
+			Next: nil,
+		}
+		cur = cur.Next
+		newHeadCur = newHeadCur.Next
+	}
+
+	newHead = reverseList(newHead.Next)
+	for newHead != nil && head != nil  {
+		if newHead.Val != head.Val {
+			return false
+		}
+		newHead  = newHead.Next
+		head     = head.Next
+	}
+	return true
+}
+
+//https://leetcode-cn.com/leetbook/read/top-interview-questions-easy/xnwzei/
+func hasCycle(head *ListNode) bool {
+	slow := head
+	fast := head
+	for fast != nil && slow != nil {
+		slow = slow.Next
+		fast = fast.Next
+		if fast == nil {
+			return false
+		}
+		fast = fast.Next
+
+
+		if fast == slow {
+			return true
+		}
+	}
+	return false
+}
