@@ -18,6 +18,8 @@ $ 匹配以前面的子表达式结尾
 . 匹配除了换行符\n之外的所有单字符
 | 匹配或
 {} 限定符表达式
+[^ab]d  匹配后面除了ad,bd之外 的字段
+\p{Han} 匹配中文字符
 
 限定符 指定表达式出现多少次满足匹配
 {n}   匹配前面的子表达式 n 次
@@ -64,6 +66,7 @@ func main() {
 		"regex2":regex2,
 		"regex3":regex3,
 		"regex4":regex4,
+		"regex5":regex5,
 	}
 	fun[os.Args[1]]()
 }
@@ -99,6 +102,10 @@ func regex2()  {
 	re("The fat cat sat on the mat.",`(at\.?)$`)
 	//\w
 	re("The fat cat sat on the mat.",`\w+`)
+	//匹配除了fat,cat之外,[^xxx] : 除之外
+	re("The fat cat sat on the mat.",`[^fc]at`)
+	//匹配中文字符
+	re("The fat cat sat on the mat.中文字符",`\p{Han}{2}`)
 }
 
 //常用正则表达式
@@ -111,7 +118,7 @@ func re(str,pattern string)  {
 	reg  := regexp.MustCompile(pattern)
 	str1 := reg.FindAllString(str,-1)
 	for _,s := range str1 {
-		fmt.Println(s)
+		fmt.Println(s+"?")
 	}
 }
 
@@ -119,4 +126,8 @@ func regex4()  {
 	input   := "a"
 	pattern := fmt.Sprintf(`(\[')%s([a-z',\(\p{Han}\)']+)(\])`,input)
 	re(`var _arrusers = [['aaaroncai','aaaroncai(蔡程)'],['aaaronguo','aaaronguo(郭益诚)'],['bbbronguo','bbbronguo(郭益诚)']]`,pattern)
+}
+
+func regex5()  {
+	re("The fat cat sat on the mat.中文字符",`\p{Han}{2}`)
 }
