@@ -20,11 +20,15 @@ import (
 
 /**
 问题描述:
+1.服务端tcp接收缓冲区/客户端tcp发送缓冲区满时,客户端会卡住,超时设置将不起作用
 go version 1.13.5 客户端:go https client 服务端: go https(2) server
 在使用使用https 2.x 的情况下,当服务端卡住(ctrl + z｜ dlv可以停止该服务)的情况下,
 客户端在同一条tcp连接上不断请求直到 服务端的tcp接收缓冲区 和 客户端的发送缓冲区 被塞满的时候,
 golang https client的请求超时设置将不起作用而导致客户端卡住
 问题分析: http2 使用了多路复用,一条tcp连接多个请求复用,若在客户端配置 不强制使用http2请求即可暂时解决
+
+2.服务端卡死,
+2个服务端的情况下(ip不同,DNS解析域名得出来的ip会有两个服务),其中一个服务端f
 
 server
 ./test -server=true
@@ -46,15 +50,15 @@ var (
 	handlerTime = time.Hour*24*30*12
 
 	forceHttp2 bool
-	server     bool
+	Server     bool
 )
 
 func main() {
-	flag.BoolVar(&server, "server", false, "https server(true) or client(false)")
+	flag.BoolVar(&Server, "server", false, "https server(true) or client(false)")
 	flag.BoolVar(&forceHttp2, "http2", true, "client if force http2")
 	flag.Parse()
 
-	if server {
+	if Server {
 		HttpsServer("client.crt", "server.crt", "server.key")
 		return
 	}
@@ -150,15 +154,14 @@ func HttpsClient(serverCrt, clientCrt, clientKey string) {
 			}
 		}()
 	}
-
-	for {
+	input := 1
+	for _ = range time.Tick(time.Second*2) {
 		//获取键盘输入作为请求次数,默认为1
-		input := 1
-		fmt.Println("please input:")
-		fmt.Scanln(&input)
-		if input == -1 {
-			log.Println("exit!")
-			return
+		//input := 1
+		//fmt.Println("please input:")
+		//fmt.Scanln(&input)
+		if input > 1 {
+			input = 100
 		}
 		log.Printf("req https://%s timeout=%s input=%d \n", addr, clientTimeout, input)
 
@@ -197,5 +200,6 @@ func HttpsClient(serverCrt, clientCrt, clientKey string) {
 				log.Printf("received status:%s body:%s \n", resp.Status, string(data))
 			}
 		}
+		input++
 	}
 }
