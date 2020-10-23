@@ -19,9 +19,9 @@
 ```
 
 ----------------------------
-[test1_grpcTest.png](./test1_grpcTest.png)  
+![test1_grpcTest.png](./test1_grpcTest.png)  
 
-[grpcClient.png](./grpcClient.png)  
+![grpcClient.png](./grpcClient.png)  
 
 ----------------------------
 ```$xslt
@@ -50,7 +50,7 @@ grpc client timeout仍然有作用(goroutine 数量没变,占用内存%比持续
 ```
 
 ----------------------------
-[test3_grpcTest.png](./test3_grpcTest.png)  
+![test3_grpcTest.png](./test3_grpcTest.png)  
 
 ----------------------------
 ```$xslt
