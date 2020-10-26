@@ -1,24 +1,22 @@
-package main
+package tuntap
 
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/songgao/water"
+	"log"
 	"os"
 	"os/exec"
 	"os/signal"
+	"runtime"
 	"strconv"
 	"strings"
 	"syscall"
 )
 //ref:https://juejin.im/post/6844904119837147149#heading-1
 
-func main() {
-	tunTest()
-	//IpTest()
-}
-
 //创建虚拟网卡并监听该文件描述符(读取流经该网卡的ip报文段)
-func tunTest()  {
+func RcvTun()  {
 	sig := make(chan os.Signal)
 
 	go func() {
@@ -96,6 +94,26 @@ func tunTest()  {
 	signal.Notify(sig,syscall.SIGTERM,syscall.SIGINT)
 	s := <-sig
 	fmt.Println("get signal:",s," exit!")
+}
+
+func RcvTunFromWater()  {
+	waterCfg := water.Config{
+		DeviceType:water.TUN,
+	}
+	ifce,err := water.New(waterCfg)
+	if err != nil {
+		log.Fatal("tun err:",err)
+	}
+	log.Printf("Interface name: %s , OS:%s, \n",ifce.Name(),runtime.GOOS)
+
+	packet := make([]byte,2000)
+	for {
+		n,err := ifce.Read(packet)
+		if err != nil {
+			log.Fatal(err)
+		}
+		log.Println("Packet Received:",packet[:n])
+	}
 }
 
 //ipv4报文段转ip结构体
