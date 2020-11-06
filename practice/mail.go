@@ -18,8 +18,8 @@ func main()  {
 
 	auth := smtp.PlainAuth(
 		"",
-		"464485940@qq.com",
-		"uavgxasmyopebjga",
+		"1@qq.com",
+		"test",
 		"smtp.qq.com",
 	)
 	err = client.Auth(auth)
@@ -28,13 +28,13 @@ func main()  {
 	}
 	fmt.Println(2)
 
-	err = client.Mail("464485940@qq.com")
+	err = client.Mail("1@qq.com")
 	if err != nil {
 		log.Fatal(err.Error())
 	}
 	fmt.Println(3)
 
-	err = client.Rcpt("sealingp@163.com")
+	err = client.Rcpt("1@163.com")
 	if err != nil {
 		log.Fatal(err.Error())
 	}
@@ -56,8 +56,8 @@ func main()  {
 
 	//auth := smtp.PlainAuth(
 	//	"",
-	//	"464485940@qq.com",
-	//	"qwerSEA123",
+	//	"1@qq.com",
+	//	"1",
 	//	"smtp.qq.com",
 	//)
 	//smtp.SendMail(addr,auth,"")
