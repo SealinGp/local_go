@@ -1,8 +1,12 @@
 package main
 
 import (
+	"flag"
 	"fmt"
+	"io"
+	"log"
 	"math/rand"
+	"net"
 	"os"
 	"strings"
 	"time"
@@ -39,6 +43,7 @@ func execute(funcN string)  {
 		"time8" : time8,
 		"time9" : time9,
 		"time10" : time10,
+		"time11" : time11,
 	}
 	funcMap[funcN]()
 }
