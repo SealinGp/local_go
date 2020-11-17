@@ -9,6 +9,7 @@ import (
 	"net"
 	"os"
 	"strings"
+	"sync"
 	"time"
 )
 
@@ -118,12 +119,26 @@ func reverb2()  {
 }
 
 func handleConn2(c net.Conn)  {
-	defer c.Close()
+	var wg sync.WaitGroup
 	input := bufio.NewScanner(c)
 	for input.Scan() {
-		go echo(c,input.Text(),time.Second)
+		wg.Add(1)
+		go echo2(c,input.Text(),time.Second,wg)
 	}
+	wg.Wait()
+	tcpC := c.(*net.TCPConn)
+	tcpC.CloseWrite()
 }
+
+func echo2(c net.Conn, shout string, delay time.Duration,wg sync.WaitGroup) {
+	defer wg.Done()
+	fmt.Fprintln(c, "\t", strings.ToUpper(shout))
+	time.Sleep(delay)
+	fmt.Fprintln(c, "\t", shout)
+	time.Sleep(delay)
+	fmt.Fprintln(c, "\t", strings.ToLower(shout))
+}
+
 
 
 func echo(c net.Conn, shout string, delay time.Duration) {
