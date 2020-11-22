@@ -144,7 +144,7 @@ func execute(n string) {
 1 int8  = 1 uint8 = 1 byte = 8 bit
 1 int16 = 1 uint16 = 2 byte
 1 int32 = 1 uint32 = 4 byte
-1 int64 = 6 byte
+1 int64 = 8 byte
 */
 func number_type() {
 	var i1 int = 1 << 31 - 1 //int32                                    [-2^31,2^31-1]
