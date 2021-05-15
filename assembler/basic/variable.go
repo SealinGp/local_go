@@ -1,4 +1,5 @@
 package basic
+
 /*
 Go汇编语言变量定义
 https://github.com/chai2010/advanced-go-programming-book/blob/master/ch3-asm/ch3-03-const-and-var.md
@@ -25,18 +26,18 @@ DATA ·VarName+offset(SB)/width,$VarVal
 
 */
 var (
-	Id int
-	Num [2]int
-	BoolValue bool
-	TrueValue bool
-	FalseValue bool
-	Int32Value int32
-	Uint32Value uint32
+	Id           int
+	Num          [2]int
+	BoolValue    bool
+	TrueValue    bool
+	FalseValue   bool
+	Int32Value   int32
+	Uint32Value  uint32
 	Float32Value float32
 	Float64Value float64
-	M map[string]int
-	Ch chan int
-	ReadOnlyInt int
-	Name string
-	NameData string
+	M            map[string]int
+	Ch           chan int
+	ReadOnlyInt  int
+	Name         string
+	NameData     string
 )

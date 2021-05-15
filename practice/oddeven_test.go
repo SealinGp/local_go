@@ -2,14 +2,14 @@ package main
 
 import "testing"
 
-func Even(i int) bool  {
+func Even(i int) bool {
 	return i%2 == 0
 }
-func Odd(i int) bool  {
+func Odd(i int) bool {
 	return i%2 != 0
 }
 
-func TestEven(t *testing.T)  {
+func TestEven(t *testing.T) {
 	if !Even(10) {
 		t.Log("10 is even")
 		t.Fail()
@@ -19,7 +19,7 @@ func TestEven(t *testing.T)  {
 		t.Fail()
 	}
 }
-func TestOdd(t *testing.T)  {
+func TestOdd(t *testing.T) {
 	if !Odd(11) {
 		t.Log("11 is odd")
 		t.Fail()

@@ -60,32 +60,32 @@ goroutine内存泄漏(如果不知道何时停止一个goroutine,那么这个gor
 
 2.命令行交互
 
- */
+*/
 
 func main() {
 	HeapMem()
 }
 
 //1.goroutine内部实现变量没有释放造成内存泄漏
-func HeapMem()  {
+func HeapMem() {
 	go func() {
-		if err := http.ListenAndServe(":9876",nil);err != nil {
+		if err := http.ListenAndServe(":9876", nil); err != nil {
 			println(err)
 			os.Exit(1)
 		}
 	}()
 
-	tick := time.Tick(time.Second/100)
+	tick := time.Tick(time.Second / 100)
 	var buf []byte
 	for range tick {
-		buf = append(buf,make([]byte,1024*1024)...)
+		buf = append(buf, make([]byte, 1024*1024)...)
 	}
 }
 
 //2.goroutine内存泄漏,每次调用goroutine后没有正确的退出造成goroutine栈内存占用不释放,造成goroutine内存泄漏
-func GoRoutineMem()  {
+func GoRoutineMem() {
 	go func() {
-		if err := http.ListenAndServe(":9876",nil);err != nil {
+		if err := http.ListenAndServe(":9876", nil); err != nil {
 			println(err)
 			os.Exit(1)
 		}
@@ -99,8 +99,8 @@ func GoRoutineMem()  {
 	}()
 
 	//开启100个goroutine/秒,并且goroutine内阻塞不退出
-	tick := time.Tick(time.Second/100)
-	i    := 0
+	tick := time.Tick(time.Second / 100)
+	i := 0
 	for range tick {
 		i++
 		fmt.Println(i)
@@ -109,13 +109,13 @@ func GoRoutineMem()  {
 }
 
 //goroutine内阻塞不退出
-func alloc1(outCh chan<- int)  {
+func alloc1(outCh chan<- int) {
 	go func() {
 		defer fmt.Println("alloc-fm exit")
 
 		//分配内存,假装用一下
-		buf := make([]byte,(1<<20)*10)
-		_   = len(buf)
+		buf := make([]byte, (1<<20)*10)
+		_ = len(buf)
 		fmt.Println("alloc done")
 		outCh <- 0
 	}()

@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"os"
-	"time"
 )
 
 func init() {
@@ -23,8 +22,8 @@ func execute(n string) {
 		"create_map": create_map,
 		"for_map":    for_map,
 		"fun_map":    fun_map,
-		"map1" : map1,
-		"map2" : map2,
+		"map1":       map1,
+		"map2":       map2,
 	}
 	funs[n]()
 }
@@ -96,21 +95,20 @@ func seprate_line() {
 }
 
 type QmInfo struct {
-	Name    string
-	Area    string
+	Name string
+	Area string
 }
-
 
 //https://draveness.me/golang/docs/part2-foundation/ch05-keyword/golang-for-range/
 //1.map循环无序,k每次循环不一定相同
 //2.把数组中的指针变量传递到另外一个map或者数组时,传递的是循环里面变量v的地址,而v的地址里面的值随着循环是会拷贝数组里面的元素进来的
-func map1()  {
+func map1() {
 	a := []QmInfo{
-		{Name:"name1",Area:"area1"},
-		{Name:"name2",Area:"area2"},
-		{Name:"name3",Area:"area3"},
-		{Name:"name4",Area:"area4"},
-		{Name:"name5",Area:"area5"},
+		{Name: "name1", Area: "area1"},
+		{Name: "name2", Area: "area2"},
+		{Name: "name3", Area: "area3"},
+		{Name: "name4", Area: "area4"},
+		{Name: "name5", Area: "area5"},
 	}
 
 	m1 := make(map[string]*QmInfo)
@@ -126,12 +124,12 @@ func map1()  {
 
 	//最终变量v的地址里面的值一定是数组里面的最后一个变量的值
 	for k, v := range m1 {
-		fmt.Println(k,"m1:",v,"---","m2:",m2[k])
+		fmt.Println(k, "m1:", v, "---", "m2:", m2[k])
 	}
 }
 
 //循环永动机?
-func map2()  {
+func map2() {
 	arr := []int{1, 2, 3}
 	for _, v := range arr {
 		arr = append(arr, v)

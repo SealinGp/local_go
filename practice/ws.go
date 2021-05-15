@@ -9,6 +9,7 @@ type pool struct {
 	workFun    chan func()
 	maxRoutine chan struct{}
 }
+
 func main() {
 	res := make(chan string)
 	ts := func() {
@@ -28,11 +29,11 @@ func main() {
 func NewPool(maxRoutineNum int) *pool {
 	return &pool{
 		workFun:    make(chan func()),
-		maxRoutine: make(chan struct{},maxRoutineNum),
+		maxRoutine: make(chan struct{}, maxRoutineNum),
 	}
 }
 
-func (p *pool)PoolControl(task func()) {
+func (p *pool) PoolControl(task func()) {
 	select {
 	//这里等待
 	case p.workFun <- task:
@@ -45,7 +46,7 @@ func (p *pool)PoolControl(task func()) {
 	}
 }
 
-func (p *pool)work(task func())  {
+func (p *pool) work(task func()) {
 	defer func() {
 		<-p.maxRoutine
 	}()

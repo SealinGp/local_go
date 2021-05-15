@@ -33,73 +33,75 @@ func main() {
 
 func execute(n string) {
 	funs := map[string]func(){
-		"xml1" : xml1,
-		"xml2" : xml2,
+		"xml1": xml1,
+		"xml2": xml2,
 	}
 	if nil == funs[n] {
-		fmt.Println("func",n,"unregistered")
+		fmt.Println("func", n, "unregistered")
 		return
 	}
 	funs[n]()
 }
+
 var (
 	x = "<Person a='abc'>" +
 		"<FirstName>" + "Laura" + "</FirstName>" +
-		"<LastName>" + "Lynn" +"</LastName>" +
-		"<LN>" + "LN123" +"</LN>" +
+		"<LastName>" + "Lynn" + "</LastName>" +
+		"<LN>" + "LN123" + "</LN>" +
 		"</Persion>"
 )
-func xml1()  {
-	r  := strings.NewReader(x)
+
+func xml1() {
+	r := strings.NewReader(x)
 	xd := xml.NewDecoder(r)
-	for t, err := xd.Token(); err == nil; t, err = xd.Token()  {
+	for t, err := xd.Token(); err == nil; t, err = xd.Token() {
 		switch token := t.(type) {
 		//开始标签
-			case xml.StartElement:
+		case xml.StartElement:
 
-				//开始标签名
-				fmt.Println("SE:",token.Name.Local)
+			//开始标签名
+			fmt.Println("SE:", token.Name.Local)
 
-				//标签属性
-				for _,v := range token.Attr {
-					fmt.Println(
-						"attr :",v.Name.Local,
-						"value:",v.Value,
-					)
-				}
+			//标签属性
+			for _, v := range token.Attr {
+				fmt.Println(
+					"attr :", v.Name.Local,
+					"value:", v.Value,
+				)
+			}
 
-			//结束标签
-			case xml.EndElement:
-				fmt.Println("EE:")
+		//结束标签
+		case xml.EndElement:
+			fmt.Println("EE:")
 
-			//标签包裹的内容
-			case xml.CharData:
-				content := string([]byte(token))
-				fmt.Println("CD:",content)
+		//标签包裹的内容
+		case xml.CharData:
+			content := string([]byte(token))
+			fmt.Println("CD:", content)
 
-			//其他
-			default:
-				fmt.Println("DF:")
+		//其他
+		default:
+			fmt.Println("DF:")
 		}
 	}
 }
 
-func xml2()  {
+func xml2() {
 	find := "Person/LN"
-	val  := getTagValByTagName(find,x,"/")
+	val := getTagValByTagName(find, x, "/")
 	fmt.Println(val)
 }
-func getTagValByTagName(tag, xmls, sep string) (val string)  {
-	r  := strings.NewReader(xmls)
+func getTagValByTagName(tag, xmls, sep string) (val string) {
+	r := strings.NewReader(xmls)
 	xd := xml.NewDecoder(r)
 
-	find1 := strings.Split(tag,sep)
-	le    := len(find1)
-	i     := 0
+	find1 := strings.Split(tag, sep)
+	le := len(find1)
+	i := 0
 	if le <= 0 {
 		return
 	}
-	for t, err := xd.Token(); err == nil; t, err = xd.Token()  {
+	for t, err := xd.Token(); err == nil; t, err = xd.Token() {
 		switch token := t.(type) {
 		//开始标签
 		case xml.StartElement:

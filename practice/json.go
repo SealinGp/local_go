@@ -25,11 +25,11 @@ func main() {
 
 func execute(n string) {
 	funs := map[string]func(){
-		"json1" : json1,
-		"json2" : json2,
+		"json1": json1,
+		"json2": json2,
 	}
 	if nil == funs[n] {
-		fmt.Println("func",n,"unregistered")
+		fmt.Println("func", n, "unregistered")
 		return
 	}
 	funs[n]()
@@ -41,33 +41,34 @@ type Address struct {
 	Country string
 }
 type VCard struct {
-	FName string
-	LName string
+	FName   string
+	LName   string
 	Address []*Address
-	Remark string
+	Remark  string
 }
-func json1()  {
+
+func json1() {
 	addresses := []*Address{
-		&Address{"T1","C1","CO1"},
-		&Address{"T2","C2","co2"},
+		&Address{"T1", "C1", "CO1"},
+		&Address{"T2", "C2", "co2"},
 	}
-	vc   := VCard{"Zhang","Sea",addresses,"re"}
+	vc := VCard{"Zhang", "Sea", addresses, "re"}
 
 	//json_encode并输出
-	js,_ := json.Marshal(vc)
+	js, _ := json.Marshal(vc)
 	fmt.Println(vc)
 	fmt.Println(string(js))
 
 	//json_decode
 	var v VCard
-	json.Unmarshal(js,&v)
-	for _,add := range v.Address {
+	json.Unmarshal(js, &v)
+	for _, add := range v.Address {
 		fmt.Println(add)
 	}
 	fmt.Println(*v.Address[0])
 
 	//json_encode并写入文件
-	file, _ := os.OpenFile("t.deb",os.O_CREATE|os.O_WRONLY,0666)
+	file, _ := os.OpenFile("t.deb", os.O_CREATE|os.O_WRONLY, 0666)
 	defer file.Close()
 
 	//encoder json写入文件,decoder读取文件json数据
@@ -88,33 +89,33 @@ float64 对应 JSON 的 number
 string  对应 JSON 的 string
 nil     对应 JSON 的 null
 */
-func json2()  {
+func json2() {
 	b := []byte(`{"Name": "Wednesday", "Age": 6, "Parents": ["Gomez", "Morticia"]}`)
 
 	//在不知道json结构的情况下进行decode,并判断类型
 	//var j map[string]interface{}
 	j := make(map[string]interface{})
-	err := json.Unmarshal(b,&j);
+	err := json.Unmarshal(b, &j)
 	if err != nil {
 		fmt.Println(err.Error())
 		return
 	}
 	//类型断言,t = v 的内容,t的类型在case中
-	for k,v := range j {
+	for k, v := range j {
 		switch t := v.(type) {
 		case string:
-			fmt.Println("string:",k,v)
+			fmt.Println("string:", k, v)
 		case float64:
-			fmt.Println("float64",k,v)
+			fmt.Println("float64", k, v)
 		case int:
-			fmt.Println("int",k,v)
+			fmt.Println("int", k, v)
 		case []string:
-			fmt.Println("[]string:",k,v)
+			fmt.Println("[]string:", k, v)
 		case []interface{}:
-			fmt.Print("[]interface: ",k)
+			fmt.Print("[]interface: ", k)
 			//正确的循环
-			for _,v2 := range t  {
-				fmt.Print(" ",v2)
+			for _, v2 := range t {
+				fmt.Print(" ", v2)
 			}
 			fmt.Println("")
 			//错误的循环
@@ -122,7 +123,7 @@ func json2()  {
 			//
 			//}
 		default:
-			fmt.Println("default",k,v,t)
+			fmt.Println("default", k, v, t)
 		}
 	}
 
@@ -133,6 +134,6 @@ func json2()  {
 		Parents []string
 	}
 	fm := FamilyMember{}
-	json.Unmarshal(b,&fm)
+	json.Unmarshal(b, &fm)
 	fmt.Println(fm)
 }

@@ -30,55 +30,57 @@ func main() {
 }
 func execute(n string) {
 	funs := map[string]func(){
-		"rpc1" : rpc1,
-		"rpc2" : rpc2,
-		"rpc3" : rpc3,
+		"rpc1": rpc1,
+		"rpc2": rpc2,
+		"rpc3": rpc3,
 	}
 	if nil == funs[n] {
-		fmt.Println("func",n,"unregistered")
+		fmt.Println("func", n, "unregistered")
 		return
 	}
 	funs[n]()
 }
 
 //server
-func rpc1()  {
+func rpc1() {
 	//rpc register
 	cal := new(Args)
 	_ = rpc.Register(cal)
 	rpc.HandleHTTP()
 
 	//start server
-	e := http.ListenAndServe(":1234",rpc.DefaultServer)
+	e := http.ListenAndServe(":1234", rpc.DefaultServer)
 	if e != nil {
 		log.Println(e)
 	}
 }
+
 type Args struct {
-	N,M int
+	N, M int
 }
-func (*Args)Multiply(a Args,reply *int) error {
+
+func (*Args) Multiply(a Args, reply *int) error {
 	*reply = a.M * a.N
 	return nil
 }
 
 //client
-func rpc2()  {
+func rpc2() {
 	//connect
-	client,err := rpc.DialHTTP("tcp","localhost:1234")
+	client, err := rpc.DialHTTP("tcp", "localhost:1234")
 	if err != nil {
-		fmt.Println("dial rpc server(localhost:1234) failed:"+err.Error())
+		fmt.Println("dial rpc server(localhost:1234) failed:" + err.Error())
 		return
 	}
 	fmt.Println("connect success! start to call")
 
 	//call
 	defer client.Close()
-	arg     := Args{2,3}
-	reply   := 0
-	err     = client.Call("Args.Multiply",arg,&reply);
+	arg := Args{2, 3}
+	reply := 0
+	err = client.Call("Args.Multiply", arg, &reply)
 	if err != nil {
-		fmt.Println("cal error:"+err.Error())
+		fmt.Println("cal error:" + err.Error())
 		return
 	}
 	fmt.Println("call success,ready to print result")
@@ -86,9 +88,9 @@ func rpc2()  {
 	fmt.Println(reply)
 }
 
-func rpc3()  {
-	a := &Args{2,3}
+func rpc3() {
+	a := &Args{2, 3}
 	r := 0
-	a.Multiply(*a,&r)
+	a.Multiply(*a, &r)
 	fmt.Println(r)
 }

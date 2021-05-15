@@ -76,15 +76,16 @@ var (
 	Tokyo    string
 	London   string
 )
-func init()  {
-	flag.StringVar(&fun,"fun","","func you need to run")
 
-	flag.StringVar(&timezone,"timezone","Asia/Shanghai","usage")
-	flag.StringVar(&port,"port","","port")
-	flag.StringVar(&NewYork,"NewYork","","address")
-	flag.StringVar(&Tokyo,"Tokyo","","address")
-	flag.StringVar(&London,"London","","address")
-	flag.IntVar(&numCores,"numCores",2,"core")
+func init() {
+	flag.StringVar(&fun, "fun", "", "func you need to run")
+
+	flag.StringVar(&timezone, "timezone", "Asia/Shanghai", "usage")
+	flag.StringVar(&port, "port", "", "port")
+	flag.StringVar(&NewYork, "NewYork", "", "address")
+	flag.StringVar(&Tokyo, "Tokyo", "", "address")
+	flag.StringVar(&London, "London", "", "address")
+	flag.IntVar(&numCores, "numCores", 2, "core")
 }
 func main() {
 	flag.Parse()
@@ -97,62 +98,62 @@ func main() {
 }
 func execute(n string) {
 	funs := map[string]func(){
-		"gor1" : gor1,
-		"gor2" : gor2,
-		"gor3" : gor3,
-		"gor4" : gor4,
-		"gor5" : gor5,
-		"gor6" : gor6,
-		"gor7" : gor7,
-		"gor8" : gor8,
-		"gor9" : gor9,
-		"gor10" : gor10,
-		"gor11" : gor11,
-		"gor12" : gor12,
-		"gor13" : gor13,
-		"gor14" : gor14,
-		"gor15" : gor15,
-		"gor16" : gor16,
-		"gor17" : gor17,
-		"gor18" : gor18,
-		"gor19" : gor19,
-		"gor20" : gor20,
-		"gor21" : gor21,
-		"gor22" : gor22,
-		"gor23" : gor23,
-		"gor24" : gor24,
-		"gor25" : gor25,
-		"gor_test" : gor_test,
+		"gor1":     gor1,
+		"gor2":     gor2,
+		"gor3":     gor3,
+		"gor4":     gor4,
+		"gor5":     gor5,
+		"gor6":     gor6,
+		"gor7":     gor7,
+		"gor8":     gor8,
+		"gor9":     gor9,
+		"gor10":    gor10,
+		"gor11":    gor11,
+		"gor12":    gor12,
+		"gor13":    gor13,
+		"gor14":    gor14,
+		"gor15":    gor15,
+		"gor16":    gor16,
+		"gor17":    gor17,
+		"gor18":    gor18,
+		"gor19":    gor19,
+		"gor20":    gor20,
+		"gor21":    gor21,
+		"gor22":    gor22,
+		"gor23":    gor23,
+		"gor24":    gor24,
+		"gor25":    gor25,
+		"gor_test": gor_test,
 	}
 	defer func() {
-		if e := recover();e != nil {
+		if e := recover(); e != nil {
 			log.Println(e)
 		}
 	}()
 	funs[n]()
 }
-func gor1()  {
+func gor1() {
 	log.Println(numCores)
 	//通过命令行指定使用的核心数量
 	runtime.GOMAXPROCS(numCores)
 }
 
 //并行只用了10s,若不使用go关键字,串行会耗时10+5+2 = 17s
-func gor2()  {
+func gor2() {
 	fmt.Println("In main")
 	go longWait()
 	go shortWait()
-	time.Sleep(10*time.Second)
+	time.Sleep(10 * time.Second)
 	fmt.Println("end main")
 }
-func longWait()  {
+func longWait() {
 	fmt.Println("Beginning long wait")
-	time.Sleep(5*time.Second)
+	time.Sleep(5 * time.Second)
 	fmt.Println("end long wait")
 }
-func shortWait()  {
+func shortWait() {
 	fmt.Println("Beginning shrot wait")
-	time.Sleep(2*time.Second)
+	time.Sleep(2 * time.Second)
 	fmt.Println("end short wait")
 }
 
@@ -162,25 +163,25 @@ func shortWait()  {
 并且也是引用类型,需使用Make来给他分配内存
 所有数据类型都可以用来声明管道,包括interface{},slice,array,map,func(),struct
 */
-func gor3()  {
+func gor3() {
 	ch := make(chan string)
 	/*
-	执行顺序为:
-	1.goroutine gor3_1 : c <- "a"
-	2.goruntine gor3_2 : i = <-c
+		执行顺序为:
+		1.goroutine gor3_1 : c <- "a"
+		2.goruntine gor3_2 : i = <-c
 
-	3.goroutine gor3_1 : fmt.Println("abc")
+		3.goroutine gor3_1 : fmt.Println("abc")
 
-	4.goruntine gor3_1 : c <- "b"
-	5.goruntine gor3_2 : i = <- c
-	...
+		4.goruntine gor3_1 : c <- "b"
+		5.goruntine gor3_2 : i = <- c
+		...
 	*/
 	go gor3_1(ch)
 	go gor3_2(ch)
 
 	time.Sleep(time.Second)
 }
-func gor3_1(c chan<- string)  {
+func gor3_1(c chan<- string) {
 	c <- "a"
 	fmt.Println("abc")
 	c <- "b"
@@ -189,14 +190,14 @@ func gor3_1(c chan<- string)  {
 	c <- "e"
 	c <- "f"
 }
-func gor3_2(c <-chan string)  {
+func gor3_2(c <-chan string) {
 	var i string
 	for {
 		i = <-c
 		fmt.Println(i)
 	}
 }
-func gor4()  {
+func gor4() {
 	t := time.Now()
 	a := make(chan string)
 
@@ -207,80 +208,82 @@ func gor4()  {
 	b := <-a
 	c := <-a
 
-	fmt.Println(b,c)
-	fmt.Println("耗时",time.Since(t).String())
+	fmt.Println(b, c)
+	fmt.Println("耗时", time.Since(t).String())
 }
+
 //发送至通道
-func gor4_1(c chan<- string)  {
+func gor4_1(c chan<- string) {
 	//模拟任务处理时间
-	time.Sleep(3*time.Second)
+	time.Sleep(3 * time.Second)
 
 	c <- "func gor3_1"
 }
-func gor4_2(c chan<- string)  {
+func gor4_2(c chan<- string) {
 	//模拟任务处理时间
-	time.Sleep(2*time.Second)
+	time.Sleep(2 * time.Second)
 
 	c <- "func gor3_2"
 }
-func gor5()  {
+func gor5() {
 	p := make(chan int)
 	go gor5_1(p)
 	p <- 2
 	fmt.Println("end gor5")
 }
-func gor5_1(c <-chan int)  {
+func gor5_1(c <-chan int) {
 	c1 := <-c
 	fmt.Println(c1)
 }
 
 //同步通道,带缓冲的通道
-func gor6()  {
+func gor6() {
 	/*
-	有缓冲管道
-	通道可以同时容纳的元素(这里是指string)的个数
-	在缓冲100全部被使用之前,该管道不会阻塞
-	总结:同时允许多少个协程同时对管道进行操作(协程并行数量限制)
+		有缓冲管道
+		通道可以同时容纳的元素(这里是指string)的个数
+		在缓冲100全部被使用之前,该管道不会阻塞
+		总结:同时允许多少个协程同时对管道进行操作(协程并行数量限制)
 
-	无缓冲管道:
-	对于同一个通道,发送操作（协程或者函数中的）,在接收者准备好之前是阻塞的
-	简单来说: 接收操作->发送操作 的顺序
-	buf = 0时,
-	执行到这一句ch1 <- "a" 导致panic
+		无缓冲管道:
+		对于同一个通道,发送操作（协程或者函数中的）,在接收者准备好之前是阻塞的
+		简单来说: 接收操作->发送操作 的顺序
+		buf = 0时,
+		执行到这一句ch1 <- "a" 导致panic
 	*/
 	buf := 4
-	ch1 := make(chan string,buf)
+	ch1 := make(chan string, buf)
 
-	for i := 0; i< 5; i++ {
-		go gor6_1(ch1,i)
+	for i := 0; i < 5; i++ {
+		go gor6_1(ch1, i)
 	}
 
-	for i := 0; i< 5; i++ {
-		fmt.Println(<-ch1,i)
+	for i := 0; i < 5; i++ {
+		fmt.Println(<-ch1, i)
 	}
 	fmt.Println("end")
 }
-func gor6_1(c chan<- string,i int)  {
+func gor6_1(c chan<- string, i int) {
 	c <- "gor6_1 " + string(i)
 	fmt.Println(i)
 }
+
 /*
 信号量模式
 */
-func gor7()  {
-	N    := 5
-	data := make([]float64,N)
-	res  := make([]float64,N)
-	sem  := make(chan float64,N)
+func gor7() {
+	N := 5
+	data := make([]float64, N)
+	res := make([]float64, N)
+	sem := make(chan float64, N)
 
-	for i,xi := range data  {
+	for i, xi := range data {
 		go func(i int, xi float64) {
 			res[i] = float64(i)
 			sem <- res[i]
-		}(i,xi)
+		}(i, xi)
 	}
 
-	for i := 0; i < N ; i++ {
+	for i := 0; i < N; i++ {
 		fmt.Println(<-sem)
 	}
 }
@@ -291,44 +294,46 @@ func gor7()  {
 互斥锁:防止多条线程对同一个变量进行读写的机制
 */
 type semaphore chan interface{}
+
 //write
-func (s semaphore)w(n int)  {
+func (s semaphore) w(n int) {
 	e := new(interface{})
-	for i := 0; i < n ; i++ {
+	for i := 0; i < n; i++ {
 		s <- e
 	}
 }
+
 //read
-func (s semaphore)r(n int)  {
-	for i := 0; i < n ; i++ {
+func (s semaphore) r(n int) {
+	for i := 0; i < n; i++ {
 		<-s
 	}
 }
-func (s semaphore)Lock()  {
+func (s semaphore) Lock() {
 	s.w(1)
 }
-func (s semaphore)Unlock()  {
+func (s semaphore) Unlock() {
 	s.r(1)
 }
-func (s semaphore)Wait(n int)  {
+func (s semaphore) Wait(n int) {
 	s.w(n)
 }
-func (s semaphore)Signal()  {
+func (s semaphore) Signal() {
 	s.r(1)
 }
-func gor_test()  {
+func gor_test() {
 	c := container{
-		items:[]item{"a1","a2","a3"},
+		items: []item{"a1", "a2", "a3"},
 	}
 	ifdone := make(chan bool)
 
 	go c.consume(ifdone)
 	<-ifdone
 }
-func (c container)product()  <-chan item {
+func (c container) product() <-chan item {
 	ch := make(chan item)
 	go func() {
-		for _,it := range c.items {
+		for _, it := range c.items {
 			ch <- it
 		}
 		close(ch)
@@ -336,71 +341,69 @@ func (c container)product()  <-chan item {
 	return ch
 }
 
-func (c container)consume(done chan<- bool)  {
+func (c container) consume(done chan<- bool) {
 	for it := range c.product() {
 		log.Println(it)
 	}
 	done <- true
 }
 
-
-
-func gor8()  {
-	c    := make(chan int)
+func gor8() {
+	c := make(chan int)
 	done := make(chan bool)
 
-	go gor8_1(c,10,10)
-	go gor8_2(c,done)
+	go gor8_1(c, 10, 10)
+	go gor8_2(c, done)
 
 	<-done
 }
-func gor8_1(c chan<- int,num,step int)  {
-	ns := make([]int,num)
+func gor8_1(c chan<- int, num, step int) {
+	ns := make([]int, num)
 	for i := range ns {
-		c <- i*step
+		c <- i * step
 	}
 
 	/*
-	https://blog.csdn.net/butterfly5211314/article/details/81842519
-	close 函数是一个内建函数,用来关闭channel,这个channel必须为发送者
-	当最后一个发送的值,被接受者从关闭的channel中接收时,接下来所有接收的值都会非阻塞直接成功,返回
-	channel元素的0值
+		https://blog.csdn.net/butterfly5211314/article/details/81842519
+		close 函数是一个内建函数,用来关闭channel,这个channel必须为发送者
+		当最后一个发送的值,被接受者从关闭的channel中接收时,接下来所有接收的值都会非阻塞直接成功,返回
+		channel元素的0值
 	*/
 	close(c)
 }
-func gor8_2(c <-chan int,done chan<- bool)  {
+func gor8_2(c <-chan int, done chan<- bool) {
 	/*
-      它从指定通道中读取数据直到通道关闭，才继续执行下边的代码
-	  使用for-range语句来读取通道是更好的办法,因为会自动检测通道是否关闭
+		      它从指定通道中读取数据直到通道关闭，才继续执行下边的代码
+			  使用for-range语句来读取通道是更好的办法,因为会自动检测通道是否关闭
 	*/
 	for n := range c {
 		fmt.Println(n)
 	}
 
 	//当c所有的值都被接收了(即通道关闭了),则 ok = false
-	k,ok := <-c
-	fmt.Println(k,ok)
+	k, ok := <-c
+	fmt.Println(k, ok)
 	done <- true
 }
 
 //通道工厂模式
-func gor9()  {
+func gor9() {
 	ch := make(chan bool)
 
 	stream := gor9_1(3)
-	go gor9_2(stream,ch)
+	go gor9_2(stream, ch)
 
 	//go gor9_2(gor9_1(3),ch)
 
 	<-ch
 }
-func gor9_1(n int) chan int  {
+func gor9_1(n int) chan int {
 	ch := make(chan int)
 	go func() {
-		for i := 0; i < n; i++  {
-			fmt.Println("write",i,"start")
+		for i := 0; i < n; i++ {
+			fmt.Println("write", i, "start")
 			ch <- i
-			fmt.Println("write",i,"end")
+			fmt.Println("write", i, "end")
 		}
 
 		//一次向通道内写入超过通道缓存的数量,那么在写入完后需要关闭通道
@@ -408,10 +411,10 @@ func gor9_1(n int) chan int  {
 	}()
 	return ch
 }
-func gor9_2(ch chan int,c chan<- bool)  {
+func gor9_2(ch chan int, c chan<- bool) {
 	for {
 		fmt.Println("read 1")
-		r,ok := <-ch
+		r, ok := <-ch
 		if !ok {
 			c <- true
 			break
@@ -427,30 +430,33 @@ type item string
 type container struct {
 	items []item
 }
-func gor10()  {
+
+func gor10() {
 	//确定是否读完
 	done := make(chan bool)
 	con := &container{
-		items:[]item{"abc","def"},
+		items: []item{"abc", "def"},
 	}
-	go gor10_2(con,done)
+	go gor10_2(con, done)
 
 	<-done
 }
+
 //生产者
-func (c *container)gor10_1() <- chan item  {
+func (c *container) gor10_1() <-chan item {
 	ch := make(chan item)
 	go func() {
-		for i := 0; i < len(c.items) ; i++ {
+		for i := 0; i < len(c.items); i++ {
 			ch <- c.items[i]
 		}
 		close(ch)
 	}()
 	return ch
 }
+
 //消费者
-func gor10_2(con *container,d chan<- bool)  {
-	for x := range con.gor10_1()  {
+func gor10_2(con *container, d chan<- bool) {
+	for x := range con.gor10_1() {
 		fmt.Println(x)
 	}
 
@@ -461,7 +467,7 @@ func gor10_2(con *container,d chan<- bool)  {
 管道和选择器模式
 例子:筛选
 */
-func gor11()  {
+func gor11() {
 	//main goroutine
 	ch := make(chan int)
 	t := time.Now()
@@ -473,13 +479,13 @@ func gor11()  {
 		//3: 继续 ch=2 prime=2
 
 		//4: 停住
-		prime := <- ch
+		prime := <-ch
 
 		//fmt.Println(prime)plugplug
 		ch1 := make(chan int)
 
 		//3: 开启一个 filter goroutine ch=0 ch1=0 prime=2
-		go gor11_filter(ch,ch1,prime)
+		go gor11_filter(ch, ch1, prime)
 
 		//3: ch1=0 ch=0
 		ch = ch1
@@ -492,15 +498,15 @@ func gor11()  {
 	}
 
 }
-func gor11_write(ch chan<- int)  {
-	for i:= 2; ; i++ {
+func gor11_write(ch chan<- int) {
+	for i := 2; ; i++ {
 		//2: i=2 ch=2
 		//5: i=3 ch=3
 		ch <- i
 	}
 
 }
-func gor11_filter(ch <-chan int,ch1 chan<- int,prime int)  {
+func gor11_filter(ch <-chan int, ch1 chan<- int, prime int) {
 	for {
 		//4:停住 ch=0 ch1=0 prime=2
 		//6: 继续 ch=3 i=3
@@ -509,10 +515,10 @@ func gor11_filter(ch <-chan int,ch1 chan<- int,prime int)  {
 		i := <-ch
 
 		//6: prime=2 i=3
-		fmt.Println(prime,i)
+		fmt.Println(prime, i)
 
 		//6: 3%2 = 1 ch1 = 3
-		if i % prime != 0 {
+		if i%prime != 0 {
 			ch1 <- i
 		}
 	}
@@ -537,52 +543,52 @@ select作用:
 
 //生产者-消费者,select例子
 func gor12() {
-	ch1,ch2  := make(chan int),make(chan int)
+	ch1, ch2 := make(chan int), make(chan int)
 	go gor12_write(ch1)
 	go gor12_write1(ch2)
-	go gor12_read(ch1,ch2)
-	time.Sleep(time.Second*1)
+	go gor12_read(ch1, ch2)
+	time.Sleep(time.Second * 1)
 }
-func gor12_write(ch chan<- int)  {
-    for i := 0; ; i++ {
-       ch <- i * 10
+func gor12_write(ch chan<- int) {
+	for i := 0; ; i++ {
+		ch <- i * 10
 	}
 }
-func gor12_write1(ch chan<- int)  {
+func gor12_write1(ch chan<- int) {
 	for i := 0; ; i++ {
 		ch <- i * 100
 	}
 }
-func gor12_read(ch1,ch2 <-chan int)  {
-    for {
+func gor12_read(ch1, ch2 <-chan int) {
+	for {
 		select {
 		case v := <-ch1:
-			fmt.Println(v,"ch1")
+			fmt.Println(v, "ch1")
 		case v := <-ch2:
-			fmt.Println(v,"ch2")
-	   }
+			fmt.Println(v, "ch2")
+		}
 	}
 }
 
-func gor13()  {
+func gor13() {
 	//练习5.4
 	n := 15
-	for i := 0;i < n;i++ {
+	for i := 0; i < n; i++ {
 		fmt.Println(i)
 	}
 
 	i := 0
-	FOR:
-		if i < n {
-			fmt.Println(i)
-			i++
-			goto FOR
-		}
+FOR:
+	if i < n {
+		fmt.Println(i)
+		i++
+		goto FOR
+	}
 }
-func gor14()  {
+func gor14() {
 	done := make(chan bool)
 	ch := make(chan int)
-	go tel(ch,5,done)
+	go tel(ch, 5, done)
 
 	//方法1
 	//for a := range ch  {
@@ -609,7 +615,7 @@ func gor14()  {
 		}
 	}
 }
-func tel(ch chan<- int,num int,d chan<- bool)  {
+func tel(ch chan<- int, num int, d chan<- bool) {
 	for i := 0; i < num; i++ {
 		ch <- i
 	}
@@ -620,16 +626,16 @@ func tel(ch chan<- int,num int,d chan<- bool)  {
 }
 
 //练习14.8 fib使用通道channel,速度最快
-func gor15()  {
+func gor15() {
 	term := 25
-	i    := 0
-	c    := make(chan int)
+	i := 0
+	c := make(chan int)
 
-	go gor15_1(term,c)
+	go gor15_1(term, c)
 	start := time.Now()
 	for {
-		if result, ok := <-c ; ok {
-			fmt.Println(i,result)
+		if result, ok := <-c; ok {
+			fmt.Println(i, result)
 			i++
 		} else {
 			fmt.Println(time.Since(start))
@@ -637,7 +643,7 @@ func gor15()  {
 		}
 	}
 }
-func gor15_1(l int,c chan int)  {
+func gor15_1(l int, c chan int) {
 	f := gor15_2()
 	for i := 0; i < l; i++ {
 		a := i
@@ -648,33 +654,33 @@ func gor15_1(l int,c chan int)  {
 	}
 	close(c)
 }
-func gor15_2() (func(int) int) {
+func gor15_2() func(int) int {
 	var red []int
 	return func(i int) int {
 		if l := len(red); l >= 2 {
 			i = red[l-1] + red[l-2]
 		}
-		red = append(red,i)
-		return red[len(red) - 1]
+		red = append(red, i)
+		return red[len(red)-1]
 	}
 }
 
 //练习14.8的改良版(两者速度差不多,但内存肯定是这个用的少,因为少用了一个缓冲数组)
-func gor16()  {
+func gor16() {
 	start := time.Now()
-	le    := 25
-	done  := make(chan int)
-	go gor16_1(le,done)
+	le := 25
+	done := make(chan int)
+	go gor16_1(le, done)
 	i := 0
-	for d := range done  {
-		fmt.Println(i,d)
+	for d := range done {
+		fmt.Println(i, d)
 		i++
 	}
 
 	fmt.Println(time.Since(start))
 }
-func gor16_1(n int,c chan int)  {
-	x,y := 1,1
+func gor16_1(n int, c chan int) {
+	x, y := 1, 1
 	for i := 0; i < n; i++ {
 		c <- x
 		x, y = y, x+y
@@ -683,29 +689,29 @@ func gor16_1(n int,c chan int)  {
 }
 
 //练习14.8.1 fib使用通道channel 和 select 让通道退出
-func gor17()  {
+func gor17() {
 	start := time.Now()
 	ch := make(chan int)
 	done := make(chan bool)
 	le := 25
 
-	go gor17_1(le,ch,done)
+	go gor17_1(le, ch, done)
 
 	i := 0
 	for {
 		select {
-		case v := <- ch:
-			fmt.Println(i,v)
+		case v := <-ch:
+			fmt.Println(i, v)
 			i++
-		case v := <- done:
+		case v := <-done:
 			fmt.Println(v)
 			fmt.Println(time.Since(start))
 			return
 		}
 	}
 }
-func gor17_1(n int,c chan int,done chan bool)  {
-	x, y := 1,1
+func gor17_1(n int, c chan int, done chan bool) {
+	x, y := 1, 1
 	for i := 0; i < n; i++ {
 		c <- x
 		x, y = y, x+y
@@ -714,22 +720,22 @@ func gor17_1(n int,c chan int,done chan bool)  {
 }
 
 //2个协程????
-func gor18()  {
+func gor18() {
 	start := time.Now()
-	x     := gor18_1()
-	le    := 25
+	x := gor18_1()
+	le := 25
 	for i := 0; i < le; i++ {
 		fmt.Println(<-x)
 	}
 
 	fmt.Println(time.Since(start))
 }
-func gor18_1() (<-chan int) {
-	d := make(chan int,2)
-	a,b,out := gor18_2(d)
+func gor18_1() <-chan int {
+	d := make(chan int, 2)
+	a, b, out := gor18_2(d)
 	go func() {
-		d<- 0
-		d<- 1
+		d <- 0
+		d <- 1
 
 		<-a
 		for {
@@ -739,8 +745,8 @@ func gor18_1() (<-chan int) {
 	<-out
 	return out
 }
-func gor18_2(in <-chan int) (<-chan int,<-chan int,<-chan int) {
-	a, b, c := make(chan int,2),make(chan int,2),make(chan int,2)
+func gor18_2(in <-chan int) (<-chan int, <-chan int, <-chan int) {
+	a, b, c := make(chan int, 2), make(chan int, 2), make(chan int, 2)
 	go func() {
 		for {
 			o := <-in // x = 0
@@ -749,17 +755,17 @@ func gor18_2(in <-chan int) (<-chan int,<-chan int,<-chan int) {
 			c <- o
 		}
 	}()
-	return a,b,c
+	return a, b, c
 }
 
 //提供总数量为num的 随机 0|1 的协程
-func gor19()  {
-	start    := time.Now()
+func gor19() {
+	start := time.Now()
 	num := 25
 	c := make(chan int)
 	go func() {
 		for {
-			fmt.Println(<-c," ")
+			fmt.Println(<-c, " ")
 		}
 	}()
 
@@ -770,8 +776,8 @@ func gor19()  {
 		}
 		num--
 		select {
-		case c<-0:
-		case c<-1:
+		case c <- 0:
+		case c <- 1:
 		}
 	}
 }
@@ -784,55 +790,56 @@ type JI struct {
 	corner float64 "OP与OX的夹角,极角.单位:度数"
 }
 type ZJ struct {
-	x float64  "X轴长度"
-	y float64  "Y轴长度"
+	x float64 "X轴长度"
+	y float64 "Y轴长度"
 }
-func gor20()  {
-	ji        := new(JI)
-	ji.le     = 3
+
+func gor20() {
+	ji := new(JI)
+	ji.le = 3
 	ji.corner = 60
 	channel1 := make(chan *JI) //极坐标
 	channel2 := make(chan *ZJ) //笛卡尔坐标 [x,y]
 	go func() {
 		//读取极坐标
-		ji1  := <-channel1
+		ji1 := <-channel1
 
 		//计算笛卡尔坐标
 		zji1 := new(ZJ)
 		zji1.calculate(ji1)
-		channel2<-zji1
+		channel2 <- zji1
 	}()
 	//写入极坐标
-	channel1<- ji
+	channel1 <- ji
 
 	//读取笛卡尔坐标
 	zj := <-channel2
-	fmt.Println(zj.x,zj.y)
+	fmt.Println(zj.x, zj.y)
 }
-func (z *ZJ)calculate(J *JI) {
+func (z *ZJ) calculate(J *JI) {
 	z.y = J.le * math.Sin(J.corner)
 	z.x = math.Sqrt(J.le*J.le - z.y*z.y)
 }
 
 //生产者-消费者模型
 //https://github.com/chai2010/advanced-go-programming-book/blob/master/ch1-basic/ch1-06-goroutine.md
-func gor21()  {
+func gor21() {
 	done := make(chan bool)
-	taskCh := make(chan int,10)
+	taskCh := make(chan int, 10)
 
-	go gor21_producer(taskCh,2)
-	go gor21_consumer(taskCh,done)
+	go gor21_producer(taskCh, 2)
+	go gor21_consumer(taskCh, done)
 
 	<-done
 }
-func gor21_producer(task chan<- int,beishu int)  {
+func gor21_producer(task chan<- int, beishu int) {
 	defer close(task)
-	for i := 0; i<10; i++ {
-		task <- i*beishu
+	for i := 0; i < 10; i++ {
+		task <- i * beishu
 	}
 }
-func gor21_consumer(task <-chan int,done chan<- bool)  {
-	for t := range task  {
+func gor21_consumer(task <-chan int, done chan<- bool) {
+	for t := range task {
 		index := t
 		fmt.Println(index)
 	}
@@ -845,27 +852,28 @@ https://github.com/chai2010/advanced-go-programming-book/blob/master/ch1-basic/c
 生产者 = 发布者
 消费者 = 订阅者
 传统生产者-消费者模型中,将消息发送到一个队列中,发布者-订阅者,将消息发布给一个主题
- */
+*/
 type (
 	sub       chan interface{}         //订阅者
 	topicFunc func(v interface{}) bool //主题
 
-	Publisher struct {                //发布者
-		m sync.RWMutex                //读写锁
-		buffer int                    //订阅队列的缓存大小
-		timeout time.Duration         //发布超时时间
+	Publisher struct { //发布者
+		m           sync.RWMutex      //读写锁
+		buffer      int               //订阅队列的缓存大小
+		timeout     time.Duration     //发布超时时间
 		subscribers map[sub]topicFunc //订阅者信息
 	}
 )
-func gor22()  {
-	p     := NewPublisher(100*time.Millisecond,10)
-	done  := make(chan bool)
+
+func gor22() {
+	p := NewPublisher(100*time.Millisecond, 10)
+	done := make(chan bool)
 	done1 := make(chan bool)
 
-	all       := p.Subscribe()
+	all := p.Subscribe()
 	golangTop := p.SubscribeTopic(func(v interface{}) bool {
-		if s,ok := v.(string);ok {
-			return strings.Contains(s,"golang")
+		if s, ok := v.(string); ok {
+			return strings.Contains(s, "golang")
 		}
 		return false
 	})
@@ -876,7 +884,7 @@ func gor22()  {
 
 	go func() {
 		for msg := range all {
-			fmt.Println("all:",msg)
+			fmt.Println("all:", msg)
 		}
 		done <- true
 
@@ -884,46 +892,47 @@ func gor22()  {
 
 	go func() {
 		for msg := range golangTop {
-			fmt.Println("golang:",msg)
+			fmt.Println("golang:", msg)
 		}
-		done1<- true
+		done1 <- true
 	}()
 
 	<-done1
 	<-done
 }
-func NewPublisher(timeOut time.Duration,buf int) *Publisher {
+func NewPublisher(timeOut time.Duration, buf int) *Publisher {
 	return &Publisher{
-		buffer:buf,
-		timeout:timeOut,
-		subscribers:make(map[sub]topicFunc),
+		buffer:      buf,
+		timeout:     timeOut,
+		subscribers: make(map[sub]topicFunc),
 	}
 }
 
 //添加一个订阅者,订阅指定主题
-func (p *Publisher)SubscribeTopic(topic topicFunc) chan interface{} {
-	ch := make(chan interface{},p.buffer)
+func (p *Publisher) SubscribeTopic(topic topicFunc) chan interface{} {
+	ch := make(chan interface{}, p.buffer)
 
 	p.m.Lock()
 	defer p.m.Unlock()
 	p.subscribers[ch] = topic
 	return ch
 }
+
 //添加一个订阅者,订阅所有主题
-func (p *Publisher)Subscribe() chan interface{} {
+func (p *Publisher) Subscribe() chan interface{} {
 	return p.SubscribeTopic(nil)
 }
 
 //退出订阅
-func (p *Publisher)Evict(sub chan interface{})  {
+func (p *Publisher) Evict(sub chan interface{}) {
 	p.m.Lock()
 	defer p.m.Unlock()
-	delete(p.subscribers,sub)
+	delete(p.subscribers, sub)
 	close(sub)
 }
 
 //发布一个主题,允许一定时间内的超时
-func (p *Publisher)sendTopic(su sub,topic topicFunc,v interface{}, wg *sync.WaitGroup)  {
+func (p *Publisher) sendTopic(su sub, topic topicFunc, v interface{}, wg *sync.WaitGroup) {
 	defer wg.Done()
 	if topic != nil && !topic(v) {
 		return
@@ -935,46 +944,46 @@ func (p *Publisher)sendTopic(su sub,topic topicFunc,v interface{}, wg *sync.Wait
 		fmt.Println("sendTopic time out!")
 	}
 }
-func (p *Publisher)Publish(v interface{})  {
+func (p *Publisher) Publish(v interface{}) {
 	p.m.RLock()
 	defer p.m.RUnlock()
 
 	var wg sync.WaitGroup
-	for sub,top := range p.subscribers {
+	for sub, top := range p.subscribers {
 		wg.Add(1)
-		go p.sendTopic(sub,top,v,&wg)
+		go p.sendTopic(sub, top, v, &wg)
 	}
 
 	wg.Wait()
 }
 
 //关闭发布者,同时关闭订阅者管道
-func (p *Publisher)Close()  {
+func (p *Publisher) Close() {
 	p.m.Lock()
 	defer p.m.Unlock()
 	for sub := range p.subscribers {
-		delete(p.subscribers,sub)
+		delete(p.subscribers, sub)
 		close(sub)
 	}
 }
 
 // http://dev.api.com/_book/ch8/ch8-02.html
-func gor23()  {
+func gor23() {
 	go spinner(100 * time.Millisecond)
 	const n = 45
 	fibN := fib(n)
-	fmt.Printf("\r Fibonacci(%d) = %d\n",n,fibN)
+	fmt.Printf("\r Fibonacci(%d) = %d\n", n, fibN)
 }
-func fib(x int) int  {
+func fib(x int) int {
 	if x < 2 {
 		return x
 	}
 	return fib(x-1) + fib(x-2)
 }
-func spinner(d time.Duration)  {
+func spinner(d time.Duration) {
 	for {
 		for _, r := range `-\|/` {
-			fmt.Printf("\r%c",r)
+			fmt.Printf("\r%c", r)
 			time.Sleep(d)
 		}
 	}
@@ -982,19 +991,19 @@ func spinner(d time.Duration)  {
 
 // http://dev.api.com/_book/ch8/ch8-02.html
 //clock2
-func gor24()  {
+func gor24() {
 	clock2()
 }
-func clock2()  {
-	listener, err := net.Listen("tcp","localhost:" + port)
+func clock2() {
+	listener, err := net.Listen("tcp", "localhost:"+port)
 	if err != nil {
 		log.Fatal(err)
 	}
-	lo,_  := time.LoadLocation(timezone)
-	fmt.Println("in:",timezone,"listen:",port,"now:",time.Now().In(lo).Format("15:04:05\n"))
+	lo, _ := time.LoadLocation(timezone)
+	fmt.Println("in:", timezone, "listen:", port, "now:", time.Now().In(lo).Format("15:04:05\n"))
 
 	for {
-		conn,err := listener.Accept()
+		conn, err := listener.Accept()
 		if err != nil {
 			log.Println(err)
 			continue
@@ -1002,7 +1011,7 @@ func clock2()  {
 		go func(c net.Conn) {
 			defer c.Close()
 			for {
-				_, err := io.WriteString(c,time.Now().In(lo).Format("15:04:05\n"))
+				_, err := io.WriteString(c, time.Now().In(lo).Format("15:04:05\n"))
 				if err != nil {
 					return
 				}
@@ -1017,21 +1026,22 @@ type wallStr struct {
 	ch chan []byte
 }
 
-var ws  = NewWallStr(3)
-func gor25()  {
+var ws = NewWallStr(3)
+
+func gor25() {
 	var wg sync.WaitGroup
 
 	if NewYork != "" {
 		wg.Add(1)
-		go clockwall(NewYork,wg,[]byte("NewYork:["))
+		go clockwall(NewYork, wg, []byte("NewYork:["))
 	}
 	if Tokyo != "" {
 		wg.Add(1)
-		go clockwall(Tokyo,wg,[]byte("Tokyo:["))
+		go clockwall(Tokyo, wg, []byte("Tokyo:["))
 	}
 	if London != "" {
 		wg.Add(1)
-		go clockwall(London,wg,[]byte("London:["))
+		go clockwall(London, wg, []byte("London:["))
 	}
 
 	go func() {
@@ -1040,9 +1050,9 @@ func gor25()  {
 			i++
 			a := ws.Read()
 			if len(a) > 0 {
-				a = append(a,' ')
+				a = append(a, ' ')
 				if i == 3 {
-					a = append(a,'\r')
+					a = append(a, '\r')
 					i = 0
 				}
 				os.Stdout.Write(a)
@@ -1052,54 +1062,53 @@ func gor25()  {
 
 	wg.Wait()
 }
-func clockwall(address string,wg sync.WaitGroup,tz []byte)  {
+func clockwall(address string, wg sync.WaitGroup, tz []byte) {
 	defer wg.Done()
 
-	c,e := net.Dial("tcp",address)
+	c, e := net.Dial("tcp", address)
 	if e != nil {
 		log.Fatal(e)
 	}
-	defer  c.Close()
+	defer c.Close()
 
-
-	mustCopy(ws,c,tz)
+	mustCopy(ws, c, tz)
 }
-func mustCopy(w io.Writer,r io.Reader,tz []byte)  {
+func mustCopy(w io.Writer, r io.Reader, tz []byte) {
 	//if _,e := io.Copy(w,r); e != nil {
 	//	log.Fatal(e)
 	//}
 
-	p := make([]byte,1024)
+	p := make([]byte, 1024)
 	for {
-		i,e := r.Read(p)
+		i, e := r.Read(p)
 
 		if e != nil {
 			break
 		}
 
 		all := tz
-		all = append(all,p[0:i-1]...)
-		all = append(all,']')
-		if _,e = w.Write(all);e != nil {
+		all = append(all, p[0:i-1]...)
+		all = append(all, ']')
+		if _, e = w.Write(all); e != nil {
 			break
 		}
 
 	}
 }
 func NewWallStr(num int) *wallStr {
-	return &wallStr{ch:make(chan []byte,num)}
+	return &wallStr{ch: make(chan []byte, num)}
 }
-func (ws wallStr)Read() []byte {
+func (ws wallStr) Read() []byte {
 	var res []byte
 	select {
 	case res = <-ws.ch:
-	case <-time.Tick(time.Second*5):
+	case <-time.Tick(time.Second * 5):
 	}
 	return res
 }
-func (ws wallStr)Write(s []byte) (int,error) {
+func (ws wallStr) Write(s []byte) (int, error) {
 	ws.ch <- s
-	return len(s),nil
+	return len(s), nil
 }
 
 /**
@@ -1113,7 +1122,7 @@ https://www.ardanlabs.com/blog/2017/05/language-mechanics-on-stacks-and-pointers
 1.指针变量存储的值是变量地址,自身也有一个地址
 2.函数调用的时候,需要在当前协程上面的堆栈分配新的内存,2个函数帧之间会有一个转换(值传递还是指针传递(贡献变量地址),函数帧内逃逸分析,协程内有效内存与无效内存)
 */
-func gor26()  {
+func gor26() {
 	runtime.GOMAXPROCS(runtime.NumCPU())
 	wg := sync.WaitGroup{}
 	wg.Add(12)
@@ -1122,20 +1131,20 @@ func gor26()  {
 	//形参
 	//1.会将变量移动到heap中,因为两个goroutine都要用到该变量
 	//2.并发安全性,外部变量的改变会影响内部变量的改变
-	for i := 0;  i < 6; i++ {
+	for i := 0; i < 6; i++ {
 		go func() {
 			defer wg.Done()
-			fmt.Println("T1:",i)
+			fmt.Println("T1:", i)
 		}()
 	}
 
 	//实参
 	//1.会将i放到groutine的stack上
 	//2.外部变量的改变不会影响内部变量的改变
-	for i := 0;  i < 6; i++ {
+	for i := 0; i < 6; i++ {
 		go func(i int) {
 			defer wg.Done()
-			fmt.Println("T2:",i)
+			fmt.Println("T2:", i)
 		}(i)
 	}
 	wg.Wait()

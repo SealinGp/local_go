@@ -62,72 +62,78 @@ $ 匹配以前面的子表达式结尾
 */
 func main() {
 	fun := map[string]func(){
-		"regex1":regex1,
-		"regex2":regex2,
-		"regex3":regex3,
-		"regex4":regex4,
-		"regex5":regex5,
+		"regex1": regex1,
+		"regex2": regex2,
+		"regex3": regex3,
+		"regex4": regex4,
+		"regex5": regex5,
+		"regex6": regex6,
 	}
 	fun[os.Args[1]]()
 }
 
 //1.基本匹配
-func regex1()  {
-	re("the cat sat on the mat",`cat`)
+func regex1() {
+	re("the cat sat on the mat", `cat`)
 }
 
 //2.元字符
-func regex2()  {
+func regex2() {
 	//.
-	re("The car parked in the garage.",`.ar`)
+	re("The car parked in the garage.", `.ar`)
 	//字符集
-	re("The car parked in the garage.",`[tT]he`)
+	re("The car parked in the garage.", `[tT]he`)
 	//否定字符集
-	re("The car parked in the garage.",`[^c]ar`)
+	re("The car parked in the garage.", `[^c]ar`)
 	//*
-	re("The car parked in the garage.",`[a-z]*`)
+	re("The car parked in the garage.", `[a-z]*`)
 	//\s
-	re("The fat cat sat on the cat",`\s*cat\s*`)
+	re("The fat cat sat on the cat", `\s*cat\s*`)
 	//+
-	re("The fat cat sat on the mat.",`c.+t`)
+	re("The fat cat sat on the mat.", `c.+t`)
 	//?
-	re("The fat cat sat on the mat.",`T?he`)
+	re("The fat cat sat on the mat.", `T?he`)
 	//{}
-	re("The number was 9.9997 but we rounded it off to 10.01",`[0-9]{2,}`)
+	re("The number was 9.9997 but we rounded it off to 10.01", `[0-9]{2,}`)
 	//|
-	re("The car parked in the garage.",`(T|t)he|car`)
+	re("The car parked in the garage.", `(T|t)he|car`)
 	//转义字符
-	re("The fat cat sat on the mat.",`(f|c|m)at\.?`)
+	re("The fat cat sat on the mat.", `(f|c|m)at\.?`)
 	//$
-	re("The fat cat sat on the mat.",`(at\.?)$`)
+	re("The fat cat sat on the mat.", `(at\.?)$`)
 	//\w
-	re("The fat cat sat on the mat.",`\w+`)
+	re("The fat cat sat on the mat.", `\w+`)
 	//匹配除了fat,cat之外,[^xxx] : 除之外
-	re("The fat cat sat on the mat.",`[^fc]at`)
+	re("The fat cat sat on the mat.", `[^fc]at`)
 	//匹配中文字符
-	re("The fat cat sat on the mat.中文字符",`\p{Han}{2}`)
+	re("The fat cat sat on the mat.中文字符", `\p{Han}{2}`)
 }
 
 //常用正则表达式
-func regex3()  {
+func regex3() {
 	//电话号码
-	re("0755-123",`^+?[\d\s-]{3,}$`)
+	re("0755-123", `^+?[\d\s-]{3,}$`)
 }
 
-func re(str,pattern string)  {
-	reg  := regexp.MustCompile(pattern)
-	str1 := reg.FindAllString(str,-1)
-	for _,s := range str1 {
-		fmt.Println(s+"?")
+func re(str, pattern string) {
+	reg := regexp.MustCompile(pattern)
+	str1 := reg.FindAllString(str, -1)
+	for _, s := range str1 {
+		fmt.Println(s)
 	}
 }
 
-func regex4()  {
-	input   := "a"
-	pattern := fmt.Sprintf(`(\[')%s([a-z',\(\p{Han}\)']+)(\])`,input)
-	re(`var _arrusers = [['aaaroncai','aaaroncai(蔡程)'],['aaaronguo','aaaronguo(郭益诚)'],['bbbronguo','bbbronguo(郭益诚)']]`,pattern)
+func regex4() {
+	input := "a"
+	pattern := fmt.Sprintf(`(\[')%s([a-z',\(\p{Han}\)']+)(\])`, input)
+	re(`var _arrusers = [['aaaroncai','aaaroncai(蔡程)'],['aaaronguo','aaaronguo(郭益诚)'],['bbbronguo','bbbronguo(郭益诚)']]`, pattern)
 }
 
-func regex5()  {
-	re("The fat cat sat on the mat.中文字符",`\p{Han}{2}`)
+func regex5() {
+	re("The fat cat sat on the mat.中文字符", `\p{Han}{2}`)
+}
+
+func regex6() {
+	//
+	re("enum('b','c','你好')", `(\(){1}([\',a-zA-Z\p{Han}])+(\)){1}`)
 }

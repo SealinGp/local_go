@@ -12,17 +12,16 @@ func main() {
 	startTime := time.Now()
 	defer func() {
 		d := time.Now().Sub(startTime)
-		fmt.Println("processTime:",d)
+		fmt.Println("processTime:", d)
 	}()
 
-
-	args     := os.Args
+	args := os.Args
 	if len(args) <= 1 {
 		fmt.Println("lack param ?func=xxx")
 		return
 	}
 
-	ref    := simple.Ref{}
+	ref := simple.Ref{}
 	refVal := reflect.ValueOf(&ref)
 	refVal.MethodByName(args[1]).Call(nil)
 }
@@ -33,17 +32,18 @@ func main() {
 // 假设 写一个 1+2+3+...+100的程序
 // 算法1
 func Index1() int {
-	sum,n := 0,100            //执行1次
-	for i := 1; i <= n ; i++ {//执行n+1次
+	sum, n := 0, 100          //执行1次
+	for i := 1; i <= n; i++ { //执行n+1次
 		sum += 1
 	}
 	// 算法1时间复杂度位O(n)
 	return sum
 }
+
 // 算法2
 func Index2() int {
-	sum,n := 0,100   //执行1次
-	sum = (1 + n) * (n/2)//执行1次
+	sum, n := 0, 100        //执行1次
+	sum = (1 + n) * (n / 2) //执行1次
 	// 算法2时间复杂度位O(1)
 	return sum
 }

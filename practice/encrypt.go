@@ -28,15 +28,16 @@ func main() {
 
 func execute(n string) {
 	funs := map[string]func(){
-		"enc1" : enc1,
-		"Md5En" : Md5En,
+		"enc1":  enc1,
+		"Md5En": Md5En,
 	}
 	if nil == funs[n] {
-		fmt.Println("func",n,"unregistered")
+		fmt.Println("func", n, "unregistered")
 		return
 	}
 	funs[n]()
 }
+
 var body string = `{
   "ref": "refs/heads/master",
   "before": "a28418b92902ee9dfc111ef3168daab2210239cb",
@@ -225,18 +226,19 @@ var body string = `{
     ]
   }
 }`
+
 //sha1
-func enc1()  {
+func enc1() {
 	//github
 	//69d7d753e0ca7c448afa10f10a8c09d8638ce38d
-	SHA1  := sha1.New()
-	Msg   :=  "billingPush"
+	SHA1 := sha1.New()
+	Msg := "billingPush"
 	MsgBy := []byte(Msg)
-	Key   := "billingPush"
+	Key := "billingPush"
 	KeyBy := []byte(Key)
 
 	//加密
-	_,err := SHA1.Write(MsgBy)
+	_, err := SHA1.Write(MsgBy)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -245,11 +247,10 @@ func enc1()  {
 	//checksumStr := fmt.Sprintf("%x",checksum)
 	//fmt.Println(checksumStr)
 
-
 	//hmac的sha1
-	HmacWithSha1 := hmac.New(sha1.New,KeyBy)
+	HmacWithSha1 := hmac.New(sha1.New, KeyBy)
 	HmacWithSha1.Write([]byte(body))
-	checksum1    := HmacWithSha1.Sum(nil)
+	checksum1 := HmacWithSha1.Sum(nil)
 	checksum1Str := hex.EncodeToString(checksum1)
 	fmt.Println(checksum1Str)
 
@@ -262,7 +263,7 @@ func enc1()  {
 https://studygolang.com/articles/2283
 md5加密
 */
-func Md5En()  {
+func Md5En() {
 	msg := "121"
 	m := md5.New()
 	m.Write([]byte(msg))

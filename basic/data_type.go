@@ -119,8 +119,8 @@ func execute(n string) {
 		"number_type": number_type,
 		"string_type": string_type,
 		"other_type":  other_type,
-		"type1":  type1,
-		"type2":  type2,
+		"type1":       type1,
+		"type2":       type2,
 	}
 	funs[n]()
 }
@@ -147,17 +147,17 @@ func execute(n string) {
 1 int64 = 8 byte
 */
 func number_type() {
-	var i1 int = 1 << 31 - 1 //int32                                    [-2^31,2^31-1]
-	var i4 int32 = 1 << 31-1 //-2147483648~2147483647                   [-2^31,2^31-1]
-	var ui5 rune = 7   //int32                  [-2^31,2^31-1]
+	var i1 int = 1<<31 - 1   //int32                                    [-2^31,2^31-1]
+	var i4 int32 = 1<<31 - 1 //-2147483648~2147483647                   [-2^31,2^31-1]
+	var ui5 rune = 7         //int32                  [-2^31,2^31-1]
 
-	var i2 int8 = 1 << 7-1   //-128~127                                 [-2^7,2^7-1]
-	var i3 int16 = 1 << 15-1 //-32768~32767                             [-2^15,2^15-1]
-	var i5 int64 = 1 << 63-1 //-9223372036854775808~9223372036854775807 [-2^63,2^63-1]
+	var i2 int8 = 1<<7 - 1   //-128~127                                 [-2^7,2^7-1]
+	var i3 int16 = 1<<15 - 1 //-32768~32767                             [-2^15,2^15-1]
+	var i5 int64 = 1<<63 - 1 //-9223372036854775808~9223372036854775807 [-2^63,2^63-1]
 	fmt.Println(i1, i2, i3, i4, i5)
 
-	var ui1 uint8 = 1 << 8  //0~255(2^8)
-	var ui2 byte = 1 << 8   //0~255
+	var ui1 uint8 = 1 << 8 //0~255(2^8)
+	var ui2 byte = 1 << 8  //0~255
 
 	var ui3 uint16 = 6 //0~65535                [0,2^16]
 	var ui4 uint32 = 7 //0~4294967295           [0,2^32]
@@ -232,7 +232,7 @@ func other_type() {
 		ch6 := make([]chan string,5);*/
 }
 
-func type1()  {
+func type1() {
 	s := "中文检查"
 	rs := []rune(s)
 	fmt.Println(
@@ -245,7 +245,7 @@ func type1()  {
 		s[:2],
 	) //12(3*4) ??
 }
-func type2()  {
+func type2() {
 	var a float64
 	a = 12.2
 	fmt.Println(fmt.Sprint(a))

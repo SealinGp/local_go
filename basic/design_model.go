@@ -16,21 +16,21 @@ import (
 行为模式: 观察者模式(1发多接收),发布订阅模式(1发订阅了的才接收)...
 结构模式: 适配器模式(token接口服务=存储接口+加解密接口)...
 同步模式: 消费生产者模式,信号量模式,
- */
+*/
 
 func main() {
 	defer func() {
-		if e := recover(); e != nil{
+		if e := recover(); e != nil {
 			println(e)
 		}
 	}()
 	fun := map[string]func(){
-		"m1":m1,
-		"m2":m2,
-		"m3":m3,
-		"m4":m4,
-		"m5":m5,
-		"m6":m6,
+		"m1": m1,
+		"m2": m2,
+		"m3": m3,
+		"m4": m4,
+		"m5": m5,
+		"m6": m6,
 	}
 	fun[os.Args[1]]()
 }
@@ -39,12 +39,15 @@ func main() {
 type Product interface {
 	Create()
 }
-type ProductA struct {}
-func (ProductA)Create()  {
+type ProductA struct{}
+
+func (ProductA) Create() {
 	println("产品A")
 }
-type ProductB struct {}
-func (ProductB)Create()  {
+
+type ProductB struct{}
+
+func (ProductB) Create() {
 	println("产品B")
 }
 func GetProduct(productType string) Product {
@@ -58,7 +61,7 @@ func GetProduct(productType string) Product {
 		return ProductA{}
 	}
 }
-func m1()  {
+func m1() {
 	ProA := GetProduct("A")
 	ProA.Create()
 
@@ -70,8 +73,9 @@ func m1()  {
 type ProductsFactory interface {
 	GetProduct(productT string) Product
 }
-type ShenZhenProduct struct {}
-func (ShenZhenProduct)GetProduct(pt string) Product {
+type ShenZhenProduct struct{}
+
+func (ShenZhenProduct) GetProduct(pt string) Product {
 	print("这里是深圳工厂的")
 	switch pt {
 	case "A":
@@ -82,8 +86,10 @@ func (ShenZhenProduct)GetProduct(pt string) Product {
 		return ProductA{}
 	}
 }
-type BeijingProduct struct {}
-func (BeijingProduct)GetProduct(pt string) Product {
+
+type BeijingProduct struct{}
+
+func (BeijingProduct) GetProduct(pt string) Product {
 	print("这里是北京工厂的")
 	switch pt {
 	case "A":
@@ -104,7 +110,7 @@ func MakeFactory(where string) ProductsFactory {
 		return ShenZhenProduct{}
 	}
 }
-func m2()  {
+func m2() {
 	sz := MakeFactory("SZ")
 	sz.GetProduct("A").Create()
 	sz.GetProduct("B").Create()
@@ -115,32 +121,35 @@ func m2()  {
 }
 
 //3.创建模式-单例模式
-func m3()  {
+func m3() {
 	ch := make(chan *in)
 
 	//1.使用锁+全局变量
-	i1  := m3_1()
+	i1 := m3_1()
 	go func() {
 		ch <- m3_1()
 	}()
-	println(i1,<-ch) //查看地址是否一样
+	println(i1, <-ch) //查看地址是否一样
 
 	//2.使用锁+atomic+全局变量+int
 	go func() {
 		ch <- m3_2()
 	}()
 	i3 := m3_2()
-	println(i3,<-ch)
+	println(i3, <-ch)
 
 	//3.使用sync.Once+全局变量 (原理=atomic)
-	i5,i6 := m3_3(),m3_3()
-	println(i5.ran,i6.ran)
+	i5, i6 := m3_3(), m3_3()
+	println(i5.ran, i6.ran)
 }
+
 type in struct {
 	ran int
 }
+
 var instance *in
 var mu sync.Mutex
+
 func m3_1() *in {
 	if instance == nil {
 		mu.Lock()
@@ -152,6 +161,7 @@ func m3_1() *in {
 
 var instance1 *in
 var i uint32
+
 func m3_2() *in {
 	if atomic.LoadUint32(&i) == 1 {
 		return instance1
@@ -160,13 +170,14 @@ func m3_2() *in {
 	defer mu.Unlock()
 	if i == 0 {
 		instance1 = &in{rand.New(rand.NewSource(time.Now().UnixNano())).Intn(100)}
-		atomic.StoreUint32(&i,1)
+		atomic.StoreUint32(&i, 1)
 	}
 	return instance1
 }
 
 var instance2 *in
 var once sync.Once
+
 func m3_3() *in {
 	once.Do(func() {
 		instance2 = &in{rand.New(rand.NewSource(time.Now().UnixNano())).Intn(100)}
@@ -175,17 +186,17 @@ func m3_3() *in {
 }
 
 //4.同步模式-消费者-生产者模式
-func m4()  {
+func m4() {
 	ch := make(chan int)
 	go produser(ch)
 	consumer(ch)
 }
-func consumer(ch <-chan int)  {
+func consumer(ch <-chan int) {
 	for c := range ch {
 		println(c)
 	}
 }
-func produser(ch chan<-int)  {
+func produser(ch chan<- int) {
 	defer close(ch)
 	for i := 0; i < 10; i++ {
 		ch <- i
@@ -193,7 +204,7 @@ func produser(ch chan<-int)  {
 }
 
 //5.行为模式-观察者模式
-func m5()  {
+func m5() {
 	oba := new(ObserverA)
 	obb := new(ObserverB)
 
@@ -202,25 +213,31 @@ func m5()  {
 	com.Add(obb)
 	com.change()
 }
+
 type Observer interface {
 	Receive()
 }
-type ObserverA struct {}
-func (ObserverA)Receive()  {
+type ObserverA struct{}
+
+func (ObserverA) Receive() {
 	println("observerA received")
 }
-type ObserverB struct {}
-func (ObserverB)Receive()  {
+
+type ObserverB struct{}
+
+func (ObserverB) Receive() {
 	println("observerB received")
 }
+
 type Company struct {
 	obs []Observer
 }
-func (c *Company)Add(observer Observer)  {
+
+func (c *Company) Add(observer Observer) {
 	c.obs = append(c.obs, observer)
 }
-func (c *Company)change()  {
-	for _,o := range c.obs {
+func (c *Company) change() {
+	for _, o := range c.obs {
 		o.Receive()
 	}
 }
@@ -229,17 +246,20 @@ func (c *Company)change()  {
 type MusicPlayer interface {
 	Play(fType, fName string)
 }
-type MPlayer struct {}
-func (this *MPlayer)PlayMp3()  {
+type MPlayer struct{}
+
+func (this *MPlayer) PlayMp3() {
 	fmt.Println("play mp3")
 }
-func (this *MPlayer)PlayMp4()  {
+func (this *MPlayer) PlayMp4() {
 	fmt.Println("play mp4")
 }
+
 type PlayerAdapter struct {
 	mp MPlayer
 }
-func (this *PlayerAdapter)Play(fType, fName string)  {
+
+func (this *PlayerAdapter) Play(fType, fName string) {
 	switch fType {
 	case "mp3":
 		this.mp.PlayMp3()
@@ -249,14 +269,14 @@ func (this *PlayerAdapter)Play(fType, fName string)  {
 		fmt.Println("not supported")
 	}
 }
-func m6()  {
+func m6() {
 	player := PlayerAdapter{}
-	player.Play("mp3","1")
-	player.Play("mp4","2")
-	player.Play("mp5","3")
+	player.Play("mp3", "1")
+	player.Play("mp4", "2")
+	player.Play("mp5", "3")
 }
 
 //信号量模式
-func m7()  {
-	
+func m7() {
+
 }

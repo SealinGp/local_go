@@ -23,9 +23,10 @@ func main() {
 }
 
 //动态执行函数
-type ref struct {}
+type ref struct{}
+
 func execute(n string) {
-	ref    := NewRef()
+	ref := NewRef()
 	refVal := reflect.ValueOf(&ref).Elem()
 	//nil为输入参数
 	refVal.MethodByName(n).Call(nil)
@@ -35,7 +36,8 @@ func NewRef() *ref {
 }
 
 type myInt int
-func (r *ref)Ref1()  {
+
+func (r *ref) Ref1() {
 	var m myInt = 5
 	v := reflect.ValueOf(m)
 	fmt.Println(
@@ -49,36 +51,37 @@ func (r *ref)Ref1()  {
 
 	meLen := v.NumMethod()
 	iv := 3
-	for i := iv; i < meLen; i++  {
+	for i := iv; i < meLen; i++ {
 		v.Method(i).Call(nil)
 	}
 }
-func (m myInt)MyIntFun20191213()  {
+func (m myInt) MyIntFun20191213() {
 	fmt.Println("3?")
 }
-func (m myInt)MyIntFun20191211()  {
+func (m myInt) MyIntFun20191211() {
 	fmt.Println("1?")
 }
-func (m myInt)MyIntFun20191212()  {
+func (m myInt) MyIntFun20191212() {
 	fmt.Println("2?")
 }
 
 //反射获取对象中的信息(包含属性,方法,标签)
 type t struct {
-	s1,s2,s3 string  "abc"
+	s1, s2, s3 string "abc"
 }
-func (t1 t)String(b,c string) string  {
+
+func (t1 t) String(b, c string) string {
 	return t1.s1 + t1.s2 + t1.s3 + b + string(c)
 }
-func (r *ref)Ref2()  {
-	var s interface{} = t{"s1_","s2_","s3_"}
+func (r *ref) Ref2() {
+	var s interface{} = t{"s1_", "s2_", "s3_"}
 
-	attributes    := reflect.TypeOf(s)
-	value         := reflect.ValueOf(s)
+	attributes := reflect.TypeOf(s)
+	value := reflect.ValueOf(s)
 	for i := 0; i < attributes.NumField(); i++ {
 		fmt.Println(
 			//对象的属性,属性类型,属性标签
-			attributes.Field(i).Name,attributes.Field(i).Type,attributes.Field(i).Tag,
+			attributes.Field(i).Name, attributes.Field(i).Type, attributes.Field(i).Tag,
 
 			//对象的属性值
 			value.Field(i),
@@ -93,15 +96,15 @@ func (r *ref)Ref2()  {
 	sv1 := reflect.ValueOf(s1)
 	sv2 := reflect.ValueOf(s2)
 
-	res := value.MethodByName("String").Call([]reflect.Value{sv1,sv2})
+	res := value.MethodByName("String").Call([]reflect.Value{sv1, sv2})
 	//res := value.Method(0).Call([]reflect.Value{sv})
 	fmt.Println(res)
 }
 
 //通过反射设置值
-func (r *ref)Ref3()  {
+func (r *ref) Ref3() {
 	//普通值
-	a  := 123
+	a := 123
 	av := reflect.ValueOf(&a).Elem()
 	av.SetInt(456)
 	fmt.Println(a)
@@ -109,7 +112,7 @@ func (r *ref)Ref3()  {
 	//结构值(属性名必须大写(public),否则不可设置)
 	type s struct {
 		Name string
-		Age uint8
+		Age  uint8
 	}
 	b := s{}
 	bv := reflect.ValueOf(&b).Elem()

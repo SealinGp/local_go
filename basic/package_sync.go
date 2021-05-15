@@ -86,7 +86,7 @@ func mutex_sync() {
 	fmt.Println("Unlocked")
 	mutex.Unlock()
 
-	wait.Wait()//等待所有协程运行完毕
+	wait.Wait() //等待所有协程运行完毕
 }
 
 /*

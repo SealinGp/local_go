@@ -45,14 +45,14 @@ func code1() {
 		fmt.Printf("no one was ready to communicate\n") //
 	}
 	/*
-		类似于switch语句
-	除 default 外,若只有一个 case 语句评估通过，那么就执行这个case里的语句；
-	除 default 外,若有多个 case 语句评估通过，那么通过伪随机的方式随机选一个；
-	如果 default 外的 case 语句都没有通过评估，那么执行 default 里的语句；
-	如果没有 default，那么 代码块会被阻塞，指导有一个 case 通过评估；否则一直阻塞
+			类似于switch语句
+		除 default 外,若只有一个 case 语句评估通过，那么就执行这个case里的语句；
+		除 default 外,若有多个 case 语句评估通过，那么通过伪随机的方式随机选一个；
+		如果 default 外的 case 语句都没有通过评估，那么执行 default 里的语句；
+		如果没有 default，那么 代码块会被阻塞，指导有一个 case 通过评估；否则一直阻塞
 
-	ref:https://www.cnblogs.com/jianxinzhou/p/3931893.html
-	linux下的select 通过检查管道是否阻塞,来进行监听
+		ref:https://www.cnblogs.com/jianxinzhou/p/3931893.html
+		linux下的select 通过检查管道是否阻塞,来进行监听
 	*/
 }
 func code2() {

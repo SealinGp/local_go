@@ -27,16 +27,16 @@ func main() {
 
 func execute(n string) {
 	funs := map[string]func(){
-		"flag1" : flag1,
-		"flag2" : flag2,
-		"flag3" : flag3,
-		"flag4" : flag4,
-		"flag5" : flag5,
-		"flag6" : flag6,
-		"flag7" : flag7,
+		"flag1": flag1,
+		"flag2": flag2,
+		"flag3": flag3,
+		"flag4": flag4,
+		"flag5": flag5,
+		"flag6": flag6,
+		"flag7": flag7,
 	}
 	if nil == funs[n] {
-		fmt.Println("func",n,"unregistered")
+		fmt.Println("func", n, "unregistered")
 		return
 	}
 	funs[n]()
@@ -47,9 +47,10 @@ var (
 	help    bool
 	Newline = "\n"
 )
-func flag1()  {
+
+func flag1() {
 	//go run flag.go flag1 -h
-	flag.BoolVar(&help,"h",false,"print this help")
+	flag.BoolVar(&help, "h", false, "print this help")
 
 	//扫描参数列表,并设置flag
 	flag.Parse()
@@ -61,18 +62,18 @@ func flag1()  {
 
 	output := ""
 	//flag.NArg 返回参数的数量
-	for i := 0; i < flag.NArg() ; i++ {
+	for i := 0; i < flag.NArg(); i++ {
 		if flag.Arg(i) == "-h" {
 			flag.PrintDefaults()
 			return
 		}
-		output +=flag.Arg(i) + Newline
+		output += flag.Arg(i) + Newline
 	}
 	os.Stdout.WriteString(output)
 }
 
 //用buffer读取文件
-func flag2()  {
+func flag2() {
 	flag.Parse()
 
 	//参数除了func的参数(第一个)后,若无其他参数,则命令行输入=输出
@@ -81,13 +82,13 @@ func flag2()  {
 	}
 
 	//命令行若有其他参数,若为文件,则读取输出
-	for i := 0; i < flag.NArg() ; i++ {
+	for i := 0; i < flag.NArg(); i++ {
 		if i == 0 {
 			continue
 		}
-		f,err := os.Open(flag.Arg(i))
+		f, err := os.Open(flag.Arg(i))
 		if err != nil {
-			os.Stdout.WriteString(err.Error()+Newline)
+			os.Stdout.WriteString(err.Error() + Newline)
 			continue
 		}
 		cat(bufio.NewReader(f))
@@ -95,10 +96,11 @@ func flag2()  {
 	}
 
 }
+
 //读取文件,输出到命令行
-func cat(r *bufio.Reader)  {
+func cat(r *bufio.Reader) {
 	for {
-		buf,err := r.ReadString('\n')
+		buf, err := r.ReadString('\n')
 
 		//读取报错
 		if err != nil && err != io.EOF {
@@ -116,21 +118,21 @@ func cat(r *bufio.Reader)  {
 
 //https://github.com/unknwon/the-way-to-go_ZH_CN/blob/master/eBook/12.6.md
 //用切片读写文件
-func flag3()  {
-	file,err := os.Open("a.deb")
+func flag3() {
+	file, err := os.Open("a.deb")
 	if err != nil {
 		//os.Stdout.WriteString(err.Error())
 		return
 	}
 	cat2(file)
 }
-func cat2(file *os.File)  {
-	const NBUF  = 512
+func cat2(file *os.File) {
+	const NBUF = 512
 	//数组
 	var buf [NBUF]byte
 	for {
-		switch nr,err := file.Read(buf[:]);true {
-		case nr < 0:  //err != os.EOF && err != nil
+		switch nr, err := file.Read(buf[:]); true {
+		case nr < 0: //err != os.EOF && err != nil
 			os.Stderr.WriteString("cat: error reading: " + err.Error())
 			os.Exit(1)
 		case nr == 0: //err = os.EOF
@@ -143,8 +145,9 @@ func cat2(file *os.File)  {
 		}
 	}
 }
+
 //用切片读取文件2
-func flag4()  {
+func flag4() {
 	flag.Parse()
 	if flag.NArg() <= 1 {
 		fmt.Println("no file")
@@ -154,7 +157,7 @@ func flag4()  {
 		if i == 0 {
 			continue
 		}
-		f,err := os.Open(flag.Arg(i))
+		f, err := os.Open(flag.Arg(i))
 		if f == nil {
 			os.Stderr.WriteString(err.Error())
 			os.Exit(1)
@@ -163,17 +166,17 @@ func flag4()  {
 		f.Close()
 	}
 }
-func cat3(file *os.File)  {
-	const NBUF  = 512
+func cat3(file *os.File) {
+	const NBUF = 512
 	var buf [NBUF]byte
 	for {
-		switch nr,err := file.Read(buf[:]);true {
-		case nr < 0 :
+		switch nr, err := file.Read(buf[:]); true {
+		case nr < 0:
 			os.Stderr.WriteString("cat: error reading: " + err.Error())
 			os.Exit(1)
-		case nr == 0 :
+		case nr == 0:
 			return
-		case nr > 0 :
+		case nr > 0:
 			buf[nr-1] = '\n'
 			if nw, ew := os.Stdout.Write(buf[0:nr]); nw != nr {
 				os.Stderr.WriteString("cat: error writing: " + ew.Error())
@@ -189,10 +192,10 @@ os.Stdout 标准输出流
 os.Stderr 标准错误流
 os.Stdin  标准输入流
 */
-func flag5()  {
-	fmt.Fprintf(os.Stdout,"%s\n","-- unbuffered")
+func flag5() {
+	fmt.Fprintf(os.Stdout, "%s\n", "-- unbuffered")
 	buf := bufio.NewWriter(os.Stdout)
-	fmt.Fprintf(buf,"%s\n","buffered")
+	fmt.Fprintf(buf, "%s\n", "buffered")
 
 	buf.Flush()
 }
@@ -201,24 +204,24 @@ func flag5()  {
 练习
 https://github.com/unknwon/the-way-to-go_ZH_CN/blob/master/eBook/12.8.md
 */
-func flag6()  {
-	inputFile, _  := os.OpenFile("a.deb",os.O_WRONLY,0666)
+func flag6() {
+	inputFile, _ := os.OpenFile("a.deb", os.O_WRONLY, 0666)
 	//先写入需要读取的数据
 	str := "ab123asfasfas\ngh456fasgsdsdgash\ngh789jklfjklahjkjk"
-	bw  := bufio.NewWriter(inputFile)
+	bw := bufio.NewWriter(inputFile)
 	bw.WriteString(str)
 	bw.Flush()
 	inputFile.Close()
 
-	inputFile,_   = os.Open("a.deb")
-	outputFile,_ := os.OpenFile("a1.deb",os.O_WRONLY|os.O_CREATE,0666)
+	inputFile, _ = os.Open("a.deb")
+	outputFile, _ := os.OpenFile("a1.deb", os.O_WRONLY|os.O_CREATE, 0666)
 	defer inputFile.Close()
 	defer outputFile.Close()
 
-	inputReader  := bufio.NewReader(inputFile)
+	inputReader := bufio.NewReader(inputFile)
 	outputWriter := bufio.NewWriter(outputFile)
 	for {
-		inputString , _, readerError := inputReader.ReadLine()
+		inputString, _, readerError := inputReader.ReadLine()
 		if readerError == io.EOF {
 			fmt.Println("end")
 			break
@@ -244,6 +247,6 @@ func flag6()  {
 	}
 	fmt.Println("Conversion done")
 }
-func flag7()  {
+func flag7() {
 
 }

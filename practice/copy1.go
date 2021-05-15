@@ -2,9 +2,10 @@ package main
 
 import (
 	"fmt"
-	"github.com/jinzhu/copier"
 	"os"
 	"time"
+
+	"github.com/jinzhu/copier"
 )
 
 /*
@@ -24,10 +25,10 @@ func main() {
 }
 func execute(n string) {
 	funs := map[string]func(){
-		"cop1" : cop1,
+		"cop1": cop1,
 	}
 	if nil == funs[n] {
-		fmt.Println("func",n,"unregistered")
+		fmt.Println("func", n, "unregistered")
 		return
 	}
 	funs[n]()
@@ -41,16 +42,17 @@ type cops2 struct {
 	A string
 	B string
 }
-func cop1()  {
+
+func cop1() {
 	c1 := cops1{
-		A:time.Now(),
-		B:"b1",
+		A: time.Now(),
+		B: "b1",
 	}
 	c2 := cops2{
-		A:"2014-12-16 00:00:00",
-		B:"b2",
+		A: "2014-12-16 00:00:00",
+		B: "b2",
 	}
-	err := copier.Copy(&c1,&c2)
+	err := copier.Copy(&c1, &c2)
 	if err != nil {
 		fmt.Println(err.Error())
 	}

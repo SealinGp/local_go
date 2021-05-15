@@ -14,13 +14,13 @@ func main() {
 		log.Fatal("func required")
 	}
 	fuc := map[string]func(){
-		"req1":req1,
+		"req1": req1,
 	}
 	fuc[os.Args[1]]()
 }
 
-func req1()  {
-	req, err := http.NewRequest("GET","https://safety.yjgl.sz.gov.cn/ytsafe/rand/randCode.shtml",nil)
+func req1() {
+	req, err := http.NewRequest("GET", "https://safety.yjgl.sz.gov.cn/ytsafe/rand/randCode.shtml", nil)
 	if err != nil {
 		log.Fatal(err.Error())
 	}
@@ -36,7 +36,7 @@ func req1()  {
 		log.Fatal(err.Error())
 	}
 	dst := []byte{}
-	base64.StdEncoding.Decode(dst,body)
+	base64.StdEncoding.Decode(dst, body)
 	base64.StdEncoding.EncodeToString()
 	fmt.Println(string(dst))
 }

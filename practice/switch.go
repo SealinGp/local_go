@@ -20,17 +20,17 @@ func main() {
 
 	execute(args[1])
 }
-func execute(funcN string)  {
+func execute(funcN string) {
 	funcMap := map[string]func(){
-		"switch1" : switch1,
-		"switch2" : switch2,
-		"switch3" : switch3,
+		"switch1": switch1,
+		"switch2": switch2,
+		"switch3": switch3,
 	}
 	funcMap[funcN]()
 }
 
 //fallthrough 找到符合的条件,该条件后面的一个case会执行,注意:此关键词不可在type-switch判断时使用
-func switch1()  {
+func switch1() {
 	k := 6
 	switch k {
 	case 4:
@@ -52,12 +52,12 @@ func switch1()  {
 	}
 }
 
-func switch2()  {
+func switch2() {
 	a := 5
-	switch a  {
+	switch a {
 	case 5:
 		fmt.Println("a = 5")
-	case 6,7:
+	case 6, 7:
 		fmt.Println("a = 6 or 7")
 	default:
 		fmt.Println("a = none")
@@ -71,29 +71,31 @@ type-switch类型断言
 若结构变量实现接口变量的方法为 *指针形式的话,那么这里应该是
 t,ok := 接口变量.(*结构变量)
 */
-func switch3()  {
+func switch3() {
 	var s s2
-	s = s1{a1:"abc"}
+	s = s1{a1: "abc"}
 
 	//类型断言1
 	switch t := s.(type) {
-		case s1:
-			fmt.Println("s1",t)
-		default:
-			fmt.Println("def",t)
+	case s1:
+		fmt.Println("s1", t)
+	default:
+		fmt.Println("def", t)
 	}
 
 	//类型断言2
-	if _,ok := s.(s2);ok {
+	if _, ok := s.(s2); ok {
 		fmt.Println("s2 type")
 	}
 }
+
 type s1 struct {
 	a1 string
 }
 type s2 interface {
 	s2F()
 }
-func (s s1)s2F()  {
+
+func (s s1) s2F() {
 	fmt.Println(s.a1)
 }

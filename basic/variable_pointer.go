@@ -144,51 +144,50 @@ https://www.ardanlabs.com/blog/2017/05/language-mechanics-on-stacks-and-pointers
 可能导致变量逃逸的情况: 1.多个函数栈帧之间共享变量地址 2.使用interface作为接受参数 3.使用make关键词的长度不确定
 
 3.内存管理(go test -run none -bench banmark函数名 -benchtime 测试的秒数 -benchmem)
- */
+*/
 
-func pointer4()  {
+func pointer4() {
 	u1 := createUserV1()
 	u2 := createUserV2()
-	println("u1 address:",&u1,"u2 address:",&u2,"u2 value",u2)
+	println("u1 address:", &u1, "u2 address:", &u2, "u2 value", u2)
 }
 
 type user struct {
-	name string
+	name  string
 	email string
 }
+
 func createUserV1() user {
-	v1 := user{"a","b"}
-	println("v1 address:",&v1)
+	v1 := user{"a", "b"}
+	println("v1 address:", &v1)
 	return v1
 }
 func createUserV2() *user {
-	v2 := user{"a1","b1"}
-	println("v2 address:",&v2)
+	v2 := user{"a1", "b1"}
+	println("v2 address:", &v2)
 	return &v2
 }
 
 //逃逸分析的可能情况: 1.会导致编译器不知道分配内存多少导致该变量逃逸到堆内存中去
-func pointer5()  {
+func pointer5() {
 	pointer5_1(10)
 }
-func pointer5_1(size int)  {
-	b := make([]byte,size)
-	b = append(b,'a')
+func pointer5_1(size int) {
+	b := make([]byte, size)
+	b = append(b, 'a')
 	fmt.Println(string(b))
 }
 
-
-
-func pointer6()  {
+func pointer6() {
 	//unsafe.Pointer: 可以跟任意指针类型互转,可以跟uintptr类型互转
 	v1 := uint(12)
 	v2 := int(13)
-	fmt.Println(reflect.TypeOf(&v1),reflect.TypeOf(&v2))
-	p  := &v1
-	fmt.Println(reflect.TypeOf(p))//*uint
+	fmt.Println(reflect.TypeOf(&v1), reflect.TypeOf(&v2))
+	p := &v1
+	fmt.Println(reflect.TypeOf(p)) //*uint
 	//*int -> *uint,类型转换
-	p  = (*uint)(unsafe.Pointer(&v2))
-	fmt.Println(reflect.TypeOf(p))//*uint
+	p = (*uint)(unsafe.Pointer(&v2))
+	fmt.Println(reflect.TypeOf(p)) //*uint
 
 	//uintptr : 内置类型,能存储指针的整型,可用于指针运算,在64bit平台上底层的数据类型是:typedef uint64 uintptr;
 	type x struct {

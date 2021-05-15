@@ -18,19 +18,19 @@ func main() {
 
 	execute(args[1])
 }
-func execute(funcN string)  {
+func execute(funcN string) {
 	funcMap := map[string]func(){
-		"rec1" : rec1,
-		"rec2" : rec2,
-		"rec3" : rec3,
+		"rec1": rec1,
+		"rec2": rec2,
+		"rec3": rec3,
 	}
 	funcMap[funcN]()
 }
 
 //https://github.com/unknwon/the-way-to-go_ZH_CN/blob/master/eBook/06.6.md
 //斐波那契数列 前2个数为1,从第3个数开始,每个数为前两个数之和
-func rec1()  {
-	s      := time.Now()
+func rec1() {
+	s := time.Now()
 
 	result := 0
 	for i := 0; i <= 40; i++ {
@@ -52,22 +52,22 @@ func fib1(n int) (res int) {
 }
 
 //闭包(不使用递归) 生成斐波那契数列
-func rec2()  {
-	s      := time.Now()
-	fib    := fib2(11)
+func rec2() {
+	s := time.Now()
+	fib := fib2(11)
 	println(fib)
 	fmt.Println(time.Now().Sub(s))
 }
 func fib2(n int) int {
 	fibNums := []int{}
 
-	fib     := func(n int) int {
+	fib := func(n int) int {
 		if n <= 1 {
-			fibNums = append(fibNums,1)
+			fibNums = append(fibNums, 1)
 		} else {
-			len1   := len(fibNums)
-			num    := fibNums[len1-1] + fibNums[len1-2]
-			fibNums = append(fibNums,num)
+			len1 := len(fibNums)
+			num := fibNums[len1-1] + fibNums[len1-2]
+			fibNums = append(fibNums, num)
 		}
 		return fibNums[len(fibNums)-1]
 	}
@@ -80,8 +80,8 @@ func fib2(n int) int {
 
 //https://github.com/unknwon/the-way-to-go_ZH_CN/blob/master/eBook/06.12.md
 //缓存
-func rec3()  {
-	s      := time.Now()
+func rec3() {
+	s := time.Now()
 	var result uint64
 
 	for i := 0; i < LIM; i++ {
@@ -91,8 +91,11 @@ func rec3()  {
 
 	fmt.Println(time.Now().Sub(s))
 }
+
 const LIM = 41
+
 var fibs [LIM]uint64
+
 func fib3(n int) (res uint64) {
 	if fibs[n] != 0 {
 		res = fibs[n]

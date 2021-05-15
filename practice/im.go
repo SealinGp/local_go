@@ -15,7 +15,7 @@ import (
 
 func main() {
 	var name string
-	flag.StringVar(&name,"name","","")
+	flag.StringVar(&name, "name", "", "")
 	flag.Parse()
 	if name == "server" {
 		IMServer()
@@ -25,8 +25,8 @@ func main() {
 	}
 }
 
-func IMServer()  {
-	lis, err := net.Listen("tcp","localhost:1234")
+func IMServer() {
+	lis, err := net.Listen("tcp", "localhost:1234")
 	if err != nil {
 		log.Printf("[E] listen err:%s", err)
 		return
@@ -36,16 +36,16 @@ func IMServer()  {
 	go broadcaster()
 
 	for {
-		conn,err := lis.Accept()
+		conn, err := lis.Accept()
 		if err != nil {
-			log.Printf("[E] accept err:%s",err)
+			log.Printf("[E] accept err:%s", err)
 			continue
 		}
 		go IMServerHandleConn(conn)
 	}
 }
 
-func IMServerHandleConn(c net.Conn)  {
+func IMServerHandleConn(c net.Conn) {
 	ch := make(chan string)
 	defer c.Close()
 	go clientWriter(c, ch)
@@ -57,11 +57,11 @@ func IMServerHandleConn(c net.Conn)  {
 
 	//该用户进入房间
 	entering <- Client{
-		cli:ch,
-		addr:who,
+		cli:  ch,
+		addr: who,
 	}
 	//进入房间提示语
-	messages <- fmt.Sprintf("%s has come to the house",who)
+	messages <- fmt.Sprintf("%s has come to the house", who)
 
 	//从该连接中读取数据
 	input := bufio.NewScanner(c)
@@ -69,7 +69,7 @@ func IMServerHandleConn(c net.Conn)  {
 		text := input.Text()
 
 		//离开房间的消息
-		if strings.Contains(text,"exit") {
+		if strings.Contains(text, "exit") {
 			break
 		}
 
@@ -83,16 +83,16 @@ func IMServerHandleConn(c net.Conn)  {
 }
 
 //把从客户端接收到的消息写入该tcp连接中
-func clientWriter(conn net.Conn, ch <-chan string)  {
+func clientWriter(conn net.Conn, ch <-chan string) {
 	for msg := range ch {
 		fmt.Fprintln(conn, msg)
 	}
 }
 
-func IMClient()  {
-	conn, err := net.Dial("tcp","localhost:1234")
+func IMClient() {
+	conn, err := net.Dial("tcp", "localhost:1234")
 	if err != nil {
-		log.Printf("[E] dial err:%s \n",err)
+		log.Printf("[E] dial err:%s \n", err)
 		return
 	}
 	defer conn.Close()
@@ -111,26 +111,27 @@ func IMClient()  {
 
 		fmt.Fprintln(conn, text)
 		if err != nil {
-			log.Printf("[E] conn write err:%s \n",err)
+			log.Printf("[E] conn write err:%s \n", err)
 		}
-		if strings.Contains(text,"exit") {
+		if strings.Contains(text, "exit") {
 			break
 		}
 	}
 }
- type client chan<- string
- type Client struct {
- 	cli client
- 	addr string
- }
 
- var (
- 	entering = make(chan Client)
- 	leaving = make(chan client)
- 	messages = make(chan string)
- )
+type client chan<- string
+type Client struct {
+	cli  client
+	addr string
+}
 
-func broadcaster()  {
+var (
+	entering = make(chan Client)
+	leaving  = make(chan client)
+	messages = make(chan string)
+)
+
+func broadcaster() {
 	clients := make(map[client]string)
 	for {
 		select {

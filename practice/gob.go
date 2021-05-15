@@ -26,12 +26,12 @@ func main() {
 
 func execute(n string) {
 	funs := map[string]func(){
-		"gob1" : gob1,
-		"gob2" : gob2,
-		"gob3" : gob3,
+		"gob1": gob1,
+		"gob2": gob2,
+		"gob3": gob3,
 	}
 	if nil == funs[n] {
-		fmt.Println("func",n,"unregistered")
+		fmt.Println("func", n, "unregistered")
 		return
 	}
 	funs[n]()
@@ -39,18 +39,19 @@ func execute(n string) {
 
 type P struct {
 	X, Y, Z int
-	Name string
+	Name    string
 }
 type Q struct {
 	X, Y, Z *int32
-	Name string
+	Name    string
 }
-func gob1()  {
+
+func gob1() {
 	var network bytes.Buffer
 	enc := gob.NewEncoder(&network) //write
 	dec := gob.NewDecoder(&network) //read
 
-	err := enc.Encode(P{3,4,5,"pythagoras"})
+	err := enc.Encode(P{3, 4, 5, "pythagoras"})
 	if err != nil {
 		fmt.Println(err.Error())
 		return
@@ -61,12 +62,12 @@ func gob1()  {
 		fmt.Println(err.Error())
 		return
 	}
-	fmt.Println(q.Name,*q.X,*q.Y,*q.Z)
+	fmt.Println(q.Name, *q.X, *q.Y, *q.Z)
 }
 
 type Address struct {
-	T string
-	C string
+	T  string
+	C  string
 	Co string
 }
 type VCard struct {
@@ -75,18 +76,20 @@ type VCard struct {
 	Ad []*Address
 	Re string
 }
+
 var content string
-func gob2()  {
+
+func gob2() {
 	vc := VCard{
 		FN: "Jan",
 		LN: "Ker",
 		Ad: []*Address{
-			&Address{"t1","c1","co1"},
-			&Address{"t2","c2","co2"},
+			&Address{"t1", "c1", "co1"},
+			&Address{"t2", "c2", "co2"},
 		},
 		Re: "none",
 	}
-	file,_ := os.OpenFile("vcard.deb",os.O_WRONLY|os.O_CREATE,0666)
+	file, _ := os.OpenFile("vcard.deb", os.O_WRONLY|os.O_CREATE, 0666)
 	defer file.Close()
 	enc := gob.NewEncoder(file)
 	err := enc.Encode(vc)
@@ -97,9 +100,9 @@ func gob2()  {
 	fmt.Println("ok")
 }
 
-func gob3()  {
+func gob3() {
 	var vc VCard
-	file,err := os.Open("vcard.deb")
+	file, err := os.Open("vcard.deb")
 	if err != nil {
 		fmt.Println(err.Error())
 		return
@@ -112,6 +115,6 @@ func gob3()  {
 		return
 	}
 	fmt.Println(
-		vc,vc.Ad[0],
+		vc, vc.Ad[0],
 	)
 }

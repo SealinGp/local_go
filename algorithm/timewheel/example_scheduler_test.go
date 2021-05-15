@@ -9,7 +9,7 @@ import (
 
 //测试延迟任务是否成功
 func TestTimingWheel_AfterFunc(t *testing.T) {
-	tw := timewheel.NewTimingWheel(time.Millisecond,20)
+	tw := timewheel.NewTimingWheel(time.Millisecond, 20)
 	tw.Start()
 	defer tw.Stop()
 
@@ -37,7 +37,7 @@ func TestTimingWheel_AfterFunc(t *testing.T) {
 
 			err := 5 * time.Millisecond
 			if got.Before(min) || got.After(min.Add(err)) {
-				t.Errorf("Timer(%s) expiration: want[%s, %s], got %s",d,min,min.Add(err),got)
+				t.Errorf("Timer(%s) expiration: want[%s, %s], got %s", d, min, min.Add(err), got)
 			}
 		})
 	}
@@ -48,7 +48,7 @@ type scheduler struct {
 	current   int
 }
 
-func (s *scheduler)Next(prev time.Time) time.Time {
+func (s *scheduler) Next(prev time.Time) time.Time {
 	if s.current >= len(s.intervals) {
 		return time.Time{}
 	}
@@ -57,18 +57,18 @@ func (s *scheduler)Next(prev time.Time) time.Time {
 	return next
 }
 
-func TestTimingWheel_ScheduleFunc(t *testing.T)  {
-	tw := timewheel.NewTimingWheel(time.Millisecond,20)
+func TestTimingWheel_ScheduleFunc(t *testing.T) {
+	tw := timewheel.NewTimingWheel(time.Millisecond, 20)
 	tw.Start()
 	defer tw.Stop()
 
 	s := &scheduler{
-		intervals:[]time.Duration{
-			1 * time.Millisecond, //start + 1ms
-			4 * time.Millisecond, //start + 5ms
-			5 * time.Millisecond, //start + 10ms
-			40 * time.Millisecond, //start + 50ms
-			50 * time.Millisecond, //start + 100ms
+		intervals: []time.Duration{
+			1 * time.Millisecond,   //start + 1ms
+			4 * time.Millisecond,   //start + 5ms
+			5 * time.Millisecond,   //start + 10ms
+			40 * time.Millisecond,  //start + 50ms
+			50 * time.Millisecond,  //start + 100ms
 			400 * time.Millisecond, //start + 500ms
 			500 * time.Millisecond, //start + 1000ms
 		},
@@ -89,7 +89,7 @@ func TestTimingWheel_ScheduleFunc(t *testing.T)  {
 
 		//精度相差 +- 5ms则报错
 		if got.Before(min) || got.After(min.Add(err)) {
-			t.Errorf("Timer(%s) expiration: want [%s, %s] got %s",accum,min,min.Add(err),got)
+			t.Errorf("Timer(%s) expiration: want [%s, %s] got %s", accum, min, min.Add(err), got)
 		}
 	}
 }

@@ -2,26 +2,27 @@ package nsq
 
 import (
 	"fmt"
-	"github.com/nsqio/go-nsq"
 	"os"
 	"os/signal"
 	"syscall"
+
+	"github.com/nsqio/go-nsq"
 )
 
-func Consume(topic,channel string)  {
+func Consume(topic, channel string) {
 
-	config       := nsq.NewConfig()
-	consumer,err := nsq.NewConsumer(topic,channel,config)
+	config := nsq.NewConfig()
+	consumer, err := nsq.NewConsumer(topic, channel, config)
 	if err != nil {
-		fmt.Println("newConsumer err:",err)
+		fmt.Println("newConsumer err:", err)
 		return
 	}
-	
+
 	consumer.AddHandler(&nsqClient{})
 
 	err = consumer.ConnectToNSQLookupd("localhost:4161")
 	if err != nil {
-		fmt.Println("connect err:",err)
+		fmt.Println("connect err:", err)
 		return
 	}
 
@@ -33,7 +34,7 @@ func Consume(topic,channel string)  {
 	consumer.Stop()
 }
 
-type nsqClient struct {}
+type nsqClient struct{}
 
 func (h *nsqClient) HandleMessage(m *nsq.Message) error {
 
@@ -49,7 +50,7 @@ func (h *nsqClient) HandleMessage(m *nsq.Message) error {
 	// Returning a non-nil error will automatically send a REQ command to NSQ to re-queue the message.
 	return err
 }
-func (h *nsqClient)processMessage(body []byte) error {
-	fmt.Println("process message",string(body))
+func (h *nsqClient) processMessage(body []byte) error {
+	fmt.Println("process message", string(body))
 	return nil
 }

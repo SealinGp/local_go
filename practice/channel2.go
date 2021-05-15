@@ -16,15 +16,15 @@ func main() {
 }
 func execute(n string) {
 	funs := map[string]func(){
-		"chan1"   : chan1,
+		"chan1": chan1,
 	}
 	if nil == funs[n] {
-		fmt.Println("func",n,"unregistered")
+		fmt.Println("func", n, "unregistered")
 		return
 	}
 	funs[n]()
 }
 
-func chan1()  {
+func chan1() {
 
 }

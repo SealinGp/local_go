@@ -9,7 +9,6 @@ import (
 	"encoding/pem"
 	"fmt"
 	"io"
-	"log"
 	"math/big"
 
 	quic "github.com/lucas-clemente/quic-go"
@@ -19,19 +18,8 @@ const addr = "localhost:4242"
 
 const message = "foobar"
 
-// We start a server echoing data on the first stream the client opens,
-// then connect with a client, send the message, and wait for its receipt.
-func main() {
-	go func() { log.Fatal(echoServer()) }()
-
-	err := clientMain()
-	if err != nil {
-		panic(err)
-	}
-}
-
 // Start a server that echos all data on the first stream opened by the client
-func echoServer() error {
+func EchoServer() error {
 	listener, err := quic.ListenAddr(addr, generateTLSConfig(), nil)
 	if err != nil {
 		return err
@@ -49,7 +37,7 @@ func echoServer() error {
 	return err
 }
 
-func clientMain() error {
+func ClientMain() error {
 	tlsConf := &tls.Config{
 		InsecureSkipVerify: true,
 		NextProtos:         []string{"quic-echo-example"},

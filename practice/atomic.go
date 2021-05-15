@@ -16,15 +16,15 @@ func main() {
 }
 func execute(n string) {
 	funs := map[string]func(){
-		"atomic1" : atomic1,
+		"atomic1": atomic1,
 	}
 	if nil == funs[n] {
-		fmt.Println("func",n,"unregistered")
+		fmt.Println("func", n, "unregistered")
 		return
 	}
 	funs[n]()
 }
 
-func atomic1()  {
-	
+func atomic1() {
+
 }

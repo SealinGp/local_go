@@ -16,10 +16,10 @@ func main() {
 	//
 	//unsafe.Alignof()
 
-	x1 := x{b:0}
+	x1 := x{b: 0}
 	pb := &x1.b
 	*pb = 1
-	fmt.Println(*pb,x1.b)
+	fmt.Println(*pb, x1.b)
 
 	//
 	pb1 := (*uint16)(

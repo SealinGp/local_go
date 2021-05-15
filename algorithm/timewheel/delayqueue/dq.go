@@ -10,11 +10,11 @@ import (
 //http://russellluo.com/2018/10/golang-implementation-of-hierarchical-timing-wheels.html
 //层级时间轮实现
 
-func New(wheelSize int) *DelayQueue  {
+func New(wheelSize int) *DelayQueue {
 	return &DelayQueue{
-		C: make(chan interface{}),
-		pq:newPriorityQueue(wheelSize),
-		wakeupC:make(chan struct{}),
+		C:       make(chan interface{}),
+		pq:      newPriorityQueue(wheelSize),
+		wakeupC: make(chan struct{}),
 	}
 }
 
@@ -29,17 +29,17 @@ type DelayQueue struct {
 
 	//跟 runtime.timers的 sleeping state 相似
 	sleeping int32
-	wakeupC chan struct{}
+	wakeupC  chan struct{}
 }
 
 //吧元素插入当前延迟队列中
-func (dq *DelayQueue)Offer(elem interface{},expiration int64)  {
+func (dq *DelayQueue) Offer(elem interface{}, expiration int64) {
 	item := &item{
-		Value:elem,
-		Priority:expiration,
+		Value:    elem,
+		Priority: expiration,
 	}
 	dq.mu.Lock()
-	heap.Push(&dq.pq,item)
+	heap.Push(&dq.pq, item)
 	index := item.Index
 	dq.mu.Unlock()
 
@@ -52,7 +52,7 @@ func (dq *DelayQueue)Offer(elem interface{},expiration int64)  {
 }
 
 //Poll函数初始化延迟队列的循环,并等待该队列中的一个元素过期后,将其元素发送到channel C里面去
-func (dq *DelayQueue)Poll(exitC chan struct{}, nowF func() int64)  {
+func (dq *DelayQueue) Poll(exitC chan struct{}, nowF func() int64) {
 	for {
 		now := nowF()
 
@@ -77,7 +77,7 @@ func (dq *DelayQueue)Poll(exitC chan struct{}, nowF func() int64)  {
 					goto exit
 				}
 
-			//至少有一个元素正在处理
+				//至少有一个元素正在处理
 			} else if delta > 0 {
 
 				select {
@@ -105,76 +105,75 @@ func (dq *DelayQueue)Poll(exitC chan struct{}, nowF func() int64)  {
 
 exit:
 	//重置睡眠状态为0
-	atomic.StoreInt32(&dq.sleeping,0)
+	atomic.StoreInt32(&dq.sleeping, 0)
 }
-
 
 type priorityQueue []*item
 type item struct {
 	Value    interface{}
-	Priority int64  //根据过期时间排列的优先级
+	Priority int64 //根据过期时间排列的优先级
 	Index    int
 }
 
 func newPriorityQueue(wheelSize int) priorityQueue {
-	return make(priorityQueue,0,wheelSize)
+	return make(priorityQueue, 0, wheelSize)
 }
 
-func (pq priorityQueue)Len() int {
+func (pq priorityQueue) Len() int {
 	return len(pq)
 }
-func (pq priorityQueue)Less(i, j int) bool {
+func (pq priorityQueue) Less(i, j int) bool {
 	return pq[i].Priority < pq[j].Priority
 }
-func (pq priorityQueue)Swap(i, j int)  {
+func (pq priorityQueue) Swap(i, j int) {
 	pq[i], pq[j] = pq[j], pq[i]
 	pq[i].Index = i
 	pq[j].Index = j
 }
 
 //把延迟任务推入优先级队列
-func (pq *priorityQueue)Push(x interface{})  {
+func (pq *priorityQueue) Push(x interface{}) {
 
 	n := len(*pq)
 	c := cap(*pq)
 	if n+1 > c {
-		npq := make(priorityQueue,n,c*2)
-		copy(npq,*pq)
+		npq := make(priorityQueue, n, c*2)
+		copy(npq, *pq)
 		*pq = npq
 	}
 
-	*pq = (*pq)[0:n+1]
+	*pq = (*pq)[0 : n+1]
 	item := x.(*item)
 	item.Index = n
 	(*pq)[n] = item
 }
 
 //移除并返回移除的元素
-func (pq *priorityQueue)Pop() interface{} {
+func (pq *priorityQueue) Pop() interface{} {
 	n := len(*pq)
 	c := cap(*pq)
 	if n < (c/2) && c > 25 {
-		npq := make(priorityQueue,n,c/2)
-		copy(npq,*pq)
+		npq := make(priorityQueue, n, c/2)
+		copy(npq, *pq)
 		*pq = npq
 	}
 	item := (*pq)[n-1]
 	item.Index = -1
-	*pq = (*pq)[0:n-1]
+	*pq = (*pq)[0 : n-1]
 	return item
 }
 
-func (pq *priorityQueue)PeekAndShift(max int64) (*item,int64) {
+func (pq *priorityQueue) PeekAndShift(max int64) (*item, int64) {
 	if pq.Len() == 0 {
-		return nil,0
+		return nil, 0
 	}
 
 	//如果第一个元素 > max 说明没有过期,因此不移除
 	item := (*pq)[0]
 	if item.Priority > max {
-		return nil,item.Priority - max
+		return nil, item.Priority - max
 	}
 
-	heap.Remove(pq,0)
-	return item,0
+	heap.Remove(pq, 0)
+	return item, 0
 }

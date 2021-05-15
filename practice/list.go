@@ -17,18 +17,18 @@ func main() {
 }
 func execute(n string) {
 	funs := map[string]func(){
-		"l1" : l1,
+		"l1": l1,
 	}
 	if nil == funs[n] {
-		fmt.Println("func",n,"unregistered")
+		fmt.Println("func", n, "unregistered")
 		return
 	}
 	funs[n]()
 }
 
-func l1()  {
+func l1() {
 	ln := list.New()
-	for i := 0 ; i < 5; i++ {
+	for i := 0; i < 5; i++ {
 		ln.PushBack(i)
 	}
 

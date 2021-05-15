@@ -24,18 +24,18 @@ func main() {
 }
 func execute(n string) {
 	funs := map[string]func(){
-		"mat1":mat1,
+		"mat1": mat1,
 	}
 	if nil == funs[n] {
-		fmt.Println("func",n,"unregistered")
+		fmt.Println("func", n, "unregistered")
 		return
 	}
 	funs[n]()
 }
 
-func mat1()  {
+func mat1() {
 	fmt.Println(math.Pow10(3))
 
-	fmt.Println(math.Pow(-2,2))
+	fmt.Println(math.Pow(-2, 2))
 
 }

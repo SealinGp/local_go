@@ -13,15 +13,16 @@ import (
 type queue struct {
 	l *list.List
 }
+
 func NewQueue() *queue {
 	return &queue{
 		list.New(),
 	}
 }
-func (this *queue)InQueue(val interface{}){
+func (this *queue) InQueue(val interface{}) {
 	this.l.PushBack(val)
 }
-func (this *queue)OutQueue() interface{} {
+func (this *queue) OutQueue() interface{} {
 	ele := this.l.Front()
 	if ele == nil {
 		return nil
@@ -30,7 +31,7 @@ func (this *queue)OutQueue() interface{} {
 	this.l.Remove(ele)
 	return ele.Value
 }
-func (this *queue)Len() int {
+func (this *queue) Len() int {
 	return this.l.Len()
 }
 
@@ -38,50 +39,52 @@ func (this *queue)Len() int {
 type stack struct {
 	arr []interface{}
 }
+
 func NewStack() *stack {
-	return &stack{arr:make([]interface{},0)}
+	return &stack{arr: make([]interface{}, 0)}
 }
-func (this *stack)Push(val interface{})  {
-	this.arr = append(this.arr,val)
+func (this *stack) Push(val interface{}) {
+	this.arr = append(this.arr, val)
 }
-func (this *stack)Pop() interface{} {
+func (this *stack) Pop() interface{} {
 	if len(this.arr) > 0 {
-		val     := this.arr[len(this.arr)-1]
+		val := this.arr[len(this.arr)-1]
 		this.arr = this.arr[:len(this.arr)-1]
 		return val
 	}
 	return nil
 }
-func (this *stack)Len() int {
+func (this *stack) Len() int {
 	return len(this.arr)
 }
-
 
 type TreeNode struct {
 	Val   int
 	Left  *TreeNode
 	Right *TreeNode
 }
+
 //前序----递归
-func (this *TreeNode)PreOrder(f func(curNode *TreeNode))  {
-	preOrder(this,f)
+func (this *TreeNode) PreOrder(f func(curNode *TreeNode)) {
+	preOrder(this, f)
 }
-func preOrder(current *TreeNode,f func(curNode *TreeNode))  {
+func preOrder(current *TreeNode, f func(curNode *TreeNode)) {
 	if current != nil {
 		f(current)
-		preOrder(current.Left,f)
-		preOrder(current.Right,f)
+		preOrder(current.Left, f)
+		preOrder(current.Right, f)
 	}
 }
+
 //前序----栈
-func (this *TreeNode)PreOrderStack(f func(node *TreeNode))  {
-	preOrderStack(this,f)
+func (this *TreeNode) PreOrderStack(f func(node *TreeNode)) {
+	preOrderStack(this, f)
 }
-func preOrderStack(root *TreeNode,f func(node *TreeNode))  {
-	sta  := NewStack()
+func preOrderStack(root *TreeNode, f func(node *TreeNode)) {
+	sta := NewStack()
 	curr := root
-	for curr != nil || sta.Len() > 0  {
-		for curr != nil  {
+	for curr != nil || sta.Len() > 0 {
+		for curr != nil {
 			f(curr)
 			sta.Push(curr)
 			curr = curr.Left
@@ -95,34 +98,34 @@ func preOrderStack(root *TreeNode,f func(node *TreeNode))  {
 }
 
 //中序----
-func (this *TreeNode)InOrder(f func(curNode *TreeNode))  {
-	inOrder(this,f)
+func (this *TreeNode) InOrder(f func(curNode *TreeNode)) {
+	inOrder(this, f)
 }
-func inOrder(current *TreeNode,f func(curNode *TreeNode))  {
+func inOrder(current *TreeNode, f func(curNode *TreeNode)) {
 	if current != nil {
-		inOrder(current.Left,f)
+		inOrder(current.Left, f)
 		f(current)
-		inOrder(current.Right,f)
+		inOrder(current.Right, f)
 	}
 }
 
 //后序
-func (this *TreeNode)PostOrder(f func(curNode *TreeNode))  {
-	postOrder(this,f)
+func (this *TreeNode) PostOrder(f func(curNode *TreeNode)) {
+	postOrder(this, f)
 }
-func postOrder(current *TreeNode,f func(curNode *TreeNode))  {
+func postOrder(current *TreeNode, f func(curNode *TreeNode)) {
 	if current != nil {
-		postOrder(current.Left,f)
-		postOrder(current.Right,f)
+		postOrder(current.Left, f)
+		postOrder(current.Right, f)
 		f(current)
 	}
 }
 
 //广度优先遍历-队列实现
-func (this *TreeNode)LevelOrder(f func(node *TreeNode))  {
-	levelOrder(this,f)
+func (this *TreeNode) LevelOrder(f func(node *TreeNode)) {
+	levelOrder(this, f)
 }
-func levelOrder(root *TreeNode,f func(node *TreeNode))  {
+func levelOrder(root *TreeNode, f func(node *TreeNode)) {
 	//根节点入队
 	qu := NewQueue()
 	qu.InQueue(root)
@@ -142,12 +145,13 @@ func levelOrder(root *TreeNode,f func(node *TreeNode))  {
 		}
 	}
 }
-func (this *TreeNode)DepthLevel() int {
+func (this *TreeNode) DepthLevel() int {
 	return depth1(this)
 }
-func (this *TreeNode)DepthPost() int {
+func (this *TreeNode) DepthPost() int {
 	return depth2(this)
 }
+
 //广度优先遍历-实现获取树的深度
 func depth1(root *TreeNode) int {
 	//根节点入队
@@ -162,11 +166,10 @@ func depth1(root *TreeNode) int {
 		}
 		if qu.Len() == 0 && tmp.Len() > 0 {
 			depth++
-			qu  = tmp
+			qu = tmp
 			tmp = NewQueue()
 		}
 		first := qu.OutQueue()
-
 
 		current := first.(*TreeNode)
 		//f(current)
@@ -180,35 +183,36 @@ func depth1(root *TreeNode) int {
 
 	return depth
 }
+
 //深度优先遍历-后序-递归-实现获取树的深度
 func depth2(root *TreeNode) int {
 	if root == nil {
 		return 0
 	}
-	return max(depth2(root.Left),depth2(root.Right)) + 1
+	return max(depth2(root.Left), depth2(root.Right)) + 1
 }
 
 //https://leetcode-cn.com/problems/minimum-height-tree-lcci/
-func (*Ref)STBST()  {
-	nums     := []int{-10,-3,0,5,9}
+func (*Ref) STBST() {
+	nums := []int{-10, -3, 0, 5, 9}
 
 	if len(nums) == 0 {
 		return
 	}
 	node := &TreeNode{}
-	c(node,nums)
+	c(node, nums)
 
 	node.PreOrder(func(curNode *TreeNode) {
 		fmt.Println(curNode.Val)
 	})
 }
-func c(current *TreeNode,arr []int) *TreeNode {
+func c(current *TreeNode, arr []int) *TreeNode {
 	if len(arr) == 0 {
 		return nil
 	}
-	rootNode := len(arr)/2
+	rootNode := len(arr) / 2
 
-	current.Val   = arr[rootNode]
+	current.Val = arr[rootNode]
 	if current.Left == nil {
 		current.Left = &TreeNode{
 			Val:   0,
@@ -223,16 +227,16 @@ func c(current *TreeNode,arr []int) *TreeNode {
 			Right: nil,
 		}
 	}
-	current.Left  = c(current.Left,arr[:rootNode])
-	current.Right = c(current.Right,arr[rootNode+1:])
+	current.Left = c(current.Left, arr[:rootNode])
+	current.Right = c(current.Right, arr[rootNode+1:])
 
 	return current
 }
 
 //https://leetcode-cn.com/problems/er-cha-shu-de-jing-xiang-lcof/
-func (*Ref)Mt()  {
-	rootA     := []int{2,3,-1,1}
-	root      := ArrToNode(rootA)
+func (*Ref) Mt() {
+	rootA := []int{2, 3, -1, 1}
+	root := ArrToNode(rootA)
 	toMirror(root)
 	root.LevelOrder(func(node *TreeNode) {
 		fmt.Println(node.Val)
@@ -242,8 +246,8 @@ func toMirror(current *TreeNode) *TreeNode {
 	if current == nil {
 		return nil
 	}
-	tmp          := current.Left
-	current.Left  = toMirror(current.Right)
+	tmp := current.Left
+	current.Left = toMirror(current.Right)
 	current.Right = toMirror(tmp)
 	return current
 }
@@ -258,9 +262,8 @@ func ArrToNode(arr []int) *TreeNode {
 	currentNode := rootNode
 
 	for i := 0; i < len(arr); i++ {
-		left  := 2*i+1  //1,2|3,4
-		right := left+1
-
+		left := 2*i + 1 //1,2|3,4
+		right := left + 1
 
 		if left < len(arr) && arr[left] != -1 {
 			currentNode.Left = &TreeNode{
@@ -285,8 +288,8 @@ func ArrToNode(arr []int) *TreeNode {
 		if i+1 > len(arr) {
 			break
 		}
-		if  arr[i+1] != -1{
-			preOrder(rootNode,func(curNode *TreeNode) {
+		if arr[i+1] != -1 {
+			preOrder(rootNode, func(curNode *TreeNode) {
 				if curNode.Val == arr[i+1] {
 					currentNode = curNode
 				}
@@ -313,16 +316,16 @@ func preArrToNode(list2 *list.List) *TreeNode {
 	data := ele.Value.(int)
 	if data >= 0 {
 		node = &TreeNode{
-			Val:data,
+			Val: data,
 		}
-		node.Left  = preArrToNode(list2)
+		node.Left = preArrToNode(list2)
 		node.Right = preArrToNode(list2)
 	}
 	return node
 }
 
-func (*Ref)Test()  {
-	arr := []int{3,2,9,-1,-1,10,-1,-1,8,-1,4}
+func (*Ref) Test() {
+	arr := []int{3, 2, 9, -1, -1, 10, -1, -1, 8, -1, 4}
 	node := PreArrToNode(arr)
 	node.PreOrder(func(curNode *TreeNode) {
 		fmt.Println(curNode.Val)
@@ -330,67 +333,67 @@ func (*Ref)Test()  {
 }
 
 //https://leetcode-cn.com/problems/er-cha-shu-de-shen-du-lcof/
-func (*Ref)Md()  {
-	rootA := []int{3,9,20,-1,-1,15,7}
-	root  := ArrToNode(rootA)
+func (*Ref) Md() {
+	rootA := []int{3, 9, 20, -1, -1, 15, 7}
+	root := ArrToNode(rootA)
 	fmt.Println(root.DepthLevel())
 	fmt.Println(root.DepthPost())
 }
 
-func (*Ref)RsBst()  {
-	rootA := []int{15,9,21,7,13,19,23,5,-1,11,-1,17}
-	root  := ArrToNode(rootA)
+func (*Ref) RsBst() {
+	rootA := []int{15, 9, 21, 7, 13, 19, 23, 5, -1, 11, -1, 17}
+	root := ArrToNode(rootA)
 
-	fmt.Println(sum(root,19,21,0))
+	fmt.Println(sum(root, 19, 21, 0))
 }
 
-func sum(root *TreeNode,L,R,ans int) int {
+func sum(root *TreeNode, L, R, ans int) int {
 	if root != nil {
 		if L <= root.Val && root.Val <= R {
 			ans += root.Val
 		}
 		if L < root.Val {
-			ans = sum(root.Left,L,R,ans)
+			ans = sum(root.Left, L, R, ans)
 		}
 		if root.Val < R {
-			ans = sum(root.Right,L,R,ans)
+			ans = sum(root.Right, L, R, ans)
 		}
 	}
 	return ans
 }
 
 // https://leetcode-cn.com/problems/merge-two-binary-trees/
-func (*Ref)MergeTrees() {
-	t1  := ArrToNode([]int{1,3,2,5})
-	t2  := ArrToNode([]int{2,1,3,-1,4,-1,7})
+func (*Ref) MergeTrees() {
+	t1 := ArrToNode([]int{1, 3, 2, 5})
+	t2 := ArrToNode([]int{2, 1, 3, -1, 4, -1, 7})
 
-	t1 = preOrder1(t1,t2)
+	t1 = preOrder1(t1, t2)
 	t1.LevelOrder(func(node *TreeNode) {
 		fmt.Println(node.Val)
 	})
 }
-func preOrder1(n1 *TreeNode,n2 *TreeNode) *TreeNode {
+func preOrder1(n1 *TreeNode, n2 *TreeNode) *TreeNode {
 	if n1 == nil {
 		return n2
 	}
 	if n2 == nil {
 		return n1
 	}
-	n1.Val  += n2.Val
-	n1.Left  = preOrder1(n1.Left,n2.Left)
-	n1.Right = preOrder1(n1.Right,n2.Right)
+	n1.Val += n2.Val
+	n1.Left = preOrder1(n1.Left, n2.Left)
+	n1.Right = preOrder1(n1.Right, n2.Right)
 	return n1
 }
 
 //https://leetcode-cn.com/problems/invert-binary-tree/
-func (*Ref)InvertTree()  {
-	root := ArrToNode([]int{4,2,7,1,3,6,9})
+func (*Ref) InvertTree() {
+	root := ArrToNode([]int{4, 2, 7, 1, 3, 6, 9})
 	mirror(root)
 	root.LevelOrder(func(node *TreeNode) {
 		fmt.Println(node.Val)
 	})
 }
-func mirror(node *TreeNode)  {
+func mirror(node *TreeNode) {
 	if node == nil {
 		return
 	}
@@ -398,20 +401,20 @@ func mirror(node *TreeNode)  {
 		return
 	}
 
-	tmp       := node.Left
-	node.Left  = node.Right
+	tmp := node.Left
+	node.Left = node.Right
 	node.Right = tmp
 	mirror(node.Left)
 	mirror(node.Right)
 }
 
 //https://leetcode-cn.com/problems/search-in-a-binary-search-tree/
-func (*Ref)SearchBST()  {
-	root := ArrToNode([]int{4,2,7,1,3})
-	val  := 2
+func (*Ref) SearchBST() {
+	root := ArrToNode([]int{4, 2, 7, 1, 3})
+	val := 2
 
 	var valNode *TreeNode
-	valNode = bstFindTree(root,val)
+	valNode = bstFindTree(root, val)
 
 	if valNode != nil {
 		valNode.LevelOrder(func(node *TreeNode) {
@@ -419,7 +422,7 @@ func (*Ref)SearchBST()  {
 		})
 	}
 }
-func bstFindTree(node *TreeNode,val int) *TreeNode {
+func bstFindTree(node *TreeNode, val int) *TreeNode {
 	if node == nil {
 		return nil
 	}
@@ -428,35 +431,36 @@ func bstFindTree(node *TreeNode,val int) *TreeNode {
 	}
 
 	if val > node.Val {
-		return bstFindTree(node.Right,val)
+		return bstFindTree(node.Right, val)
 	}
-	return bstFindTree(node.Left,val)
+	return bstFindTree(node.Left, val)
 }
 
 type Node struct {
-    Val int
-    Children []*Node
+	Val      int
+	Children []*Node
 }
+
 //https://leetcode-cn.com/problems/n-ary-tree-postorder-traversal/
-func (*Ref)PO()  {
+func (*Ref) PO() {
 	root := &Node{
-		Val:      1,
+		Val: 1,
 		Children: []*Node{
-			{3,[]*Node{
-				{5,nil},
-				{6,nil},
+			{3, []*Node{
+				{5, nil},
+				{6, nil},
 			}},
-			{2,nil},
-			{4,nil},
+			{2, nil},
+			{4, nil},
 		},
 	}
 
 	arr := []int{}
 	Npo1(root, func(cn *Node) {
-		arr = append(arr,cn.Val)
+		arr = append(arr, cn.Val)
 	})
 	sta2 := NewStack()
-	for _,v := range arr  {
+	for _, v := range arr {
 		sta2.Push(v)
 	}
 	i := 0
@@ -466,39 +470,41 @@ func (*Ref)PO()  {
 	}
 	fmt.Println(arr)
 }
+
 //递归实现
-func Npo(n *Node,f func(cn *Node))  {
+func Npo(n *Node, f func(cn *Node)) {
 	if n == nil {
 		return
 	}
 
 	for len(n.Children) > 0 {
-		Npo(n.Children[0],f)
+		Npo(n.Children[0], f)
 		n.Children = n.Children[1:]
 	}
 	f(n)
 }
+
 //栈实现
-func Npo1(root *Node,f func(cn *Node))  {
+func Npo1(root *Node, f func(cn *Node)) {
 	sta := NewStack()
 	sta.Push(root)
-	for sta.Len() > 0  {
+	for sta.Len() > 0 {
 		n := sta.Pop().(*Node)
 		f(n)
 
 		if n.Children != nil {
-			for _,v := range n.Children {
+			for _, v := range n.Children {
 				sta.Push(v)
 			}
 		}
 	}
 }
 
-func (*Ref)KthLargest()  {
-	root := ArrToNode([]int{3,1,4,-1,2})
-	k    := 4
+func (*Ref) KthLargest() {
+	root := ArrToNode([]int{3, 1, 4, -1, 2})
+	k := 4
 
-	val  := 0
+	val := 0
 	root.InOrder(func(curNode *TreeNode) {
 		if k < 1 {
 			return
@@ -510,35 +516,36 @@ func (*Ref)KthLargest()  {
 }
 
 //https://leetcode-cn.com/problems/n-ary-tree-preorder-traversal/
-func (*Ref)Pre()  {
+func (*Ref) Pre() {
 	root := &Node{
-		Val:      1,
+		Val: 1,
 		Children: []*Node{
-			{3,[]*Node{
-				{5,nil},
-				{6,nil},
+			{3, []*Node{
+				{5, nil},
+				{6, nil},
 			}},
-			{2,nil},
-			{4,nil},
+			{2, nil},
+			{4, nil},
 		},
 	}
 
 	//递归
 	arr := []int{}
 	pre1(root, func(node *Node) {
-		arr = append(arr,node.Val)
+		arr = append(arr, node.Val)
 	})
 
 	arr2 := []int{}
 	pre2(root, func(node *Node) {
-		arr2 = append(arr2,node.Val)
+		arr2 = append(arr2, node.Val)
 	})
 
 	fmt.Println(arr)
 	fmt.Println(arr2)
 }
+
 //递归实现
-func pre1(n *Node,f func(node *Node))  {
+func pre1(n *Node, f func(node *Node)) {
 	if n == nil {
 		return
 	}
@@ -546,20 +553,20 @@ func pre1(n *Node,f func(node *Node))  {
 	f(n)
 	if n.Children != nil {
 		for i := 0; i < len(n.Children); i++ {
-			pre1(n.Children[i],f)
+			pre1(n.Children[i], f)
 		}
 	}
 }
 
 //迭代实现
-func pre2(root *Node,f func(node *Node))  {
+func pre2(root *Node, f func(node *Node)) {
 	sta := NewStack()
 	sta.Push(root)
 	for sta.Len() > 0 {
 		cur := sta.Pop().(*Node)
 		f(cur)
 		if cur.Children != nil {
-			for i := len(cur.Children)-1; i >= 0; i--  {
+			for i := len(cur.Children) - 1; i >= 0; i-- {
 				sta.Push(cur.Children[i])
 			}
 		}
@@ -567,42 +574,41 @@ func pre2(root *Node,f func(node *Node))  {
 }
 
 //https://leetcode-cn.com/problems/convert-sorted-array-to-binary-search-tree/
-func (*Ref)SAToBST()  {
-	nums := []int{-10,-3,0,5,9}
-	tree := SortArrToBst(nums,0,len(nums)-1)
+func (*Ref) SAToBST() {
+	nums := []int{-10, -3, 0, 5, 9}
+	tree := SortArrToBst(nums, 0, len(nums)-1)
 	tree.LevelOrder(func(node *TreeNode) {
 		fmt.Println(node.Val)
 	})
 }
 
 //把小->大的数组转换成BST(二叉搜索树)
-func SortArrToBst(arr []int,left int,right int) *TreeNode {
+func SortArrToBst(arr []int, left int, right int) *TreeNode {
 	if left > right {
 		return nil
 	}
-	rootIndex := (left + right + 1)/2
-	root      := &TreeNode{
+	rootIndex := (left + right + 1) / 2
+	root := &TreeNode{
 		Val:   arr[rootIndex],
 		Left:  nil,
 		Right: nil,
 	}
-	root.Left = SortArrToBst(arr,left,rootIndex -1)
-	root.Right = SortArrToBst(arr,rootIndex+1,right)
+	root.Left = SortArrToBst(arr, left, rootIndex-1)
+	root.Right = SortArrToBst(arr, rootIndex+1, right)
 	return root
 }
 
-
 //https://leetcode-cn.com/problems/maximum-depth-of-n-ary-tree/
-func (*Ref)MaxNDepth()  {
+func (*Ref) MaxNDepth() {
 	root := &Node{
-		Val:      1,
+		Val: 1,
 		Children: []*Node{
-			{3,[]*Node{
-				{5,nil},
-				{6,nil},
+			{3, []*Node{
+				{5, nil},
+				{6, nil},
 			}},
-			{2,nil},
-			{4,nil},
+			{2, nil},
+			{4, nil},
 		},
 	}
 	fmt.Println(Ndepth(root))
@@ -611,10 +617,10 @@ func Ndepth(root *Node) int {
 	if root == nil {
 		return 0
 	}
-	
+
 	max1 := 0
 	if root.Children != nil {
-		for _,c := range root.Children {
+		for _, c := range root.Children {
 			cDepth := Ndepth(c)
 			if max1 < cDepth {
 				max1 = cDepth
@@ -625,54 +631,54 @@ func Ndepth(root *Node) int {
 }
 
 //https://leetcode-cn.com/problems/increasing-order-search-tree/
-func (*Ref)ICBST()  {
-	root := ArrToNode([]int{5,3,6,2,4,-1,8,1,-1,-1,-1,7,9})
+func (*Ref) ICBST() {
+	root := ArrToNode([]int{5, 3, 6, 2, 4, -1, 8, 1, -1, -1, -1, 7, 9})
 	ToRight(root).InOrder(func(curNode *TreeNode) {
 		fmt.Println(curNode.Val)
 	})
 }
 func ToRight(root *TreeNode) *TreeNode {
-	var rootNew  *TreeNode
-	var tmp  *TreeNode
+	var rootNew *TreeNode
+	var tmp *TreeNode
 
 	root.InOrder(func(curNode *TreeNode) {
 		if rootNew == nil {
 			rootNew = curNode
-			tmp     = rootNew
+			tmp = rootNew
 		} else {
 			tmp.Right = &TreeNode{
 				Val:   curNode.Val,
 				Left:  nil,
 				Right: nil,
 			}
-			tmp       = tmp.Right
+			tmp = tmp.Right
 		}
 	})
 	return rootNew
 }
 
 //https://leetcode-cn.com/problems/cong-shang-dao-xia-da-yin-er-cha-shu-ii-lcof/
-func (*Ref)LO()  {
-	root := ArrToNode([]int{3,9,20,-1,-1,15,7})
+func (*Ref) LO() {
+	root := ArrToNode([]int{3, 9, 20, -1, -1, 15, 7})
 	fmt.Println(lo(root))
 }
 func lo(root *TreeNode) [][]int {
-	arr := make([][]int,0)
+	arr := make([][]int, 0)
 
 	que := NewQueue()
 	que.InQueue(root)
 	tmp := NewQueue()
 	arr1 := []int{}
-	for que.Len() > 0 || tmp.Len() > 0  {
+	for que.Len() > 0 || tmp.Len() > 0 {
 		if que.Len() == 0 {
-			que  = tmp
-			tmp  = NewQueue()
-			arr  = append(arr,arr1)
+			que = tmp
+			tmp = NewQueue()
+			arr = append(arr, arr1)
 			arr1 = []int{}
 		}
 
 		node := que.OutQueue().(*TreeNode)
-		arr1  = append(arr1,node.Val)
+		arr1 = append(arr1, node.Val)
 		if node.Left != nil {
 			tmp.InQueue(node.Left)
 		}
@@ -681,39 +687,39 @@ func lo(root *TreeNode) [][]int {
 		}
 	}
 
-	arr = append(arr,arr1)
+	arr = append(arr, arr1)
 	return arr
 }
 
-func (*Ref)TrimTree() {
-	root := ArrToNode([]int{1,0,2})
-	L    := 1
-	R    := 2
+func (*Ref) TrimTree() {
+	root := ArrToNode([]int{1, 0, 2})
+	L := 1
+	R := 2
 
-	root = tt(root,L,R)
+	root = tt(root, L, R)
 	root.LevelOrder(func(node *TreeNode) {
 		fmt.Println(node.Val)
 	})
 }
-func tt(treeNode *TreeNode,L,R int) *TreeNode {
+func tt(treeNode *TreeNode, L, R int) *TreeNode {
 	if treeNode == nil {
 		return nil
 	}
 
-	if  treeNode.Val > R {
-		return tt(treeNode.Left,L,R)
+	if treeNode.Val > R {
+		return tt(treeNode.Left, L, R)
 	} else if treeNode.Val < L {
-		return tt(treeNode.Right,L,R)
+		return tt(treeNode.Right, L, R)
 	}
 
-	treeNode.Left  = tt(treeNode.Left,L,R)
-	treeNode.Right = tt(treeNode.Right,L,R)
+	treeNode.Left = tt(treeNode.Left, L, R)
+	treeNode.Right = tt(treeNode.Right, L, R)
 	return treeNode
 }
 
 //https://leetcode-cn.com/problems/binary-tree-level-order-traversal-ii/
-func (*Ref)LOB()  {
-	root := ArrToNode([]int{3,9,20,-1,-1,15,7})
+func (*Ref) LOB() {
+	root := ArrToNode([]int{3, 9, 20, -1, -1, 15, 7})
 	fmt.Println(levelOrder1(root))
 }
 func levelOrder1(root *TreeNode) [][]int {
@@ -731,7 +737,7 @@ func levelOrder1(root *TreeNode) [][]int {
 		}
 
 		no := que1.OutQueue().(*TreeNode)
-		arr = append(arr,no.Val)
+		arr = append(arr, no.Val)
 		if no.Left != nil {
 			next.InQueue(no.Left)
 		}
@@ -741,16 +747,16 @@ func levelOrder1(root *TreeNode) [][]int {
 	}
 	sta.Push(arr)
 
-	arr1 := make([][]int,0)
-	for sta.Len() > 0  {
-		arr1 = append(arr1,sta.Pop().([]int))
+	arr1 := make([][]int, 0)
+	for sta.Len() > 0 {
+		arr1 = append(arr1, sta.Pop().([]int))
 	}
 	return arr1
 }
 
 //https://leetcode-cn.com/problems/average-of-levels-in-binary-tree/
-func (*Ref)Aof()  {
-	root := ArrToNode([]int{3,9,20,-1,-1,15,7})
+func (*Ref) Aof() {
+	root := ArrToNode([]int{3, 9, 20, -1, -1, 15, 7})
 	fmt.Println(levelOrder2(root))
 }
 func levelOrder2(root *TreeNode) []float64 {
@@ -758,21 +764,21 @@ func levelOrder2(root *TreeNode) []float64 {
 	next := NewQueue()
 	que1.InQueue(root)
 	arr1 := []float64{}
-	arr  := []int{}
+	arr := []int{}
 	for que1.Len() > 0 || next.Len() > 0 {
 		if que1.Len() == 0 {
 			que1 = next
 			next = NewQueue()
 			var av float64
-			for _,v := range arr  {
+			for _, v := range arr {
 				av += float64(v)
 			}
-			arr1 = append(arr1,av/float64(len(arr)))
-			arr  = []int{}
+			arr1 = append(arr1, av/float64(len(arr)))
+			arr = []int{}
 		}
 
 		no := que1.OutQueue().(*TreeNode)
-		arr = append(arr,no.Val)
+		arr = append(arr, no.Val)
 		if no.Left != nil {
 			next.InQueue(no.Left)
 		}
@@ -781,42 +787,43 @@ func levelOrder2(root *TreeNode) []float64 {
 		}
 	}
 	var av float64
-	for _,v := range arr  {
+	for _, v := range arr {
 		av += float64(v)
 	}
-	arr1 = append(arr1,av/float64(len(arr)))
+	arr1 = append(arr1, av/float64(len(arr)))
 
 	return arr1
 }
 
 //https://leetcode-cn.com/problems/lowest-common-ancestor-of-a-binary-search-tree/
-func (*Ref)Lca()  {
-	root := ArrToNode([]int{6,2,8,0,4,7,9,-1,-1,3,5})
-	p := &TreeNode{Val:2}
-	q := &TreeNode{Val:3}
+func (*Ref) Lca() {
+	root := ArrToNode([]int{6, 2, 8, 0, 4, 7, 9, -1, -1, 3, 5})
+	p := &TreeNode{Val: 2}
+	q := &TreeNode{Val: 3}
 
-	fmt.Println(lca(root,p,q).Val)
-	fmt.Println(lca1(root,p,q).Val)
+	fmt.Println(lca(root, p, q).Val)
+	fmt.Println(lca1(root, p, q).Val)
 }
+
 //数组
-func lca(root,p,q *TreeNode) *TreeNode {
+func lca(root, p, q *TreeNode) *TreeNode {
 	if root == nil {
 		return nil
 	}
 
 	//a > b
 	if p.Val > q.Val {
-		p,q = q,p
+		p, q = q, p
 	}
-	arrA,arrB := []*TreeNode{},[]*TreeNode{}
-	tmp  := root
+	arrA, arrB := []*TreeNode{}, []*TreeNode{}
+	tmp := root
 	for {
 		if tmp.Val == p.Val {
-			arrA = append(arrA,tmp)
+			arrA = append(arrA, tmp)
 			break
 		}
 
-		arrA = append(arrA,tmp)
+		arrA = append(arrA, tmp)
 		if p.Val < tmp.Val {
 			tmp = tmp.Left
 		} else {
@@ -824,14 +831,13 @@ func lca(root,p,q *TreeNode) *TreeNode {
 		}
 	}
 
-
-	tmp  = root
+	tmp = root
 	for {
 		if tmp.Val == q.Val {
-			arrB = append(arrB,tmp)
+			arrB = append(arrB, tmp)
 			break
 		}
-		arrB = append(arrB,tmp)
+		arrB = append(arrB, tmp)
 		if q.Val < tmp.Val {
 			tmp = tmp.Left
 		} else {
@@ -840,11 +846,11 @@ func lca(root,p,q *TreeNode) *TreeNode {
 	}
 
 	if len(arrA) > len(arrB) {
-		arrA,arrB = arrB,arrA
+		arrA, arrB = arrB, arrA
 	}
 
 	tmp = nil
-	for i := range arrA  {
+	for i := range arrA {
 		if arrA[i].Val == arrB[i].Val {
 			tmp = arrA[i]
 		}
@@ -852,25 +858,26 @@ func lca(root,p,q *TreeNode) *TreeNode {
 
 	return tmp
 }
+
 //递归 N N
-func lca1(root,p,q *TreeNode) *TreeNode {
+func lca1(root, p, q *TreeNode) *TreeNode {
 	parentV := root.Val
-	pVal    := p.Val
-	qVal    := q.Val
+	pVal := p.Val
+	qVal := q.Val
 	if pVal > parentV && qVal > parentV {
-		return lca1(root.Right,p,q)
+		return lca1(root.Right, p, q)
 	} else if pVal < parentV && qVal < parentV {
-		return lca1(root.Left,p,q)
+		return lca1(root.Left, p, q)
 	} else {
 		return root
 	}
 }
-//迭代
-func lca2(root,p,q *TreeNode) *TreeNode {
-	pVal    := p.Val
-	qVal    := q.Val
-	parent  := root
 
+//迭代
+func lca2(root, p, q *TreeNode) *TreeNode {
+	pVal := p.Val
+	qVal := q.Val
+	parent := root
 
 	for parent != nil {
 		if pVal > parent.Val && qVal > parent.Val {
@@ -885,72 +892,72 @@ func lca2(root,p,q *TreeNode) *TreeNode {
 }
 
 //https://leetcode-cn.com/problems/binary-tree-paths/
-func (*Ref)Btp()  {
-	root := ArrToNode([]int{1,2,3,-1,5,6})
+func (*Ref) Btp() {
+	root := ArrToNode([]int{1, 2, 3, -1, 5, 6})
 	if root == nil {
 		return
 	}
 
-	fmt.Println(btp(root,"",[]string{}))
+	fmt.Println(btp(root, "", []string{}))
 }
-func btp(root *TreeNode,path string,paths []string) []string {
+func btp(root *TreeNode, path string, paths []string) []string {
 	if root == nil {
 		return paths
 	}
 
 	path += strconv.Itoa(root.Val)
 	if root.Left == nil && root.Right == nil {
-		paths = append(paths,path)
+		paths = append(paths, path)
 	} else {
 		path += "->"
-		paths = btp(root.Left,path,paths)
-		paths = btp(root.Right,path,paths)
+		paths = btp(root.Left, path, paths)
+		paths = btp(root.Right, path, paths)
 	}
 	return paths
 }
 
 //https://leetcode-cn.com/problems/sum-of-root-to-leaf-binary-numbers/
-func (*Ref)SRTL()  {
-	root := ArrToNode([]int{1,0,1,0,1,0,1})
+func (*Ref) SRTL() {
+	root := ArrToNode([]int{1, 0, 1, 0, 1, 0, 1})
 
-	fmt.Println(srtl(root,0,[]int{}))
+	fmt.Println(srtl(root, 0, []int{}))
 }
-func srtl(root *TreeNode,sum int,qu []int) int {
+func srtl(root *TreeNode, sum int, qu []int) int {
 	if root == nil {
 		return sum
 	}
 
-	qu = append(qu,root.Val)
+	qu = append(qu, root.Val)
 	if root.Left == nil && root.Right == nil {
-		Len     := len(qu) - 1
-		for _,v := range qu {
+		Len := len(qu) - 1
+		for _, v := range qu {
 			if v > 0 {
 				sum += 1 << uint(Len)
 			}
 			Len--
 		}
 	} else {
-		sum = srtl(root.Left,sum,qu)
-		sum = srtl(root.Right,sum,qu)
+		sum = srtl(root.Left, sum, qu)
+		sum = srtl(root.Right, sum, qu)
 	}
 	return sum
 }
 
 //https://leetcode-cn.com/problems/leaf-similar-trees/
-func (*Ref)LS()  {
+func (*Ref) LS() {
 	root1 := ArrToNode([]int{})
 	root2 := ArrToNode([]int{})
 
 	l1 := []int{}
 	preOrder(root1, func(curNode *TreeNode) {
 		if curNode.Left == nil && curNode.Right == nil {
-			l1 = append(l1,curNode.Val)
+			l1 = append(l1, curNode.Val)
 		}
 	})
 	l2 := []int{}
 	preOrder(root2, func(curNode *TreeNode) {
 		if curNode.Left == nil && curNode.Right == nil {
-			l2 = append(l2,curNode.Val)
+			l2 = append(l2, curNode.Val)
 		}
 	})
 	if len(l1) != len(l2) {
@@ -964,29 +971,29 @@ func (*Ref)LS()  {
 	return
 }
 
-func (*Ref)CBST()  {
-	root := ArrToNode([]int{5,2,13})
+func (*Ref) CBST() {
+	root := ArrToNode([]int{5, 2, 13})
 	val := 0
 	InOrderReverse(root, func(curNode *TreeNode) {
 		curNode.Val += val
-		val          = curNode.Val
+		val = curNode.Val
 	})
 }
-func InOrderReverse(node *TreeNode,f func(curNode *TreeNode))  {
+func InOrderReverse(node *TreeNode, f func(curNode *TreeNode)) {
 	if node == nil {
 		return
 	}
-	InOrderReverse(node.Right,f)
+	InOrderReverse(node.Right, f)
 	f(node)
-	InOrderReverse(node.Left,f)
+	InOrderReverse(node.Left, f)
 }
 
 //https://leetcode-cn.com/problems/same-tree/submissions/
-func (*Ref)SameTree()  {
-	p := ArrToNode([]int{1,2,1})
-	q := ArrToNode([]int{1,1,2})
+func (*Ref) SameTree() {
+	p := ArrToNode([]int{1, 2, 1})
+	q := ArrToNode([]int{1, 1, 2})
 	a := true
-	preOrder2(p,q, func(node1 *TreeNode, node2 *TreeNode) {
+	preOrder2(p, q, func(node1 *TreeNode, node2 *TreeNode) {
 		if node1 == nil || node2 == nil {
 			if node1 != nil || node2 != nil {
 				a = false
@@ -999,18 +1006,17 @@ func (*Ref)SameTree()  {
 	})
 	fmt.Println(a)
 }
-func preOrder2(n1,n2 *TreeNode,f func(node1 *TreeNode,node2 *TreeNode))  {
-	f(n1,n2)
+func preOrder2(n1, n2 *TreeNode, f func(node1 *TreeNode, node2 *TreeNode)) {
+	f(n1, n2)
 	if n1 != nil && n2 != nil {
-		preOrder2(n1.Left,n2.Left,f)
-		preOrder2(n1.Right,n2.Right,f)
+		preOrder2(n1.Left, n2.Left, f)
+		preOrder2(n1.Right, n2.Right, f)
 	}
 }
 
-
 //https://leetcode-cn.com/problems/ping-heng-er-cha-shu-lcof/
-func (*Ref)IsBan()  {
-	root  := ArrToNode([]int{1,2,2,3,-1,-1,3,4,-1,-1,4})
+func (*Ref) IsBan() {
+	root := ArrToNode([]int{1, 2, 2, 3, -1, -1, 3, 4, -1, -1, 4})
 	fmt.Println(levelOrderHigh(root) != -1)
 }
 func levelOrderHigh(root *TreeNode) int {
@@ -1019,15 +1025,15 @@ func levelOrderHigh(root *TreeNode) int {
 	}
 	left := levelOrderHigh(root.Left)
 	if left == -1 {
-		return  -1
+		return -1
 	}
 	right := levelOrderHigh(root.Right)
 	if right == -1 {
-		return  -1
+		return -1
 	}
 
 	if abs(left-right) < 2 {
-		return max(left,right) + 1
+		return max(left, right) + 1
 	}
 	return -1
 }
@@ -1039,9 +1045,9 @@ func abs(a int) int {
 }
 
 //https://leetcode-cn.com/problems/dui-cheng-de-er-cha-shu-lcof/
-func (*Ref)IsSymm()  {
-	root := ArrToNode([]int{1,2,2,3,4,4,3})
-	sym  := true
+func (*Ref) IsSymm() {
+	root := ArrToNode([]int{1, 2, 2, 3, 4, 4, 3})
+	sym := true
 	defer func() {
 		fmt.Println(sym)
 	}()
@@ -1049,7 +1055,7 @@ func (*Ref)IsSymm()  {
 	if root == nil {
 		return
 	}
-	symm(root.Left,root.Right, func(cn1, cn2 *TreeNode) {
+	symm(root.Left, root.Right, func(cn1, cn2 *TreeNode) {
 		if cn1 == nil || cn2 == nil {
 			if cn1 != nil || cn2 != nil {
 				sym = false
@@ -1062,133 +1068,131 @@ func (*Ref)IsSymm()  {
 		}
 	})
 }
-func symm(n1,n2 *TreeNode,f func(cn1,cn2 *TreeNode))  {
-	f(n1,n2)
+func symm(n1, n2 *TreeNode, f func(cn1, cn2 *TreeNode)) {
+	f(n1, n2)
 	if n1 != nil && n2 != nil {
-		symm(n1.Left,n2.Right,f)
-		symm(n1.Right,n2.Left,f)
+		symm(n1.Left, n2.Right, f)
+		symm(n1.Right, n2.Left, f)
 	}
 }
 
 //https://leetcode-cn.com/problems/minimum-absolute-difference-in-bst/
-func (*Ref)Gmd()  {
+func (*Ref) Gmd() {
 	root := ArrToNode([]int{})
 
 	prev := -1
-	gap  := math.MaxInt64
+	gap := math.MaxInt64
 	inOrder(root, func(curNode *TreeNode) {
 		if prev >= 0 {
-			gap = min(gap,abs(curNode.Val - prev))
+			gap = min(gap, abs(curNode.Val-prev))
 		}
 		prev = curNode.Val
 	})
 }
 
 //https://leetcode-cn.com/problems/binary-tree-tilt/
-func (*Ref)FindTilt()  {
-	root := ArrToNode([]int{1,2,3,4})
+func (*Ref) FindTilt() {
+	root := ArrToNode([]int{1, 2, 3, 4})
 
 	tilt := 0
 	after(root, func(ls, rs int) {
-		tilt += abs(ls-rs)
+		tilt += abs(ls - rs)
 	})
 	fmt.Println(tilt)
 }
-func after(node *TreeNode,f func(ls,rs int)) int {
+func after(node *TreeNode, f func(ls, rs int)) int {
 	if node == nil {
 		return 0
 	}
 
-	leftSum  := after(node.Left,f)
-	rightSum := after(node.Right,f)
-	f(leftSum,rightSum)
+	leftSum := after(node.Left, f)
+	rightSum := after(node.Right, f)
+	f(leftSum, rightSum)
 	return leftSum + rightSum + node.Val
 }
 
 //https://leetcode-cn.com/problems/two-sum-iv-input-is-a-bst/
-func (*Ref)FindTarget()  {
-	root := ArrToNode([]int{2,1,3})
-	k    := 1
+func (*Ref) FindTarget() {
+	root := ArrToNode([]int{2, 1, 3})
+	k := 1
 
 	exists := false
 	inOrder(root, func(curNode *TreeNode) {
-		if inBst(root,k-curNode.Val,curNode) {
+		if inBst(root, k-curNode.Val, curNode) {
 			exists = true
 		}
 	})
 	fmt.Println(exists)
 }
-func inBst(root *TreeNode,target int,avoid *TreeNode) bool {
+func inBst(root *TreeNode, target int, avoid *TreeNode) bool {
 	if root == nil {
 		return false
 	}
 
 	if target > root.Val {
-		return inBst(root.Right,target,avoid)
+		return inBst(root.Right, target, avoid)
 	} else if target < root.Val {
-		return inBst(root.Left,target,avoid)
+		return inBst(root.Left, target, avoid)
 	}
 	return target == root.Val && root != avoid
 }
 
-
 //https://leetcode-cn.com/problems/path-sum-iii/
-func (*Ref)PathSum()  {
-	root := ArrToNode([]int{10,5,-3,3,2,-1,11,3,-2,-1,1})
-	sum  := 8
-	fmt.Println(pathSum1(root,sum,[]int{}))
+func (*Ref) PathSum() {
+	root := ArrToNode([]int{10, 5, -3, 3, 2, -1, 11, 3, -2, -1, 1})
+	sum := 8
+	fmt.Println(pathSum1(root, sum, []int{}))
 	//[5,4,8,11,null,13,4,7,2,null,null,5,1]
 	//22
 }
 
-func pathSum1(root *TreeNode, sum int,pathSum []int) int {
+func pathSum1(root *TreeNode, sum int, pathSum []int) int {
 	if root == nil {
 		return 0
 	}
 	tmp := root.Val
-	n   := 0
+	n := 0
 	if root.Val == sum {
 		n++
 	}
-	for i := len(pathSum)-1; i >= 0; i-- {
+	for i := len(pathSum) - 1; i >= 0; i-- {
 		tmp += pathSum[i]
 		if tmp == sum {
 			n++
 		}
 	}
-	pathSum = append(pathSum,root.Val)
+	pathSum = append(pathSum, root.Val)
 
-
-	return n + pathSum1(root.Left,sum,pathSum) + pathSum1(root.Right,sum,pathSum)
+	return n + pathSum1(root.Left, sum, pathSum) + pathSum1(root.Right, sum, pathSum)
 }
 
 //https://leetcode-cn.com/problems/sum-of-left-leaves/
-func (*Ref)SLL()  {
-	root := ArrToNode([]int{3,9,20,-1,-1,15,7})
-	fmt.Println(sll(root,0,""))
+func (*Ref) SLL() {
+	root := ArrToNode([]int{3, 9, 20, -1, -1, 15, 7})
+	fmt.Println(sll(root, 0, ""))
 }
 
-func sll(n *TreeNode,sum int, ty string) int {
+func sll(n *TreeNode, sum int, ty string) int {
 	if n == nil {
 		return sum
 	}
 	if ty == "left" && n.Left == nil && n.Right == nil {
 		return sum + n.Val
 	}
-	sum = sll(n.Left,sum,"left")
-	sum = sll(n.Right,sum,"right")
+	sum = sll(n.Left, sum, "left")
+	sum = sll(n.Right, sum, "right")
 	return sum
 }
 
 //https://leetcode-cn.com/problems/symmetric-tree/
-func (*Ref)IsSym()  {
-	root := ArrToNode([]int{1,2,2,3,4,4,3})
+func (*Ref) IsSym() {
+	root := ArrToNode([]int{1, 2, 2, 3, 4, 4, 3})
 
-	sym  := true
+	sym := true
 	if root == nil {
 		return
 	}
-	symm(root.Left,root.Right, func(cn1, cn2 *TreeNode) {
+	symm(root.Left, root.Right, func(cn1, cn2 *TreeNode) {
 		if cn1 == nil || cn2 == nil {
 			if cn1 != nil || cn2 != nil {
 				sym = false
@@ -1203,8 +1207,8 @@ func (*Ref)IsSym()  {
 }
 
 //https://leetcode-cn.com/problems/balanced-binary-tree/
-func (*Ref)IsBalanced()  {
-	root := ArrToNode([]int{3,9,20,-1,-1,15,7})
+func (*Ref) IsBalanced() {
+	root := ArrToNode([]int{3, 9, 20, -1, -1, 15, 7})
 	fmt.Println(isBalanced1(root))
 }
 func isBalanced1(root *TreeNode) bool {
@@ -1212,7 +1216,7 @@ func isBalanced1(root *TreeNode) bool {
 		return true
 	}
 	if isBalanced1(root.Left) && isBalanced1(root.Right) &&
-		abs(height(root.Left) - height(root.Right)) <= 1 {
+		abs(height(root.Left)-height(root.Right)) <= 1 {
 		return true
 	}
 	return false
@@ -1223,12 +1227,12 @@ func height(root *TreeNode) int {
 	}
 	leftHeight := height(root.Left)
 	rightHeight := height(root.Right)
-	return max(leftHeight,rightHeight) + 1
+	return max(leftHeight, rightHeight) + 1
 }
 
 //https://leetcode-cn.com/problems/maximum-binary-tree/
-func (*Ref)CMB()  {
-	nums := []int{3,2,1,6,0,5}
+func (*Ref) CMB() {
+	nums := []int{3, 2, 1, 6, 0, 5}
 	root := cmb(nums)
 	if root != nil {
 		root.LevelOrder(func(node *TreeNode) {
@@ -1241,10 +1245,10 @@ func cmb(a []int) *TreeNode {
 		return nil
 	}
 
-	left  := 0
-	right := len(a)-1
-	maxI  := left
-	for left <= right  {
+	left := 0
+	right := len(a) - 1
+	maxI := left
+	for left <= right {
 		if a[left] > a[maxI] {
 			maxI = left
 		}
@@ -1260,38 +1264,39 @@ func cmb(a []int) *TreeNode {
 		Left:  nil,
 		Right: nil,
 	}
-	n.Left  = cmb(a[:maxI])
+	n.Left = cmb(a[:maxI])
 	n.Right = cmb(a[maxI+1:])
 	return n
 }
 
 //https://leetcode-cn.com/problems/sum-of-nodes-with-even-valued-grandparent/submissions/
-func (*Ref)SEG()  {
+func (*Ref) SEG() {
 	root := ArrToNode([]int{})
-	fmt.Println(seg(root,1,1))
+	fmt.Println(seg(root, 1, 1))
 }
-func seg(node *TreeNode,parentVal,grandparentVal int) int {
+func seg(node *TreeNode, parentVal, grandparentVal int) int {
 	if node == nil {
 		return 0
 	}
 	ans := 0
-	if grandparentVal % 2 == 0 {
+	if grandparentVal%2 == 0 {
 		ans += node.Val
 	}
-	ans += seg(node.Left,node.Val,parentVal)
-	ans += seg(node.Right,node.Val,parentVal)
+	ans += seg(node.Left, node.Val, parentVal)
+	ans += seg(node.Right, node.Val, parentVal)
 	return ans
 }
 
 //https://leetcode-cn.com/problems/deepest-leaves-sum/
 var maxDep = -1
-var total  = 0
-func (*Ref)DLS() {
-	root := ArrToNode([]int{1,2,3,4,5,-1,6,7,-1,-1,-1,-1,8})
-	preOrderDLS(root, 0,-1)
+var total = 0
+
+func (*Ref) DLS() {
+	root := ArrToNode([]int{1, 2, 3, 4, 5, -1, 6, 7, -1, -1, -1, -1, 8})
+	preOrderDLS(root, 0, -1)
 	fmt.Println(total)
 }
-func preOrderDLS(current *TreeNode,dep,total int) {
+func preOrderDLS(current *TreeNode, dep, total int) {
 	if current != nil {
 		if dep > maxDep {
 			maxDep = dep
@@ -1299,18 +1304,18 @@ func preOrderDLS(current *TreeNode,dep,total int) {
 		} else if dep == maxDep {
 			total += current.Val
 		}
-		preOrderDLS(current.Left,dep+1,total)
-		preOrderDLS(current.Right,dep+1,total)
+		preOrderDLS(current.Left, dep+1, total)
+		preOrderDLS(current.Right, dep+1, total)
 	}
 }
 
 //https://leetcode-cn.com/problems/binary-search-tree-iterator/
-func (*Ref)BSTIF()  {
+func (*Ref) BSTIF() {
 
 }
 
 //https://leetcode-cn.com/problems/all-elements-in-two-binary-search-trees/
-func (*Ref)GAE() {
+func (*Ref) GAE() {
 	root1 := ArrToNode([]int{2, 1, 4})
 	root2 := ArrToNode([]int{1, 0, 3})
 
@@ -1321,11 +1326,11 @@ func (*Ref)GAE() {
 
 	arr2 := []int{}
 	inOrder(root2, func(curNode *TreeNode) {
-		arr2 = append(arr2,curNode.Val)
+		arr2 = append(arr2, curNode.Val)
 	})
 
-	arr3 := make([]int,len(arr1) + len(arr2))
-	i,j,x  := 0,0,0
+	arr3 := make([]int, len(arr1)+len(arr2))
+	i, j, x := 0, 0, 0
 	for i < len(arr1) || j < len(arr2) {
 		if i >= len(arr1) {
 			arr3[x] = arr2[j]
@@ -1348,22 +1353,22 @@ func (*Ref)GAE() {
 }
 
 //https://leetcode-cn.com/problems/insert-into-a-binary-search-tree/
-func (*Ref)IBST()  {
-	root := ArrToNode([]int{4,2,7,1,3})
-	val  := 5
-	ibst(root,val).LevelOrder(func(node *TreeNode) {
+func (*Ref) IBST() {
+	root := ArrToNode([]int{4, 2, 7, 1, 3})
+	val := 5
+	ibst(root, val).LevelOrder(func(node *TreeNode) {
 		fmt.Println(node.Val)
 	})
 
 }
-func ibst(root *TreeNode,val int)  *TreeNode {
+func ibst(root *TreeNode, val int) *TreeNode {
 	if root == nil {
-		return &TreeNode{Val:val}
+		return &TreeNode{Val: val}
 	}
 	if root.Val < val {
-		root.Right = ibst(root.Right,val)
+		root.Right = ibst(root.Right, val)
 	} else {
-		root.Left = ibst(root.Left,val)
+		root.Left = ibst(root.Left, val)
 	}
 
 	return root

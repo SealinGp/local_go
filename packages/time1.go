@@ -20,16 +20,17 @@ var (
 	port string
 	zone int
 )
-func time11()  {
-	flag.StringVar(&port,"port","","")
-	flag.IntVar(&zone,"zone",0,"")
+
+func time11() {
+	flag.StringVar(&port, "port", "", "")
+	flag.IntVar(&zone, "zone", 0, "")
 	flag.Parse()
 	if port == "" {
 		log.Fatal("[E] port required")
 		return
 	}
 
-	listener, err := net.Listen("tcp", net.JoinHostPort("localhost",port))
+	listener, err := net.Listen("tcp", net.JoinHostPort("localhost", port))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -51,7 +52,7 @@ func handleConn(c net.Conn) {
 		if zone > 0 {
 			now = now.Add(time.Hour * 24 * time.Duration(zone))
 		}
-		_, err := io.WriteString(c, now.Format(time.Stamp + "\n"))
+		_, err := io.WriteString(c, now.Format(time.Stamp+"\n"))
 		if err != nil {
 			return // e.g., client disconnected
 		}
@@ -60,53 +61,53 @@ func handleConn(c net.Conn) {
 }
 
 type info struct {
-	Time  string
+	Time string
 	Port string
 }
-func clockwall()  {
+
+func clockwall() {
 	var (
 		ports string
 	)
-	flag.StringVar(&ports,"ports","","")
+	flag.StringVar(&ports, "ports", "", "")
 	flag.Parse()
 	if ports == "" {
 		log.Fatal("[E] ports required")
 	}
-	portsSli := strings.Split(ports,",")
+	portsSli := strings.Split(ports, ",")
 	portsLen := len(portsSli)
 
-	outputCh := make(chan info,portsLen)
+	outputCh := make(chan info, portsLen)
 	for _, port := range portsSli {
-		go Dial(port,outputCh)
+		go Dial(port, outputCh)
 	}
 	for {
-		outputs := make([]info,0,portsLen)
+		outputs := make([]info, 0, portsLen)
 		for i := 0; i < portsLen; i++ {
-			outputs =  append(outputs,<-outputCh)
+			outputs = append(outputs, <-outputCh)
 		}
-		v,_ := json.Marshal(outputs)
+		v, _ := json.Marshal(outputs)
 		fmt.Println(string(v))
 	}
 
 }
 
-func Dial(port string,outputCh chan info)  {
-	conn,err := net.Dial("tcp",net.JoinHostPort("localhost",port))
+func Dial(port string, outputCh chan info) {
+	conn, err := net.Dial("tcp", net.JoinHostPort("localhost", port))
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer conn.Close()
 
 	for {
-		output := make([]byte,1024)
+		output := make([]byte, 1024)
 		n, err := conn.Read(output)
 		if err != nil {
 			log.Fatal(err)
 		}
 		outputCh <- info{
-			Port:port,
-			Time:string(output[:n]),
+			Port: port,
+			Time: string(output[:n]),
 		}
 	}
 }
-
