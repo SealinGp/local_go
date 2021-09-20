@@ -1,7 +1,6 @@
 package timewheel_test
 
 import (
-	"algorithm/timewheel"
 	"testing"
 	"time"
 )
@@ -19,13 +18,13 @@ func genD(i int) time.Duration {
 	return time.Duration(i%10000) * time.Millisecond
 }
 func BenchmarkTimingWheel_StartStop(b *testing.B) {
-	tw := timewheel.NewTimingWheel(time.Millisecond, 20)
+	tw := NewTimingWheel(time.Millisecond, 20)
 	tw.Start()
 	defer tw.Stop()
 
 	for _, c := range cases {
 		b.Run(c.name, func(b *testing.B) {
-			base := make([]*timewheel.Timer, c.N)
+			base := make([]*Timer, c.N)
 			for i := 0; i < len(base); i++ {
 				base[i] = tw.AfterFunc(genD(i), func() {})
 			}

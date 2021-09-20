@@ -1,12 +1,13 @@
 package main
 
 import (
-	"algorithm/simple"
 	"fmt"
 	"log"
 	"os"
 	"reflect"
 	"time"
+
+	"github.com/SealinGp/local_go/algorithm/simple"
 )
 
 func main() {

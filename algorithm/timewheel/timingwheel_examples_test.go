@@ -1,7 +1,6 @@
 package timewheel_test
 
 import (
-	"algorithm/timewheel"
 	"fmt"
 	"time"
 )
@@ -15,7 +14,7 @@ func (s *EveryScheduler) Next(prev time.Time) time.Time {
 }
 
 func Example_scheduleTimer() {
-	tw := timewheel.NewTimingWheel(time.Millisecond, 20)
+	tw := NewTimingWheel(time.Millisecond, 20)
 	tw.Start()
 	defer tw.Stop()
 	exitc := make(chan time.Time)

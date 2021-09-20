@@ -1,13 +1,12 @@
 package timewheel_test
 
 import (
-	"algorithm/timewheel"
 	"fmt"
 	"time"
 )
 
 func Example_startTimer() {
-	tw := timewheel.NewTimingWheel(time.Millisecond, 20)
+	tw := NewTimingWheel(time.Millisecond, 20)
 	tw.Start()
 	defer tw.Stop()
 
@@ -21,7 +20,7 @@ func Example_startTimer() {
 }
 
 func Example_stopTimer() {
-	tw := timewheel.NewTimingWheel(time.Millisecond, 20)
+	tw := NewTimingWheel(time.Millisecond, 20)
 	tw.Start()
 	defer tw.Stop()
 	t := tw.AfterFunc(time.Second, func() {

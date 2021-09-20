@@ -1,7 +1,6 @@
 package timewheel_test
 
 import (
-	"algorithm/timewheel"
 	"strconv"
 	"testing"
 	"time"
@@ -9,7 +8,7 @@ import (
 
 //测试延迟任务是否成功
 func TestTimingWheel_AfterFunc(t *testing.T) {
-	tw := timewheel.NewTimingWheel(time.Millisecond, 20)
+	tw := NewTimingWheel(time.Millisecond, 20)
 	tw.Start()
 	defer tw.Stop()
 
@@ -58,7 +57,7 @@ func (s *scheduler) Next(prev time.Time) time.Time {
 }
 
 func TestTimingWheel_ScheduleFunc(t *testing.T) {
-	tw := timewheel.NewTimingWheel(time.Millisecond, 20)
+	tw := NewTimingWheel(time.Millisecond, 20)
 	tw.Start()
 	defer tw.Stop()
 

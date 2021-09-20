@@ -1,11 +1,12 @@
 package timewheel
 
 import (
-	"algorithm/timewheel/delayqueue"
 	"errors"
 	"sync/atomic"
 	"time"
 	"unsafe"
+
+	"github.com/SealinGp/local_go/algorithm/timewheel/delayqueue"
 )
 
 type TimingWheel struct {
