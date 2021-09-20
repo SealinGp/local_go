@@ -3,11 +3,73 @@ package simple
 import (
 	"container/list"
 	"fmt"
+	"log"
 	"math"
 	"sort"
 	"strconv"
 	"strings"
 )
+
+// go run main.go MaxDepth
+func (*Ref) MaxDepth() {
+	root := &TreeNode{
+		Val: 3,
+		Left: &TreeNode{
+			Val: 9,
+		},
+		Right: &TreeNode{
+			Val: 20,
+			Left: &TreeNode{
+				Val: 15,
+			},
+			Right: &TreeNode{
+				Val: 7,
+			},
+		},
+	}
+
+	log.Printf("%v", maxDepth(root))
+}
+
+func maxDepth(root *TreeNode) int {
+	if root == nil {
+		return 0
+	}
+
+	depth := 1
+	q1 := NewQueue()
+	q2 := NewQueue()
+	q1.InQueue(root)
+
+	for {
+		if q1.Len() == 0 && q2.Len() == 0 {
+			break
+		}
+
+		if q1.Len() == 0 && q2.Len() > 0 {
+			depth++
+
+			q1 = q2
+			q2 = NewQueue()
+		}
+
+		val := q1.OutQueue()
+		if val == nil {
+			break
+		}
+
+		node := val.(*TreeNode)
+
+		if node.Left != nil {
+			q2.InQueue(node.Left)
+		}
+
+		if node.Right != nil {
+			q2.InQueue(node.Right)
+		}
+	}
+	return depth
+}
 
 //https://leetcode-cn.com/leetbook/read/top-interview-questions-easy/x2gy9m/
 func (*Ref) Nums() {

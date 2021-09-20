@@ -3,6 +3,7 @@ package simple
 import (
 	"container/list"
 	"fmt"
+	"log"
 	"math"
 	"strconv"
 )
@@ -1204,6 +1205,8 @@ func (*Ref) IsSym() {
 			}
 		}
 	})
+
+	log.Printf("%v", sym)
 }
 
 //https://leetcode-cn.com/problems/balanced-binary-tree/

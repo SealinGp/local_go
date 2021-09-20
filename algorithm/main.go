@@ -3,6 +3,7 @@ package main
 import (
 	"algorithm/simple"
 	"fmt"
+	"log"
 	"os"
 	"reflect"
 	"time"
@@ -11,8 +12,8 @@ import (
 func main() {
 	startTime := time.Now()
 	defer func() {
-		d := time.Now().Sub(startTime)
-		fmt.Println("processTime:", d)
+		dur := time.Since(startTime)
+		log.Printf("processTime:%v", dur)
 	}()
 
 	args := os.Args
