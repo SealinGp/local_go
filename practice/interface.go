@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"math"
-	"os"
 	"sort"
 )
 
@@ -11,36 +10,16 @@ import (
 https://github.com/unknwon/the-way-to-go_ZH_CN/blob/master/eBook/11.1.md
 interface 和 reflect
 */
-func init() {
-	fmt.Println("Content-Type:text/plain;charset=utf-8\n\n")
-}
-func main() {
-	args := os.Args
-	if len(args) <= 1 {
-		fmt.Println("lack param ?func=xxx")
-		return
-	}
-
-	execute(args[1])
-}
-
-func execute(n string) {
-	funs := map[string]func(){
-		"int1": int1,
-		"int2": int2,
-		"int3": int3,
-		"int4": int4,
-		"int5": int5,
-		"int6": int6,
-		"int7": int7,
-		"int8": int8,
-		"int9": int9,
-	}
-	if nil == funs[n] {
-		fmt.Println("func", n, "unregistered")
-		return
-	}
-	funs[n]()
+var implFuncs = map[string]func(){
+	"int1": int1,
+	"int2": int2,
+	"int3": int3,
+	"int4": int4,
+	"int5": int5,
+	"int6": int6,
+	"int7": int7,
+	"int8": int8,
+	"int9": int9,
 }
 
 type I1 interface {

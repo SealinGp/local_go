@@ -6,7 +6,7 @@ import (
 	"text/tabwriter"
 )
 
-func main() {
+func Tabwriter() {
 	w := tabwriter.NewWriter(os.Stdout, 0, 0, 1, '.', tabwriter.AlignRight|tabwriter.Debug)
 	fmt.Fprintf(w, "a\tb\tc\n")
 	fmt.Fprintf(w, "aa\tbb\tcc\n")

@@ -2,7 +2,6 @@ package main
 
 import (
 	"bufio"
-	"flag"
 	"fmt"
 	"io"
 	"log"
@@ -14,23 +13,6 @@ import (
 )
 
 //practice from https://books.studygolang.com/gopl-zh/ch8/ch8-04.html
-func main() {
-	var name string
-	flag.StringVar(&name, "name", "", "...")
-	flag.Parse()
-	if name == "netcat2" {
-		netcat2()
-	}
-	if name == "reverb1" {
-		reverb1()
-	}
-	if name == "reverb2" {
-		reverb2()
-	}
-	if name == "netcat3" {
-		netcat3()
-	}
-}
 
 func netcat3() {
 	conn, err := net.Dial("tcp", "localhost:1234")

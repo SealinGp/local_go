@@ -11,11 +11,6 @@ import (
 	"time"
 )
 
-func main() {
-	//time11()
-	clockwall()
-}
-
 var (
 	port string
 	zone int

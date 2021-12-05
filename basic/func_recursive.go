@@ -4,10 +4,11 @@ import (
 	"fmt"
 )
 
-func init() {
-	fmt.Println("Content-Type:text/plain;charset=utf-8\n\n")
+var funcRecurisiveFuncs = map[string]func(){
+	"mutiply": mutiply,
 }
-func main() {
+
+func mutiply() {
 	u1 := multiply_self(2, 4, true)
 
 	fmt.Println(u1)

@@ -1,4 +1,4 @@
-package timewheel_test
+package timewheel
 
 import (
 	"fmt"

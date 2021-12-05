@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"os"
 )
 
 //不同范围的变量可以重名
@@ -11,24 +10,9 @@ var (
 	a1 = "G"
 )
 
-func init() {
-	fmt.Println("Content-Type:text/plain;charset=utf-8\n\n")
-}
-func main() {
-	args := os.Args
-	if len(args) <= 1 {
-		fmt.Println("lack param ?func=xxx")
-		return
-	}
-
-	execute(args[1])
-}
-func execute(funcN string) {
-	funcMap := map[string]func(){
-		"scope1": scope1,
-		"scope2": scope2,
-	}
-	funcMap[funcN]()
+var scopeFuncs = map[string]func(){
+	"scope1": scope1,
+	"scope2": scope2,
 }
 
 func scope1() {

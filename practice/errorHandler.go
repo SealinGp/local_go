@@ -3,40 +3,21 @@ package main
 import (
 	"errors"
 	"fmt"
-	"os"
 )
 
 /*
 https://github.com/unknwon/the-way-to-go_ZH_CN/blob/master/eBook/13.0.md
 错误处理
 */
-func init() {
-	fmt.Println("Content-Type:text/plain;charset=utf-8\n\n")
-}
-func main() {
-	args := os.Args
-	if len(args) <= 1 {
-		fmt.Println("lack param ?func=xxx")
-		return
-	}
 
-	execute(args[1])
+var errFuncs = map[string]func(){
+	"err1": err1,
+	"err2": err2,
+	"err3": err3,
+	"err4": err4,
+	"err5": err5,
 }
 
-func execute(n string) {
-	funs := map[string]func(){
-		"err1": err1,
-		"err2": err2,
-		"err3": err3,
-		"err4": err4,
-		"err5": err5,
-	}
-	if nil == funs[n] {
-		fmt.Println("func", n, "unregistered")
-		return
-	}
-	funs[n]()
-}
 func err1() {
 	err := errors.New("error")
 	panic("pan")

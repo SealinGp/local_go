@@ -42,35 +42,15 @@ bufio是通过缓冲来提高效率,bufio提供了缓冲区(分配一块内存),
 
 可以用于做一个简单的项目结构脚手架
 */
-func init() {
-	fmt.Println("Content-Type:text/plain;charset=utf-8\n\n")
-}
-func main() {
-	args := os.Args
-	if len(args) <= 1 {
-		fmt.Println("lack param ?func=xxx")
-		return
-	}
-
-	execute(args[1])
-}
-
-func execute(n string) {
-	funs := map[string]func(){
-		"buf1": buf1,
-		"buf2": buf2,
-		"buf3": buf3,
-		"buf4": buf4,
-		"buf5": buf5,
-		"buf6": buf6,
-		"buf7": buf7,
-		"buf8": buf8,
-	}
-	if nil == funs[n] {
-		fmt.Println("func", n, "unregistered")
-		return
-	}
-	funs[n]()
+var buifoFuncs = map[string]func(){
+	"buf1": buf1,
+	"buf2": buf2,
+	"buf3": buf3,
+	"buf4": buf4,
+	"buf5": buf5,
+	"buf6": buf6,
+	"buf7": buf7,
+	"buf8": buf8,
 }
 
 //读取用户输入方法1

@@ -12,31 +12,15 @@ import (
 	"os"
 )
 
-func main() {
-	args := os.Args
-	if len(args) <= 1 {
-		fmt.Println("lack param ?func=xxx")
-		return
-	}
-
-	execute(args[1])
-}
-func execute(n string) {
-	funs := map[string]func(){
-		"web1": web1,
-		"web2": web2,
-		"web3": web3,
-		"web4": web4,
-		"web5": web5,
-		"web6": web6,
-		"web7": web7,
-		"web8": web8,
-	}
-	if nil == funs[n] {
-		fmt.Println("func", n, "unregistered")
-		return
-	}
-	funs[n]()
+var webFuncs = map[string]func(){
+	"web1": web1,
+	"web2": web2,
+	"web3": web3,
+	"web4": web4,
+	"web5": web5,
+	"web6": web6,
+	"web7": web7,
+	"web8": web8,
 }
 
 const (

@@ -2,31 +2,14 @@ package main
 
 import (
 	"fmt"
-	"os"
 )
 
-func init() {
-	fmt.Println("Content-Type:text/plain;charset=utf-8\n\n")
-}
-func main() {
-	args := os.Args
-	if len(args) <= 1 {
-		fmt.Println("lack param ?func=xxx")
-		return
-	}
-
-	execute(args[1])
-}
-
-func execute(n string) {
-	funs := map[string]func(){
-		"code1": code1,
-		"code2": code2,
-		"code3": code3,
-		"code4": code4,
-		"code5": code5,
-	}
-	funs[n]()
+var funcSelectFuncs = map[string]func(){
+	"code1": code1,
+	"code2": code2,
+	"code3": code3,
+	"code4": code4,
+	"code5": code5,
 }
 
 func code1() {

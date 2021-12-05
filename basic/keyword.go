@@ -2,26 +2,10 @@ package main
 
 import (
 	"fmt"
-	"os"
 )
 
-func init() {
-	fmt.Println("Content-Type:text/plain;charset=utf-8\n\n")
-}
-func main() {
-	args := os.Args
-	if len(args) <= 1 {
-		fmt.Println("lack param ?func=xxx")
-		return
-	}
-
-	execute(args[1])
-}
-func execute(n string) {
-	funs := map[string]func(){
-		"keyword1": keyword1,
-	}
-	funs[n]()
+var keywordFuncs = map[string]func(){
+	"keyword1": keyword1,
 }
 
 func keyword1() {

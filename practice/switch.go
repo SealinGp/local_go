@@ -2,31 +2,15 @@ package main
 
 import (
 	"fmt"
-	"os"
 )
 
 /*
 tar打包文件
 */
-func init() {
-	fmt.Println("Content-Type:text/plain;charset=utf-8\n\n")
-}
-func main() {
-	args := os.Args
-	if len(args) <= 1 {
-		fmt.Println("lack param ?func=xxx")
-		return
-	}
-
-	execute(args[1])
-}
-func execute(funcN string) {
-	funcMap := map[string]func(){
-		"switch1": switch1,
-		"switch2": switch2,
-		"switch3": switch3,
-	}
-	funcMap[funcN]()
+var switchFuncs = map[string]func(){
+	"switch1": switch1,
+	"switch2": switch2,
+	"switch3": switch3,
 }
 
 //fallthrough 找到符合的条件,该条件后面的一个case会执行,注意:此关键词不可在type-switch判断时使用

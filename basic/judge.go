@@ -2,28 +2,12 @@ package main
 
 import (
 	"fmt"
-	"os"
 )
 
-func init() {
-	fmt.Println("Content-Type:text/plain;charset=utf-8\n\n")
-}
-func main() {
-	args := os.Args
-	if len(args) <= 1 {
-		fmt.Println("lack param ?func=xxx")
-		return
-	}
-
-	execute(args[1])
-}
-func execute(n string) {
-	funs := map[string]func(){
-		"if_sentences":     if_sentences,
-		"for_sentences":    for_sentences,
-		"switch_sentences": switch_sentences,
-	}
-	funs[n]()
+var judgeFuncs = map[string]func(){
+	"if_sentences":     if_sentences,
+	"for_sentences":    for_sentences,
+	"switch_sentences": switch_sentences,
 }
 
 func if_sentences() {

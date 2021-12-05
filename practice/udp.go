@@ -17,13 +17,9 @@ var (
 	stopCh   = make(chan bool)
 )
 
-func init() {
-	flag.Parse()
-}
-
 //server: go run udp.go -s=true -addr="127.0.0.1:1234"
 //client: go run udp.go -s=false -addr="127.0.0.1:1234"
-func main() {
+func udpFunc() {
 	log.Println(*isServer)
 
 	if *isServer {

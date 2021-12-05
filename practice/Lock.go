@@ -2,20 +2,15 @@ package main
 
 import (
 	"log"
-	"os"
 	"sync"
 )
 
 //https://github.com/chai2010/advanced-go-programming-book/blob/master/ch6-cloud/ch6-02-lock.md
-func main() {
-	m := map[string]func(){
-		"lock1": lock1,
-		"lock2": lock2,
-		"lock3": lock3,
-	}
-	m[os.Args[1]]()
+var lockFuncs = map[string]func(){
+	"lock1": lock1,
+	"lock2": lock2,
+	"lock3": lock3,
 }
-
 var counter int
 
 func lock1() {

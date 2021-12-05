@@ -3,21 +3,13 @@ package main
 import (
 	"context"
 	"log"
-	"os"
 	"time"
 )
 
-func main() {
-	if len(os.Args) < 1 {
-		log.Fatal("func required")
-	}
-	fun := map[string]func(){
-		"ctx1": ctx1,
-		"ctx2": ctx2,
-		"ctx3": ctx3,
-	}
-
-	fun[os.Args[1]]()
+var ctxFuncs = map[string]func(){
+	"ctx1": ctx1,
+	"ctx2": ctx2,
+	"ctx3": ctx3,
 }
 
 // https://draveness.me/golang/docs/part3-runtime/ch06-concurrency/golang-context/

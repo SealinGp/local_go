@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"math/rand"
-	"os"
 	"strings"
 	"time"
 )
@@ -15,34 +14,21 @@ const (
 /*
 time packages
 */
-func init() {
-	//fmt.Println("Content-Type:text/plain;charset=utf-8\n\n")
-}
-func main() {
-	args := os.Args
-	if len(args) <= 1 {
-		fmt.Println("lack param ?func=xxx")
-		return
-	}
 
-	execute(args[1])
+var timeFuncs = map[string]func(){
+	"time1":  time1,
+	"time2":  time2,
+	"time3":  time3,
+	"time4":  time4,
+	"time5":  time5,
+	"time6":  time6,
+	"time7":  time7,
+	"time8":  time8,
+	"time9":  time9,
+	"time10": time10,
+	"time11": time11,
 }
-func execute(funcN string) {
-	funcMap := map[string]func(){
-		"time1":  time1,
-		"time2":  time2,
-		"time3":  time3,
-		"time4":  time4,
-		"time5":  time5,
-		"time6":  time6,
-		"time7":  time7,
-		"time8":  time8,
-		"time9":  time9,
-		"time10": time10,
-		"time11": time11,
-	}
-	funcMap[funcN]()
-}
+
 func time1() {
 	now := time.Now()
 	r := rand.New(rand.NewSource(time.Now().UnixNano()))

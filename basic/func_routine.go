@@ -2,10 +2,17 @@ package main
 
 import (
 	"fmt"
-	"os"
 	"runtime"
 	"sync"
 )
+
+var funcRoutine = map[string]func(){
+	"gorun":  gorun,
+	"gorun2": gorun2,
+	"gorun3": gorun3,
+	"gorun4": gorun4,
+	"gorun5": gorun5,
+}
 
 /*
 
@@ -48,29 +55,6 @@ go 并发
   goroutine：只有三个寄存器的值修改 - PC / SP / DX.
 在网络编程中,我们可以理解为 Golang 的协程本质上其实就是对IO事件的封装,并且通过语言级的支持让异步的代码看上去像同步执行的一样
 */
-func init() {
-	fmt.Println("Content-Type:text/plain;charset=utf-8\n\n")
-}
-func main() {
-	args := os.Args
-	if len(args) <= 1 {
-		fmt.Println("lack param ?func=xxx")
-		return
-	}
-
-	execute(args[1])
-}
-
-func execute(n string) {
-	funs := map[string]func(){
-		"gorun":  gorun,
-		"gorun2": gorun2,
-		"gorun3": gorun3,
-		"gorun4": gorun4,
-		"gorun5": gorun5,
-	}
-	funs[n]()
-}
 
 /*
   main函数启动了5个goroutine,然后返回,
@@ -199,11 +183,11 @@ select
 */
 func gorun5() {
 	for i := 0; i < 5; i++ {
-		go test(i)
+		go pr(i)
 	}
 
 	select {}
 }
-func test(i int) {
+func pr(i int) {
 	fmt.Println(i)
 }

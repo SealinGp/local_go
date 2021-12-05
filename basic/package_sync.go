@@ -3,32 +3,15 @@ package main
 
 import (
 	"fmt"
-	"os"
 	"sync"
 	"time"
-	// "path/filepath"
 )
 
-func init() {
-	fmt.Println("Content-Type:text/plain;charset=utf-8\n\n")
-}
-func main() {
-	args := os.Args
-	if len(args) <= 1 {
-		fmt.Println("lack param ?func=xxx")
-		return
-	}
-
-	execute(args[1])
-}
-func execute(n string) {
-	funs := map[string]func(){
-		"mutex_sync": mutex_sync,
-		"sync1":      sync1,
-		"sync2":      sync2,
-		"sync3":      sync3,
-	}
-	funs[n]()
+var syncFuncs = map[string]func(){
+	"mutex_sync": mutex_sync,
+	"sync1":      sync1,
+	"sync2":      sync2,
+	"sync3":      sync3,
 }
 
 /*互斥锁,注:首次使用后不可复制,func(表示属于哪个结构体) name(输入参数)(返回参数){}

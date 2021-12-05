@@ -22,28 +22,11 @@ ref :https://github.com/unknwon/the-way-to-go_ZH_CN/blob/master/eBook/15.1.md
 //func init() {
 //	fmt.Println("Content-Type:text/plain;charset=utf-8\n\n")
 //}
-func main() {
-	args := os.Args
-	if len(args) <= 1 {
-		fmt.Println("lack param ?func=xxx")
-		return
-	}
-
-	execute(args[1])
+var tcpFuncs = map[string]func(){
+	"tcp1":       tcp1,
+	"tcp_client": tcp_client,
+	"tcp2":       tcp2,
 }
-func execute(n string) {
-	funs := map[string]func(){
-		"tcp1":       tcp1,
-		"tcp_client": tcp_client,
-		"tcp2":       tcp2,
-	}
-	if nil == funs[n] {
-		fmt.Println("func", n, "unregistered")
-		return
-	}
-	funs[n]()
-}
-
 var clients = map[string]int{}
 
 //类似于socket编程,客户端,服务端消息传送(=聊天系统后台原理)

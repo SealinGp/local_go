@@ -14,9 +14,6 @@ https://draveness.me/golang/concurrency/golang-context.html
 context 上下文使用(控制 多个goroutine执行超时/错误时 提前结束 当前goroutine 以及触发后面的goroutine都取消)
 */
 
-func main() {
-	Cond()
-}
 func Cond() {
 	c := sync.NewCond(&sync.Mutex{})
 	for i := 0; i < 10; i++ {

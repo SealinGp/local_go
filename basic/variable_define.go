@@ -2,27 +2,12 @@ package main
 
 import (
 	"fmt"
-	"os"
 )
 
-func init() {
-	fmt.Println("Content-Type:text/plain;charset=utf-8\n\n")
+var defineFuncs = map[string]func(){
+	"define1": define1,
 }
-func main() {
-	args := os.Args
-	if len(args) <= 1 {
-		fmt.Println("url lack param ?func=xxx")
-		return
-	}
 
-	execute(args[1])
-}
-func execute(n string) {
-	funs := map[string]func(){
-		"define1": define1,
-	}
-	funs[n]()
-}
 func define1() {
 	//variable
 	var i1 int8 = 1

@@ -62,9 +62,7 @@ goroutine内存泄漏(如果不知道何时停止一个goroutine,那么这个gor
 
 */
 
-func main() {
-	HeapMem()
-}
+
 
 //1.goroutine内部实现变量没有释放造成内存泄漏
 func HeapMem() {

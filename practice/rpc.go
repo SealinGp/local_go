@@ -5,7 +5,6 @@ import (
 	"log"
 	"net/http"
 	"net/rpc"
-	"os"
 )
 
 /*
@@ -16,29 +15,11 @@ https://github.com/unknwon/the-way-to-go_ZH_CN/blob/master/eBook/15.9.md
 
 注:有问题,客户端无法调用,已提交github issue,待更新
 */
-func init() {
-	fmt.Println("Content-Type:text/plain;charset=utf-8\n\n")
-}
-func main() {
-	args := os.Args
-	if len(args) <= 1 {
-		fmt.Println("lack param ?func=xxx")
-		return
-	}
 
-	execute(args[1])
-}
-func execute(n string) {
-	funs := map[string]func(){
-		"rpc1": rpc1,
-		"rpc2": rpc2,
-		"rpc3": rpc3,
-	}
-	if nil == funs[n] {
-		fmt.Println("func", n, "unregistered")
-		return
-	}
-	funs[n]()
+var rpcFuns = map[string]func(){
+	"rpc1": rpc1,
+	"rpc2": rpc2,
+	"rpc3": rpc3,
 }
 
 //server

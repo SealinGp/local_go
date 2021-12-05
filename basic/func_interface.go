@@ -6,8 +6,8 @@ import (
 	"strconv"
 )
 
-func init() {
-	fmt.Println("Content-Type:text/plain;charset=utf-8\n\n")
+var funcInterFuncs = map[string]func(){
+	"FuncInter": FuncInter,
 }
 
 /*
@@ -19,7 +19,7 @@ why?
  2.hiding implementation detail （隐藏具体实现）
  3.providing interception points
 */
-func main() {
+func FuncInter() {
 	// nokia := Nokia{number:13129551271};
 	//以下为两种实现方法
 
@@ -36,7 +36,7 @@ func main() {
 	// callPhone(a,nokia);
 
 	// ArrObj();
-	test()
+	f_i_test()
 }
 
 //struct
@@ -102,7 +102,7 @@ func (a ArObj) Swap(i, j int) {
 func (a ArObj) Less(i, j int) bool {
 	return a[i].age < a[j].age
 }
-func test() {
+func f_i_test() {
 	ab := ArObj{
 		{"bob", 31},
 		{"john", 42},

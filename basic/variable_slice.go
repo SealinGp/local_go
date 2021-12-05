@@ -2,30 +2,15 @@ package main
 
 import (
 	"fmt"
-	"os"
 )
 
-func init() {
-	fmt.Println("Content-Type:text/plain;charset=utf-8\n\n")
+var sliceFuncs = map[string]func(){
+	"create_slice": create_slice,
+	"for_slice":    for_slice,
+	"fun_slice":    fun_slice,
+	"fs1":          fs1,
 }
-func main() {
-	args := os.Args
-	if len(args) <= 1 {
-		fmt.Println("lack param ?func=xxx")
-		return
-	}
 
-	execute(args[1])
-}
-func execute(n string) {
-	funs := map[string]func(){
-		"create_slice": create_slice,
-		"for_slice":    for_slice,
-		"fun_slice":    fun_slice,
-		"fs1":          fs1,
-	}
-	funs[n]()
-}
 func test() int {
 	var ret int
 	return ret

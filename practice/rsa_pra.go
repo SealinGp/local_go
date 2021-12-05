@@ -14,7 +14,6 @@ import (
 	"errors"
 	"fmt"
 	"hash"
-	"os"
 	"strings"
 )
 
@@ -22,32 +21,12 @@ import (
 生成公钥私钥方式
 rsa 非对称加密解密方式
 */
-func init() {
-	fmt.Println("Content-Type:text/plain;charset=gbk2312\n\n")
-}
-func main() {
-	args := os.Args
-	if len(args) <= 1 {
-		fmt.Println("lack param ?func=xxx")
-		return
-	}
-
-	execute(args[1])
-}
-
-func execute(n string) {
-	funs := map[string]func(){
-		"rsa1": rsa1,
-		"rsa2": rsa2,
-		"rsa3": rsa3,
-		"rsa4": rsa4,
-		"rsa5": rsa5,
-	}
-	if nil == funs[n] {
-		fmt.Println("func", n, "unregistered")
-		return
-	}
-	funs[n]()
+var rsaFuncs = map[string]func(){
+	"rsa1": rsa1,
+	"rsa2": rsa2,
+	"rsa3": rsa3,
+	"rsa4": rsa4,
+	"rsa5": rsa5,
 }
 
 //-----example----- start

@@ -11,30 +11,11 @@ import (
 https://github.com/unknwon/the-way-to-go_ZH_CN/blob/master/eBook/12.11.md
 适用于两服务端均为 基于go 的 RPCs服务 之间的数据传输
 */
-func init() {
-	fmt.Println("Content-Type:text/plain;charset=utf-8\n\n")
-}
-func main() {
-	args := os.Args
-	if len(args) <= 1 {
-		fmt.Println("lack param ?func=xxx")
-		return
-	}
 
-	execute(args[1])
-}
-
-func execute(n string) {
-	funs := map[string]func(){
-		"gob1": gob1,
-		"gob2": gob2,
-		"gob3": gob3,
-	}
-	if nil == funs[n] {
-		fmt.Println("func", n, "unregistered")
-		return
-	}
-	funs[n]()
+var gobFuncs = map[string]func(){
+	"gob1": gob1,
+	"gob2": gob2,
+	"gob3": gob3,
 }
 
 type P struct {
@@ -65,27 +46,27 @@ func gob1() {
 	fmt.Println(q.Name, *q.X, *q.Y, *q.Z)
 }
 
-type Address struct {
+type Address1 struct {
 	T  string
 	C  string
 	Co string
 }
-type VCard struct {
+type VCard1 struct {
 	FN string
 	LN string
-	Ad []*Address
+	Ad []*Address1
 	Re string
 }
 
 var content string
 
 func gob2() {
-	vc := VCard{
+	vc := VCard1{
 		FN: "Jan",
 		LN: "Ker",
-		Ad: []*Address{
-			&Address{"t1", "c1", "co1"},
-			&Address{"t2", "c2", "co2"},
+		Ad: []*Address1{
+			&Address1{"t1", "c1", "co1"},
+			&Address1{"t2", "c2", "co2"},
 		},
 		Re: "none",
 	}
@@ -101,7 +82,7 @@ func gob2() {
 }
 
 func gob3() {
-	var vc VCard
+	var vc VCard1
 	file, err := os.Open("vcard.deb")
 	if err != nil {
 		fmt.Println(err.Error())

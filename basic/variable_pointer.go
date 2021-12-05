@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"os"
 	"reflect"
 	"unsafe"
 )
@@ -13,29 +12,14 @@ import (
 
  var variable_name *varibale_type = &variable_name; 指针变量指向变量地址,默认nill(空指针)
 */
-func init() {
-	fmt.Println("Content-Type:text/plain;charset=utf-8\n\n")
-}
-func main() {
-	args := os.Args
-	if len(args) <= 1 {
-		fmt.Println("lack param ?func=xxx")
-		return
-	}
 
-	execute(args[1])
-}
-func execute(n string) {
-	pointer5()
-	funs := map[string]func(){
-		"pointer1": pointer1,
-		"pointer2": pointer2,
-		"pointer3": pointer3,
-		"pointer4": pointer4,
-		"pointer5": pointer5,
-		"pointer6": pointer6,
-	}
-	funs[n]()
+var pointerFuncs = map[string]func(){
+	"pointer1": pointer1,
+	"pointer2": pointer2,
+	"pointer3": pointer3,
+	"pointer4": pointer4,
+	"pointer5": pointer5,
+	"pointer6": pointer6,
 }
 
 // pointer basic

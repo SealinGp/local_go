@@ -2,12 +2,21 @@ package main
 
 import (
 	"fmt"
-	"os"
 	"regexp"
 )
 
+var regFuncs = map[string]func(){
+	"regex1": regex1,
+	"regex2": regex2,
+	"regex3": regex3,
+	"regex4": regex4,
+	"regex5": regex5,
+	"regex6": regex6,
+}
+
 /**
 https://github.com/cdoco/learn-regex-zh
+尽量别使用正则,性能太差
 \u4e00-\u9fa5
 特殊字符
 $ 匹配以前面的子表达式结尾
@@ -60,17 +69,6 @@ $ 匹配以前面的子表达式结尾
 /g 全局搜索,搜索整个输入字符串中的所有匹配
 /m 多行匹配.会匹配输入字符串每一行
 */
-func main() {
-	fun := map[string]func(){
-		"regex1": regex1,
-		"regex2": regex2,
-		"regex3": regex3,
-		"regex4": regex4,
-		"regex5": regex5,
-		"regex6": regex6,
-	}
-	fun[os.Args[1]]()
-}
 
 //1.基本匹配
 func regex1() {

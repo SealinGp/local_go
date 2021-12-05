@@ -3,7 +3,6 @@ package main
 import (
 	"encoding/xml"
 	"fmt"
-	"os"
 	"strings"
 )
 
@@ -18,29 +17,10 @@ TagVal:标签值   (a1)
 AttrName:属性名 (at)
 AttrVal :属性值 (av)
 */
-func init() {
-	fmt.Println("Content-Type:text/plain;charset=utf-8\n\n")
-}
-func main() {
-	args := os.Args
-	if len(args) <= 1 {
-		fmt.Println("lack param ?func=xxx")
-		return
-	}
 
-	execute(args[1])
-}
-
-func execute(n string) {
-	funs := map[string]func(){
-		"xml1": xml1,
-		"xml2": xml2,
-	}
-	if nil == funs[n] {
-		fmt.Println("func", n, "unregistered")
-		return
-	}
-	funs[n]()
+var xmlFuncs = map[string]func(){
+	"xml1": xml1,
+	"xml2": xml2,
 }
 
 var (

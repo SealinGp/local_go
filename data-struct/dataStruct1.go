@@ -3,33 +3,24 @@ package main
 import (
 	"container/list"
 	"fmt"
-	"log"
-	"os"
 	"sort"
 	"strconv"
 )
 
-func main() {
-	if len(os.Args) <= 1 {
-		log.Fatal("func required")
-	}
-
-	fun := map[string]func(){
-		"ds3":  ds3,
-		"ds4":  ds4,
-		"ds5":  ds5,
-		"ds6":  ds6,
-		"ds7":  ds7,
-		"ds8":  ds8,
-		"ds9":  ds9,
-		"ds10": ds10,
-		"ds11": ds11,
-		"ds12": ds12,
-		"ds13": ds13,
-		"ds14": ds14,
-		"ds15": ds15,
-	}
-	fun[os.Args[1]]()
+var struct1Funcs = map[string]func(){
+	"ds3":  ds3,
+	"ds4":  ds4,
+	"ds5":  ds5,
+	"ds6":  ds6,
+	"ds7":  ds7,
+	"ds8":  ds8,
+	"ds9":  ds9,
+	"ds10": ds10,
+	"ds11": ds11,
+	"ds12": ds12,
+	"ds13": ds13,
+	"ds14": ds14,
+	"ds15": ds15,
 }
 
 //优先级队列的实现 = 二叉堆 + 队列 (逻辑结构) = 数组 (物理结构)

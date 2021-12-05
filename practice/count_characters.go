@@ -5,10 +5,8 @@ import (
 	"unicode/utf8"
 )
 
-func init() {
-	fmt.Println("Content-Type:text/plain;charset=utf-8\n\n")
-}
-func main() {
+
+func characters() {
 	str1 := "asSASA ddd dsjkdsjs dk"
 	fmt.Println("str1 len:", len(str1))
 	fmt.Println("str1 RuneCount:", utf8.RuneCountInString(str1))

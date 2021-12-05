@@ -69,7 +69,7 @@ GOMAXPROCS = 8 适用于32核的机器上,更高的数值无法提升性能
 */
 var (
 	timezone string
-	port     string
+	Port     string
 	numCores int
 	fun      string
 	NewYork  string
@@ -81,57 +81,42 @@ func init() {
 	flag.StringVar(&fun, "fun", "", "func you need to run")
 
 	flag.StringVar(&timezone, "timezone", "Asia/Shanghai", "usage")
-	flag.StringVar(&port, "port", "", "port")
+	flag.StringVar(&Port, "port", "", "port")
 	flag.StringVar(&NewYork, "NewYork", "", "address")
 	flag.StringVar(&Tokyo, "Tokyo", "", "address")
 	flag.StringVar(&London, "London", "", "address")
 	flag.IntVar(&numCores, "numCores", 2, "core")
 }
-func main() {
-	flag.Parse()
 
-	if fun == "" {
-		flag.Usage()
-		return
-	}
-	execute(fun)
+var runtineFuncs = map[string]func(){
+	"gor1":     gor1,
+	"gor2":     gor2,
+	"gor3":     gor3,
+	"gor4":     gor4,
+	"gor5":     gor5,
+	"gor6":     gor6,
+	"gor7":     gor7,
+	"gor8":     gor8,
+	"gor9":     gor9,
+	"gor10":    gor10,
+	"gor11":    gor11,
+	"gor12":    gor12,
+	"gor13":    gor13,
+	"gor14":    gor14,
+	"gor15":    gor15,
+	"gor16":    gor16,
+	"gor17":    gor17,
+	"gor18":    gor18,
+	"gor19":    gor19,
+	"gor20":    gor20,
+	"gor21":    gor21,
+	"gor22":    gor22,
+	"gor23":    gor23,
+	"gor24":    gor24,
+	"gor25":    gor25,
+	"gor_test": gor_test,
 }
-func execute(n string) {
-	funs := map[string]func(){
-		"gor1":     gor1,
-		"gor2":     gor2,
-		"gor3":     gor3,
-		"gor4":     gor4,
-		"gor5":     gor5,
-		"gor6":     gor6,
-		"gor7":     gor7,
-		"gor8":     gor8,
-		"gor9":     gor9,
-		"gor10":    gor10,
-		"gor11":    gor11,
-		"gor12":    gor12,
-		"gor13":    gor13,
-		"gor14":    gor14,
-		"gor15":    gor15,
-		"gor16":    gor16,
-		"gor17":    gor17,
-		"gor18":    gor18,
-		"gor19":    gor19,
-		"gor20":    gor20,
-		"gor21":    gor21,
-		"gor22":    gor22,
-		"gor23":    gor23,
-		"gor24":    gor24,
-		"gor25":    gor25,
-		"gor_test": gor_test,
-	}
-	defer func() {
-		if e := recover(); e != nil {
-			log.Println(e)
-		}
-	}()
-	funs[n]()
-}
+
 func gor1() {
 	log.Println(numCores)
 	//通过命令行指定使用的核心数量
@@ -995,12 +980,12 @@ func gor24() {
 	clock2()
 }
 func clock2() {
-	listener, err := net.Listen("tcp", "localhost:"+port)
+	listener, err := net.Listen("tcp", "localhost:"+Port)
 	if err != nil {
 		log.Fatal(err)
 	}
 	lo, _ := time.LoadLocation(timezone)
-	fmt.Println("in:", timezone, "listen:", port, "now:", time.Now().In(lo).Format("15:04:05\n"))
+	fmt.Println("in:", timezone, "listen:", Port, "now:", time.Now().In(lo).Format("15:04:05\n"))
 
 	for {
 		conn, err := listener.Accept()

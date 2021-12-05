@@ -2,29 +2,13 @@ package main
 
 import (
 	"fmt"
-	"os"
 )
 
-func init() {
-	fmt.Println("Content-Type:text/plain;charset=utf-8\n\n")
-}
-func main() {
-	args := os.Args
-	if len(args) <= 1 {
-		fmt.Println("lack param ?func=xxx")
-		return
-	}
-
-	execute(args[1])
-}
-func execute(n string) {
-	funs := map[string]func(){
-		"slic_range": slic_range,
-		"arr_range":  arr_range,
-		"map_range":  map_range,
-		"str_range":  str_range,
-	}
-	funs[n]()
+var rangeFuncs = map[string]func(){
+	"slic_range": slic_range,
+	"arr_range":  arr_range,
+	"map_range":  map_range,
+	"str_range":  str_range,
 }
 
 /*
@@ -70,10 +54,10 @@ func str_range() {
 
 //can not use it for struct
 func struct_range() {
-	stuc1 := stru{name: "abc", age: 12}
-	for i, v := range stuc1 {
-		fmt.Println(i, v)
-	}
+	// stuc1 := stru{name: "abc", age: 12}
+	// for i, v := range stuc1 {
+	// 	fmt.Println(i, v)
+	// }
 	fmt.Println("----------------")
 }
 

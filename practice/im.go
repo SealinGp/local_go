@@ -2,7 +2,6 @@ package main
 
 import (
 	"bufio"
-	"flag"
 	"fmt"
 	"io"
 	"log"
@@ -12,18 +11,6 @@ import (
 )
 
 //https://books.studygolang.com/gopl-zh/ch8/ch8-10.html
-
-func main() {
-	var name string
-	flag.StringVar(&name, "name", "", "")
-	flag.Parse()
-	if name == "server" {
-		IMServer()
-	}
-	if name == "client" {
-		IMClient()
-	}
-}
 
 func IMServer() {
 	lis, err := net.Listen("tcp", "localhost:1234")

@@ -5,7 +5,7 @@ import (
 	"unsafe"
 )
 
-func main() {
+func unsafeFunc() {
 	//获取操作数在内存中的字节大小
 	fmt.Println(unsafe.Sizeof(float64(0)))
 	fmt.Println(unsafe.Sizeof(int64(0)))

@@ -2,47 +2,30 @@ package main
 
 import (
 	"fmt"
-	"os"
 	"strconv"
 	"time"
-	// "reflect"
 )
 
-func init() {
-	fmt.Println("Content-Type:text/plain;charset=utf-8\n\n")
-}
-func main() {
-	args := os.Args
-	if len(args) <= 1 {
-		fmt.Println("lack param ?func=xxx")
-		return
-	}
-
-	execute(args[1])
-}
-func execute(n string) {
-	funs := map[string]func(){
-		"channel1":    channel1,
-		"channel2":    channel2,
-		"channel3":    channel3,
-		"channel4":    channel4,
-		"channel5":    channel5,
-		"channel6":    channel6,
-		"channel7":    channel7,
-		"channel7_1":  channel7_1,
-		"channel7_2":  channel7_2,
-		"channel8":    channel8,
-		"channel8_1":  channel8_1,
-		"channel8_2":  channel8_2,
-		"channel9":    channel9,
-		"channel10":   channel10,
-		"channel11":   channel11,
-		"channel12":   channel12,
-		"channel13":   channel13,
-		"channel13_1": channel13_1,
-		"channel13_2": channel13_2,
-	}
-	funs[n]()
+var channelFuns = map[string]func(){
+	"channel1":    channel1,
+	"channel2":    channel2,
+	"channel3":    channel3,
+	"channel4":    channel4,
+	"channel5":    channel5,
+	"channel6":    channel6,
+	"channel7":    channel7,
+	"channel7_1":  channel7_1,
+	"channel7_2":  channel7_2,
+	"channel8":    channel8,
+	"channel8_1":  channel8_1,
+	"channel8_2":  channel8_2,
+	"channel9":    channel9,
+	"channel10":   channel10,
+	"channel11":   channel11,
+	"channel12":   channel12,
+	"channel13":   channel13,
+	"channel13_1": channel13_1,
+	"channel13_2": channel13_2,
 }
 
 //refurl: https://colobu.com/2016/04/14/Golang-Channels/
@@ -83,18 +66,18 @@ func channel1() {
 	fmt.Println(append(v2, v1...))
 }
 
+//管道必须在写入方关闭
 func channel2() {
 	c := make(chan int)
 
-	//函数执行完毕后关闭管道,将此步注释,则不会导致panic错误
-	// defer close(c);
-
 	//创建协程并调用
-	go func() { c <- 3 + 4 }()
+	go func() {
+		c <- 3 + 4
+		close(c)
+	}()
 
 	i := <-c
 	fmt.Println(i)
-	//报panic错误,因为管道在协程还没写入7的时候程序就结束了,管道关闭,导致panic错误
 }
 
 //blocking 阻塞(平行goroutine(协程) 的执行顺序是不可预测的)

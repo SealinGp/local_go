@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"os"
 )
 
 /*
@@ -100,30 +99,6 @@ r1Str := string(r1)
 string类型中,一个中文占3个字节
 */
 //执行顺序 全局变量初始化->init函数执行->main函数执行->defer函数执行
-func init() {
-	fmt.Println("Content-Type:text/plain;charset=utf-8\n\n")
-}
-
-func main() {
-	args := os.Args
-	if len(args) <= 1 {
-		fmt.Println("lack param ?func=xxx")
-		return
-	}
-
-	execute(args[1])
-}
-func execute(n string) {
-	funs := map[string]func(){
-		"bool_type":   bool_type,
-		"number_type": number_type,
-		"string_type": string_type,
-		"other_type":  other_type,
-		"type1":       type1,
-		"type2":       type2,
-	}
-	funs[n]()
-}
 
 /*
 //
@@ -146,6 +121,16 @@ func execute(n string) {
 1 int32 = 1 uint32 = 4 byte
 1 int64 = 8 byte
 */
+
+var dataTypeFuncs = map[string]func(){
+	"bool_type":   bool_type,
+	"number_type": number_type,
+	"string_type": string_type,
+	"other_type":  other_type,
+	"type1":       type1,
+	"type2":       type2,
+}
+
 func number_type() {
 	var i1 int = 1<<31 - 1   //int32                                    [-2^31,2^31-1]
 	var i4 int32 = 1<<31 - 1 //-2147483648~2147483647                   [-2^31,2^31-1]
@@ -156,8 +141,8 @@ func number_type() {
 	var i5 int64 = 1<<63 - 1 //-9223372036854775808~9223372036854775807 [-2^63,2^63-1]
 	fmt.Println(i1, i2, i3, i4, i5)
 
-	var ui1 uint8 = 1 << 8 //0~255(2^8)
-	var ui2 byte = 1 << 8  //0~255
+	var ui1 = 1 << 8 //0~255(2^8)
+	var ui2 = 1 << 8 //0~255
 
 	var ui3 uint16 = 6 //0~65535                [0,2^16]
 	var ui4 uint32 = 7 //0~4294967295           [0,2^32]

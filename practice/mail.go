@@ -9,7 +9,7 @@ import (
 )
 
 //https://github.com/unknwon/the-way-to-go_ZH_CN/blob/master/eBook/15.12.md
-func main() {
+func mail() {
 	addr := net.JoinHostPort("smtp.qq.com", "25")
 	client, err := smtp.Dial(addr)
 	if err != nil {

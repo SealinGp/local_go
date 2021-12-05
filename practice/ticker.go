@@ -10,7 +10,7 @@ import (
 //简单时间轮实现
 //http://russellluo.com/2018/10/golang-implementation-of-hierarchical-timing-wheels.html
 
-func main() {
+func tickerFunc() {
 	log.Println("start")
 
 	tw := NewTimeWheel()

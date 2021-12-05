@@ -10,29 +10,9 @@ import (
 https://github.com/unknwon/the-way-to-go_ZH_CN/blob/master/eBook/12.9.md
 json
 */
-func init() {
-	fmt.Println("Content-Type:application/json;charset=utf-8\n\n")
-}
-func main() {
-	args := os.Args
-	if len(args) <= 1 {
-		fmt.Println("lack param ?func=xxx")
-		return
-	}
-
-	execute(args[1])
-}
-
-func execute(n string) {
-	funs := map[string]func(){
-		"json1": json1,
-		"json2": json2,
-	}
-	if nil == funs[n] {
-		fmt.Println("func", n, "unregistered")
-		return
-	}
-	funs[n]()
+var jsonFuncs = map[string]func(){
+	"json1": json1,
+	"json2": json2,
 }
 
 type Address struct {

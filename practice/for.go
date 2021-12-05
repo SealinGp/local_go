@@ -2,36 +2,20 @@ package main
 
 import (
 	"fmt"
-	"os"
 )
 
-func init() {
-	fmt.Println("Content-Type:text/plain;charset=utf-8\n\n")
-}
-func main() {
-	args := os.Args
-	if len(args) <= 1 {
-		fmt.Println("lack param ?func=xxx")
-		return
-	}
-
-	execute(args[1])
-}
-func execute(funcN string) {
-	funcMap := map[string]func(){
-		"for1":  for1,
-		"for2":  for2,
-		"for3":  for3,
-		"for4":  for4,
-		"for5":  for5,
-		"for6":  for6,
-		"for7":  for7,
-		"for8":  for8,
-		"for9":  for9,
-		"for10": for10,
-		"for11": for11,
-	}
-	funcMap[funcN]()
+var forFuncs = map[string]func(){
+	"for1":  for1,
+	"for2":  for2,
+	"for3":  for3,
+	"for4":  for4,
+	"for5":  for5,
+	"for6":  for6,
+	"for7":  for7,
+	"for8":  for8,
+	"for9":  for9,
+	"for10": for10,
+	"for11": for11,
 }
 
 //goto

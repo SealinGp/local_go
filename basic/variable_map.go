@@ -2,30 +2,14 @@ package main
 
 import (
 	"fmt"
-	"os"
 )
 
-func init() {
-	fmt.Println("Content-Type:text/plain;charset=utf-8\n\n")
-}
-func main() {
-	args := os.Args
-	if len(args) <= 1 {
-		fmt.Println("url lack param ?func=xxx")
-		return
-	}
-
-	execute(args[1])
-}
-func execute(n string) {
-	funs := map[string]func(){
-		"create_map": create_map,
-		"for_map":    for_map,
-		"fun_map":    fun_map,
-		"map1":       map1,
-		"map2":       map2,
-	}
-	funs[n]()
+var mapFuncs = map[string]func(){
+	"create_map": create_map,
+	"for_map":    for_map,
+	"fun_map":    fun_map,
+	"map1":       map1,
+	"map2":       map2,
 }
 
 func create_map() {
@@ -135,5 +119,4 @@ func map2() {
 		arr = append(arr, v)
 	}
 	fmt.Println(arr)
-	return
 }

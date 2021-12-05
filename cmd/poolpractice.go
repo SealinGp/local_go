@@ -2,7 +2,9 @@ package main
 
 import "github.com/SealinGp/local_go/poolpractice"
 
-func main() {
+
+
+func TestBuf() {
 	poolpractice.TestBuf()
 	poolpractice.TestBuf1()
 }

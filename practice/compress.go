@@ -14,33 +14,14 @@ import (
 https://github.com/unknwon/the-way-to-go_ZH_CN/blob/master/eBook/12.2.md
 读写数据到文件
 */
-func init() {
-	fmt.Println("Content-Type:text/plain;charset=utf-8\n\n")
-}
-func main() {
-	args := os.Args
-	if len(args) <= 1 {
-		fmt.Println("lack param ?func=xxx")
-		return
-	}
 
-	execute(args[1])
-}
-
-func execute(n string) {
-	funs := map[string]func(){
-		"com1": com1,
-		"com2": com2,
-		"com3": com3,
-		"com4": com4,
-		"com5": com5,
-		"com6": com6,
-	}
-	if nil == funs[n] {
-		fmt.Println("func", n, "unregistered")
-		return
-	}
-	funs[n]()
+var compressFuncs = map[string]func(){
+	"com1": com1,
+	"com2": com2,
+	"com3": com3,
+	"com4": com4,
+	"com5": com5,
+	"com6": com6,
 }
 
 //使用缓冲写入内容到文件

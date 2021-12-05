@@ -2,29 +2,13 @@ package main
 
 import (
 	"fmt"
-	"os"
 	"time"
 )
 
-func init() {
-	fmt.Println("Content-Type:text/plain;charset=utf-8\n\n")
-}
-func main() {
-	args := os.Args
-	if len(args) <= 1 {
-		fmt.Println("lack param ?func=xxx")
-		return
-	}
-
-	execute(args[1])
-}
-func execute(funcN string) {
-	funcMap := map[string]func(){
-		"rec1": rec1,
-		"rec2": rec2,
-		"rec3": rec3,
-	}
-	funcMap[funcN]()
+var recFuncs = map[string]func(){
+	"rec1": rec1,
+	"rec2": rec2,
+	"rec3": rec3,
 }
 
 //https://github.com/unknwon/the-way-to-go_ZH_CN/blob/master/eBook/06.6.md

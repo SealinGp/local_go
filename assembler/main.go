@@ -45,8 +45,9 @@ flags:
 
 */
 import (
-	"assembler/basic"
 	"fmt"
+
+	"github.com/SealinGp/local_go/assembler/basic"
 )
 
 func main() {

@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"os"
 
 	//"runtime"
 
@@ -20,27 +19,11 @@ https://github.com/unknwon/the-way-to-go_ZH_CN/blob/master/eBook/14.5.md
 //func init() {
 //	fmt.Println("Content-Type:text/plain;charset=utf-8\n\n")
 //}
-func main() {
-	args := os.Args
-	if len(args) <= 1 {
-		fmt.Println("lack param ?func=xxx")
-		return
-	}
-
-	execute(args[1])
-}
-func execute(n string) {
-	funs := map[string]func(){
-		"sel1": sel1,
-		"sel2": sel2,
-		"sel3": sel3,
-		"sel4": sel4,
-	}
-	if nil == funs[n] {
-		fmt.Println("func", n, "unregistered")
-		return
-	}
-	funs[n]()
+var selFuncs = map[string]func(){
+	"sel1": sel1,
+	"sel2": sel2,
+	"sel3": sel3,
+	"sel4": sel4,
 }
 
 func sel1() {

@@ -4,25 +4,17 @@ import (
 	"container/list"
 	"fmt"
 	"log"
-	"os"
 )
 
-func main() {
-	if len(os.Args) <= 1 {
-		log.Fatal("func required")
-	}
-
-	fun := map[string]func(){
-		"linkTable": linkTable,
-		"stack":     stack,
-		"queue":     queue,
-		"hashTable": hashTable,
-		"dsu":       dsu,
-		"Heap":      Heap,
-		"ds1":       ds1,
-		"ds2":       ds2,
-	}
-	fun[os.Args[1]]()
+var structFuncs = map[string]func(){
+	"linkTable": linkTable,
+	"stack":     stack,
+	"queue":     queue,
+	"hashTable": hashTable,
+	"dsu":       dsu,
+	"Heap":      Heap,
+	"ds1":       ds1,
+	"ds2":       ds2,
 }
 
 //栈-数组实现-----------------------------------

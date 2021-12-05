@@ -4,6 +4,10 @@ import (
 	"fmt"
 )
 
+var funcErrHandleFuncs = map[string]func(){
+	"e_h": ErrHandle,
+}
+
 /*
 Go语言追求简洁优雅,所以,Go语言不支持传统
 的 try…catch…finally 这种异常,因为Go语
@@ -27,10 +31,7 @@ recover:
   说明:
 
 */
-func init() {
-	fmt.Println("Content-Type:text/plain;charset=utf-8\n\n")
-}
-func main() {
+func ErrHandle() {
 	// show_error();
 
 	// throw_error("错误!");

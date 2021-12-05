@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"log"
 	"math"
-	"os"
 	"reflect"
 	"strings"
 
@@ -15,44 +14,26 @@ import (
 /*
 7.array slice []bytes string
 */
-func init() {
-	fmt.Println("Content-Type:text/plain;charset=utf-8\n\n")
-}
-func main() {
-	args := os.Args
-	if len(args) <= 1 {
-		fmt.Println("lack param ?func=xxx")
-		return
-	}
 
-	execute(args[1])
-}
-func execute(n string) {
-	funs := map[string]func(){
-		"arr1":    arr1,
-		"arr2":    arr2,
-		"arr3":    arr3,
-		"slice1":  slice1,
-		"by1":     by1,
-		"slice2":  slice2,
-		"slice3":  slice3,
-		"slice4":  slice4,
-		"slice5":  slice5,
-		"app1":    app1,
-		"slice6":  slice6,
-		"slice7":  slice7,
-		"slice8":  slice8,
-		"slice9":  slice9,
-		"slice10": slice10,
-		"slice11": slice11,
-		"slice12": slice12,
-		"slice13": slice13,
-	}
-	if nil == funs[n] {
-		fmt.Println("func", n, "unregistered")
-		return
-	}
-	funs[n]()
+var arrFuncs = map[string]func(){
+	"arr1":    arr1,
+	"arr2":    arr2,
+	"arr3":    arr3,
+	"slice1":  slice1,
+	"by1":     by1,
+	"slice2":  slice2,
+	"slice3":  slice3,
+	"slice4":  slice4,
+	"slice5":  slice5,
+	"app1":    app1,
+	"slice6":  slice6,
+	"slice7":  slice7,
+	"slice8":  slice8,
+	"slice9":  slice9,
+	"slice10": slice10,
+	"slice11": slice11,
+	"slice12": slice12,
+	"slice13": slice13,
 }
 
 //数组声明方式的区别
@@ -335,7 +316,7 @@ func slice9() {
 	//a := "13129551272"
 	//fmt.Println(a[len(a)-6:])
 
-	v5 := uuid.Must(uuid.NewV4())
+	v5 := uuid.NewV4()
 
 	fmt.Println(strings.Replace(v5.String(), "-", "", -1)[:uuid.Size])
 }

@@ -3,11 +3,19 @@ package main
 import (
 	"fmt"
 	"math/rand"
-	"os"
 	"sync"
 	"sync/atomic"
 	"time"
 )
+
+var designModelFuncs = map[string]func(){
+	"m1": m1,
+	"m2": m2,
+	"m3": m3,
+	"m4": m4,
+	"m5": m5,
+	"m6": m6,
+}
 
 /**
 设计模式
@@ -17,23 +25,6 @@ import (
 结构模式: 适配器模式(token接口服务=存储接口+加解密接口)...
 同步模式: 消费生产者模式,信号量模式,
 */
-
-func main() {
-	defer func() {
-		if e := recover(); e != nil {
-			println(e)
-		}
-	}()
-	fun := map[string]func(){
-		"m1": m1,
-		"m2": m2,
-		"m3": m3,
-		"m4": m4,
-		"m5": m5,
-		"m6": m6,
-	}
-	fun[os.Args[1]]()
-}
 
 //1.创建模式-简单工厂
 type Product interface {

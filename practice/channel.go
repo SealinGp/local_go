@@ -4,7 +4,6 @@ import (
 	"flag"
 	"fmt"
 	"log"
-	"os"
 	"runtime"
 	"sync"
 	"testing"
@@ -20,35 +19,19 @@ import (
 //func init() {
 //	fmt.Println("Content-Type:text/plain;charset=utf-8\n\n")
 //}
-func main() {
-	args := os.Args
-	if len(args) <= 1 {
-		fmt.Println("lack param ?func=xxx")
-		return
-	}
-
-	execute(args[1])
-}
-func execute(n string) {
-	funs := map[string]func(){
-		"cha1":  cha1,
-		"cha2":  cha2,
-		"cha3":  cha3,
-		"cha4":  cha4,
-		"cha5":  cha5,
-		"cha6":  cha6,
-		"cha7":  cha7,
-		"cha8":  cha8,
-		"cha9":  cha9,
-		"cha10": cha10,
-		"cha11": cha11,
-		"cha12": cha12,
-	}
-	if nil == funs[n] {
-		fmt.Println("func", n, "unregistered")
-		return
-	}
-	funs[n]()
+var channelFuncs = map[string]func(){
+	"cha1":  cha1,
+	"cha2":  cha2,
+	"cha3":  cha3,
+	"cha4":  cha4,
+	"cha5":  cha5,
+	"cha6":  cha6,
+	"cha7":  cha7,
+	"cha8":  cha8,
+	"cha9":  cha9,
+	"cha10": cha10,
+	"cha11": cha11,
+	"cha12": cha12,
 }
 
 //https://github.com/unknwon/the-way-to-go_ZH_CN/blob/master/eBook/14.6.md
@@ -459,7 +442,7 @@ func process(r *Request) {
 	r.a++
 	r.b++
 }
-func handle(r *Request) {
+func handle1(r *Request) {
 	//处理一次,计数一次,直到计数管道缓冲区满,然后阻塞
 	sem <- true
 	process(r)
@@ -468,7 +451,7 @@ func handle(r *Request) {
 func server1(service chan *Request) {
 	for {
 		request := <-service
-		go handle(request)
+		go handle1(request)
 	}
 }
 

@@ -12,34 +12,14 @@ import (
 https://github.com/unknwon/the-way-to-go_ZH_CN/blob/master/eBook/12.4.md
 解析命令行,获取参数,生成使用文档
 */
-func init() {
-	//fmt.Println("Content-Type:text/plain;charset=utf-8\n\n")
-}
-func main() {
-	args := os.Args
-	if len(args) <= 1 {
-		fmt.Println("lack param ?func=xxx")
-		return
-	}
-
-	execute(args[1])
-}
-
-func execute(n string) {
-	funs := map[string]func(){
-		"flag1": flag1,
-		"flag2": flag2,
-		"flag3": flag3,
-		"flag4": flag4,
-		"flag5": flag5,
-		"flag6": flag6,
-		"flag7": flag7,
-	}
-	if nil == funs[n] {
-		fmt.Println("func", n, "unregistered")
-		return
-	}
-	funs[n]()
+var flagFuncs = map[string]func(){
+	"flag1": flag1,
+	"flag2": flag2,
+	"flag3": flag3,
+	"flag4": flag4,
+	"flag5": flag5,
+	"flag6": flag6,
+	"flag7": flag7,
 }
 
 //定义了一个默认值是 false的 -h选项, : -h=false

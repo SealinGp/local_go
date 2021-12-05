@@ -2,28 +2,12 @@ package main
 
 import (
 	"fmt"
-	"os"
 )
 
-func init() {
-	fmt.Println("Content-Type:text/plain;charset=utf-8\n\n")
-}
-func main() {
-	args := os.Args
-	if len(args) <= 1 {
-		fmt.Println("lack param ?func=xxx")
-		return
-	}
-
-	execute(args[1])
-}
-func execute(funcN string) {
-	funcMap := map[string]func(){
-		"func1": func1,
-		"func2": func2,
-		"func3": func3,
-	}
-	funcMap[funcN]()
+var fFuncs = map[string]func(){
+	"func1": func1,
+	"func2": func2,
+	"func3": func3,
 }
 
 //命名 & 非命名返回值

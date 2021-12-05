@@ -6,7 +6,7 @@ import (
 	"github.com/SealinGp/local_go/third/quic"
 )
 
-func main() {
+func QuicFunc() {
 	go func() {
 		log.Fatal(quic.EchoServer())
 	}()
