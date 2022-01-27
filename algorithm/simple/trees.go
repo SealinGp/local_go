@@ -8,144 +8,6 @@ import (
 	"strconv"
 )
 
-//二叉树专题
-
-//队列-链表实现--------------------------------
-type queue struct {
-	l *list.List
-}
-
-func NewQueue() *queue {
-	return &queue{
-		list.New(),
-	}
-}
-func (this *queue) InQueue(val interface{}) {
-	this.l.PushBack(val)
-}
-func (this *queue) OutQueue() interface{} {
-	ele := this.l.Front()
-	if ele == nil {
-		return nil
-	}
-
-	this.l.Remove(ele)
-	return ele.Value
-}
-func (this *queue) Len() int {
-	return this.l.Len()
-}
-
-//栈-数组实现-----------------------------------
-type stack struct {
-	arr []interface{}
-}
-
-func NewStack() *stack {
-	return &stack{arr: make([]interface{}, 0)}
-}
-func (this *stack) Push(val interface{}) {
-	this.arr = append(this.arr, val)
-}
-func (this *stack) Pop() interface{} {
-	if len(this.arr) > 0 {
-		val := this.arr[len(this.arr)-1]
-		this.arr = this.arr[:len(this.arr)-1]
-		return val
-	}
-	return nil
-}
-func (this *stack) Len() int {
-	return len(this.arr)
-}
-
-type TreeNode struct {
-	Val   int
-	Left  *TreeNode
-	Right *TreeNode
-}
-
-//前序----递归
-func (this *TreeNode) PreOrder(f func(curNode *TreeNode)) {
-	preOrder(this, f)
-}
-func preOrder(current *TreeNode, f func(curNode *TreeNode)) {
-	if current != nil {
-		f(current)
-		preOrder(current.Left, f)
-		preOrder(current.Right, f)
-	}
-}
-
-//前序----栈
-func (this *TreeNode) PreOrderStack(f func(node *TreeNode)) {
-	preOrderStack(this, f)
-}
-func preOrderStack(root *TreeNode, f func(node *TreeNode)) {
-	sta := NewStack()
-	curr := root
-	for curr != nil || sta.Len() > 0 {
-		for curr != nil {
-			f(curr)
-			sta.Push(curr)
-			curr = curr.Left
-		}
-
-		for sta.Len() > 0 {
-			curr = sta.Pop().(*TreeNode)
-			curr = curr.Right
-		}
-	}
-}
-
-//中序----
-func (this *TreeNode) InOrder(f func(curNode *TreeNode)) {
-	inOrder(this, f)
-}
-func inOrder(current *TreeNode, f func(curNode *TreeNode)) {
-	if current != nil {
-		inOrder(current.Left, f)
-		f(current)
-		inOrder(current.Right, f)
-	}
-}
-
-//后序
-func (this *TreeNode) PostOrder(f func(curNode *TreeNode)) {
-	postOrder(this, f)
-}
-func postOrder(current *TreeNode, f func(curNode *TreeNode)) {
-	if current != nil {
-		postOrder(current.Left, f)
-		postOrder(current.Right, f)
-		f(current)
-	}
-}
-
-//广度优先遍历-队列实现
-func (this *TreeNode) LevelOrder(f func(node *TreeNode)) {
-	levelOrder(this, f)
-}
-func levelOrder(root *TreeNode, f func(node *TreeNode)) {
-	//根节点入队
-	qu := NewQueue()
-	qu.InQueue(root)
-
-	for {
-		first := qu.OutQueue()
-		if first == nil {
-			break
-		}
-		current := first.(*TreeNode)
-		f(current)
-		if current.Left != nil {
-			qu.InQueue(current.Left)
-		}
-		if current.Right != nil {
-			qu.InQueue(current.Right)
-		}
-	}
-}
 func (this *TreeNode) DepthLevel() int {
 	return depth1(this)
 }
@@ -203,7 +65,7 @@ func (*Ref) STBST() {
 	node := &TreeNode{}
 	c(node, nums)
 
-	node.PreOrder(func(curNode *TreeNode) {
+	preOrder(node, func(curNode *TreeNode) {
 		fmt.Println(curNode.Val)
 	})
 }
@@ -239,7 +101,7 @@ func (*Ref) Mt() {
 	rootA := []int{2, 3, -1, 1}
 	root := ArrToNode(rootA)
 	toMirror(root)
-	root.LevelOrder(func(node *TreeNode) {
+	levelOrder(root, func(node *TreeNode) {
 		fmt.Println(node.Val)
 	})
 }
@@ -328,7 +190,7 @@ func preArrToNode(list2 *list.List) *TreeNode {
 func (*Ref) Test() {
 	arr := []int{3, 2, 9, -1, -1, 10, -1, -1, 8, -1, 4}
 	node := PreArrToNode(arr)
-	node.PreOrder(func(curNode *TreeNode) {
+	preOrder(node, func(curNode *TreeNode) {
 		fmt.Println(curNode.Val)
 	})
 }
@@ -369,7 +231,7 @@ func (*Ref) MergeTrees() {
 	t2 := ArrToNode([]int{2, 1, 3, -1, 4, -1, 7})
 
 	t1 = preOrder1(t1, t2)
-	t1.LevelOrder(func(node *TreeNode) {
+	levelOrder(t1, func(node *TreeNode) {
 		fmt.Println(node.Val)
 	})
 }
@@ -390,7 +252,7 @@ func preOrder1(n1 *TreeNode, n2 *TreeNode) *TreeNode {
 func (*Ref) InvertTree() {
 	root := ArrToNode([]int{4, 2, 7, 1, 3, 6, 9})
 	mirror(root)
-	root.LevelOrder(func(node *TreeNode) {
+	levelOrder(root, func(node *TreeNode) {
 		fmt.Println(node.Val)
 	})
 }
@@ -418,7 +280,7 @@ func (*Ref) SearchBST() {
 	valNode = bstFindTree(root, val)
 
 	if valNode != nil {
-		valNode.LevelOrder(func(node *TreeNode) {
+		levelOrder(valNode, func(node *TreeNode) {
 			fmt.Println(node.Val)
 		})
 	}
@@ -506,7 +368,7 @@ func (*Ref) KthLargest() {
 	k := 4
 
 	val := 0
-	root.InOrder(func(curNode *TreeNode) {
+	inOrder(root, func(curNode *TreeNode) {
 		if k < 1 {
 			return
 		}
@@ -578,7 +440,7 @@ func pre2(root *Node, f func(node *Node)) {
 func (*Ref) SAToBST() {
 	nums := []int{-10, -3, 0, 5, 9}
 	tree := SortArrToBst(nums, 0, len(nums)-1)
-	tree.LevelOrder(func(node *TreeNode) {
+	levelOrder(tree, func(node *TreeNode) {
 		fmt.Println(node.Val)
 	})
 }
@@ -634,7 +496,7 @@ func Ndepth(root *Node) int {
 //https://leetcode-cn.com/problems/increasing-order-search-tree/
 func (*Ref) ICBST() {
 	root := ArrToNode([]int{5, 3, 6, 2, 4, -1, 8, 1, -1, -1, -1, 7, 9})
-	ToRight(root).InOrder(func(curNode *TreeNode) {
+	inOrder(ToRight(root), func(curNode *TreeNode) {
 		fmt.Println(curNode.Val)
 	})
 }
@@ -642,7 +504,7 @@ func ToRight(root *TreeNode) *TreeNode {
 	var rootNew *TreeNode
 	var tmp *TreeNode
 
-	root.InOrder(func(curNode *TreeNode) {
+	inOrder(root, func(curNode *TreeNode) {
 		if rootNew == nil {
 			rootNew = curNode
 			tmp = rootNew
@@ -698,7 +560,8 @@ func (*Ref) TrimTree() {
 	R := 2
 
 	root = tt(root, L, R)
-	root.LevelOrder(func(node *TreeNode) {
+
+	levelOrder(root, func(node *TreeNode) {
 		fmt.Println(node.Val)
 	})
 }
@@ -1069,13 +932,6 @@ func (*Ref) IsSymm() {
 		}
 	})
 }
-func symm(n1, n2 *TreeNode, f func(cn1, cn2 *TreeNode)) {
-	f(n1, n2)
-	if n1 != nil && n2 != nil {
-		symm(n1.Left, n2.Right, f)
-		symm(n1.Right, n2.Left, f)
-	}
-}
 
 //https://leetcode-cn.com/problems/minimum-absolute-difference-in-bst/
 func (*Ref) Gmd() {
@@ -1238,7 +1094,7 @@ func (*Ref) CMB() {
 	nums := []int{3, 2, 1, 6, 0, 5}
 	root := cmb(nums)
 	if root != nil {
-		root.LevelOrder(func(node *TreeNode) {
+		levelOrder(root, func(node *TreeNode) {
 			fmt.Println(node.Val)
 		})
 	}
@@ -1359,7 +1215,7 @@ func (*Ref) GAE() {
 func (*Ref) IBST() {
 	root := ArrToNode([]int{4, 2, 7, 1, 3})
 	val := 5
-	ibst(root, val).LevelOrder(func(node *TreeNode) {
+	levelOrder(ibst(root, val), func(node *TreeNode) {
 		fmt.Println(node.Val)
 	})
 
@@ -1375,4 +1231,110 @@ func ibst(root *TreeNode, val int) *TreeNode {
 	}
 
 	return root
+}
+
+func (*Ref) IsValidBST() {
+	root := &TreeNode{
+		Val: 2,
+		Left: &TreeNode{
+			Val: 1,
+		},
+		Right: &TreeNode{
+			Val: 3,
+		},
+	}
+
+	log.Printf("%v", isValidBST(root))
+}
+
+func isValidBST(root *TreeNode) bool {
+	var preNode *TreeNode
+	isValid := true
+
+	inOrder(root, func(curNode *TreeNode) {
+		if preNode == nil {
+			preNode = curNode
+			return
+		}
+
+		if preNode.Val >= curNode.Val {
+			isValid = false
+			return
+		}
+
+		preNode = curNode
+	})
+
+	return isValid
+}
+
+func isSymmetric(root *TreeNode) bool {
+	sym := true
+	if root == nil {
+		return sym
+	}
+	symm(root.Left, root.Right, func(cn1, cn2 *TreeNode) {
+		if cn1 == nil && cn2 != nil {
+			sym = false
+		}
+		if cn1 != nil && cn2 == nil {
+			sym = false
+		}
+
+		if cn1 != nil && cn2 != nil {
+			if cn1.Val != cn2.Val {
+				sym = false
+			}
+		}
+	})
+	return sym
+}
+
+func (r *Ref) LevelOrder12() {
+	var root *TreeNode
+
+	v := levelOrder12(root)
+	log.Printf("%v", v)
+}
+
+func levelOrder12(root *TreeNode) [][]int {
+	data := make([][]int, 0)
+
+	q1 := NewQueue()
+	q1.InQueue(root)
+	q2 := NewQueue()
+
+	data1 := make([]int, 0)
+	for {
+		if q1.Len() == 0 && q2.Len() == 0 {
+			break
+		}
+
+		if q1.Len() == 0 {
+			q1 = q2
+			q2 = NewQueue()
+			data = append(data, data1)
+			data1 = make([]int, 0)
+		}
+
+		e := q1.OutQueue()
+		if e == nil {
+			break
+		}
+
+		node := e.(*TreeNode)
+		data1 = append(data1, node.Val)
+		if node.Left != nil {
+			q2.InQueue(node.Left)
+		}
+		if node.Right != nil {
+			q2.InQueue(node.Right)
+		}
+	}
+
+	if len(data1) > 0 {
+		data = append(data, data1)
+	}
+
+	return data
 }
