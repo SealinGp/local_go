@@ -2,3 +2,4 @@ debugger.*
 *.deb
 .idea
 *.out
+.DS_Store
