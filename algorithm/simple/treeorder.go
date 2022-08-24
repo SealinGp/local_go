@@ -19,9 +19,11 @@ func NewQueue() *queue {
 		list.New(),
 	}
 }
+
 func (this *queue) InQueue(val interface{}) {
 	this.l.PushBack(val)
 }
+
 func (this *queue) OutQueue() interface{} {	
 	ele := this.l.Front()
 	if ele == nil {
@@ -31,6 +33,7 @@ func (this *queue) OutQueue() interface{} {
 	this.l.Remove(ele)
 	return ele.Value
 }
+
 func (this *queue) Len() int {
 	return this.l.Len()
 }
@@ -43,9 +46,11 @@ type stack struct {
 func NewStack() *stack {
 	return &stack{arr: make([]interface{}, 0)}
 }
+
 func (this *stack) Push(val interface{}) {
 	this.arr = append(this.arr, val)
 }
+
 func (this *stack) Pop() interface{} {
 	if len(this.arr) > 0 {
 		val := this.arr[len(this.arr)-1]
@@ -54,6 +59,7 @@ func (this *stack) Pop() interface{} {
 	}
 	return nil
 }
+
 func (this *stack) Len() int {
 	return len(this.arr)
 }
