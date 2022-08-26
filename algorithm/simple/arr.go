@@ -3,6 +3,8 @@ package simple
 import (
 	"log"
 	"math"
+	"math/rand"
+	"time"
 )
 
 func (r *Ref) BalanceIndex() {
@@ -55,3 +57,40 @@ func maxProfit(prices []int) int {
 	return maxProfit
 }
 
+type Solution struct {
+	ori []int
+}
+
+func Constructor1(nums []int) Solution {
+	rand.Seed(time.Now().UnixNano())
+
+	s := Solution{
+		ori: nums,
+	}
+
+	return s
+}
+
+func (this *Solution) Reset() []int {
+	return this.ori
+}
+
+func (this *Solution) Shuffle() []int {
+	cp := make([]int, len(this.ori))
+	copy(cp, this.ori)
+
+	cpLen := len(cp)
+	for i := range cp {
+		j := i + rand.Intn(cpLen-i)
+		cp[i], cp[j] = cp[j], cp[i]
+	}
+
+	return cp
+}
+
+/**
+ * Your Solution object will be instantiated and called as such:
+ * obj := Constructor(nums);
+ * param_1 := obj.Reset();
+ * param_2 := obj.Shuffle();
+ */
