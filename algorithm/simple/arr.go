@@ -9,7 +9,6 @@ func (r *Ref) BalanceIndex() {
 	// 2*sumi = total - num[i]
 	// i => ?
 	log.Printf("%v", BalanceIndex([]int{1, 7, 3, 6, 5, 6}))
-
 }
 
 func BalanceIndex(nums []int) int {
