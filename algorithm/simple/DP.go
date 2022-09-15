@@ -6,6 +6,36 @@ import (
 
 //本文件全为动态规划(dynamic-programming)相关的题目
 
+// 1，确定状态
+// 2，找到转移公式
+// 3，确定初始条件以及边界条件
+// 4，计算结果。
+
+func (r *Ref) MaxSubArr() {
+
+}
+
+// dp[i] = max(dp[i−2]+nums[i], dp[i−1])
+func rob(nums []int) int {
+	if len(nums) <= 0 {
+		return 0
+	}
+
+	if len(nums) == 1 {
+		return nums[0]
+	}
+
+	d00 := nums[0]
+	d01 := max(d00, nums[1])
+	for i := 2; i < len(nums); i++ {
+		tmp := nums[i] + d00
+		d01 = max(d00, d01)
+		d00 = tmp
+	}
+
+	return max(d00, d01)
+}
+
 //https://leetcode-cn.com/problems/range-sum-query-immutable/
 func (*Ref) CS() {
 	arr := NewArr([]int{-2, 0, 3, -5, 2, -1})
@@ -145,6 +175,7 @@ func mp3(arr []int) int {
 	}
 	return maxPriceGap
 }
+
 func mp4(arr []int) int {
 	minPrice := 2147483647
 	maxProfit := 0

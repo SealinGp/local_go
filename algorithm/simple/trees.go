@@ -15,6 +15,14 @@ func (this *TreeNode) DepthPost() int {
 	return depth2(this)
 }
 
+func (*Ref) FindMinHeightTrees() {
+
+}
+
+func findMinHeightTrees() {
+
+}
+
 //广度优先遍历-实现获取树的深度
 func depth1(root *TreeNode) int {
 	//根节点入队
