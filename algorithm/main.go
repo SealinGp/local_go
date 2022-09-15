@@ -10,6 +10,7 @@ import (
 	"github.com/SealinGp/local_go/algorithm/simple"
 )
 
+
 func main() {
 	startTime := time.Now()
 	defer func() {
