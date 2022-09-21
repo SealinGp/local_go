@@ -1,6 +1,7 @@
 package simple
 
 import (
+	"container/list"
 	"log"
 	"math"
 	"math/rand"
@@ -93,4 +94,83 @@ func (this *Solution) Shuffle() []int {
  * obj := Constructor(nums);
  * param_1 := obj.Reset();
  * param_2 := obj.Shuffle();
+ */
+
+func (r *Ref) MinStackTest() {
+	ms := Constructor2()
+
+	ms.Push(2)
+	ms.Push(0)
+	ms.Push(3)
+	ms.Push(0)
+
+	log.Printf("%v", ms.GetMin())
+	ms.Pop()
+
+	log.Printf("%v", ms.GetMin())
+	ms.Pop()
+
+	log.Printf("%v", ms.GetMin())
+	ms.Pop()
+
+	log.Printf("%v", ms.GetMin())
+}
+
+type MinStack struct {
+	l    *list.List
+	minL *list.List
+}
+
+func Constructor2() MinStack {
+	return MinStack{
+		l:    list.New(),
+		minL: list.New(),
+	}
+}
+
+// [2,0,3,0] -> 0
+// [2,0,3]
+func (this *MinStack) Push(val int) {
+	this.l.PushBack(val)
+
+	if this.minL.Len() == 0 || val <= this.minL.Back().Value.(int) {
+		this.minL.PushBack(val)
+	}
+}
+
+func (this *MinStack) Pop() {
+	if this.l.Back() != nil && this.minL.Back() != nil {
+		last := this.l.Back()
+		this.l.Remove(last)
+
+		minEle := this.minL.Back()
+		if minEle.Value.(int) == last.Value.(int) {
+			this.minL.Remove(minEle)
+		}
+	}
+}
+
+func (this *MinStack) Top() int {
+	if ele := this.l.Back(); ele != nil {
+		return ele.Value.(int)
+	}
+
+	return 0
+}
+
+func (this *MinStack) GetMin() int {
+	if minEle := this.minL.Back(); minEle != nil {
+		return minEle.Value.(int)
+	}
+
+	return 0
+}
+
+/**
+ * Your MinStack object will be instantiated and called as such:
+ * obj := Constructor();
+ * obj.Push(val);
+ * obj.Pop();
+ * param_3 := obj.Top();
+ * param_4 := obj.GetMin();
  */
