@@ -1,6 +1,7 @@
 package simple
 
 import (
+	"log"
 	"math/bits"
 )
 
@@ -21,24 +22,27 @@ func reverseBits(num uint32) uint32 {
 //	1
 // 1 1
 //1 2 1
+// (2,1) = (1,0) + (1,1)
 
-//[1]     第1行1个元素 a[0][0]=1
-//[1,1]   第2行2个元素 a[1][0]=1 a[1][1]=1
-//[1,2,1] 第3行3个元素 a[2][0]=1 a[2][1] = a[1][0]+a[1][1]= 2 a[2][2]=1
-//[...]   第n行n个元素 a[n-1][0]=1 a[n-1][1] = a[n-1][1-1] + ... a[n-1][1]
+func (*Ref) Generate() {
+	log.Printf("%v", generate(5))
+}
 
 func generate(numRows int) [][]int {
 	m := make([][]int, numRows)
 	for i := 0; i < numRows; i++ {
 		row := make([]int, 0, i)
 
-		for j := 0; j < i; j++ {
-
-			value := 0
-
+		for j := 0; j <= i; j++ {
+			value := 1
+			if i-1 >= 0 && j-1 >= 0 && j <= i-1 {
+				value = m[i-1][j-1] + m[i-1][j]
+			}
 			row = append(row, value)
 		}
+
 		m[i] = row
 	}
 
+	return m
 }
