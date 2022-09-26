@@ -46,3 +46,66 @@ func generate(numRows int) [][]int {
 
 	return m
 }
+func (*Ref) IsValid() {
+	log.Printf("%v", isValid("([)]"))
+}
+
+func isValid(s string) bool {
+	stack := make([]rune, 0, len(s))
+	m := map[rune]rune{
+		'(': ')',
+		'{': '}',
+		'[': ']',
+	}
+
+	for _, c := range s {
+		//left
+		if r, ok := m[c]; ok {
+			stack = append(stack, r)
+		} else {
+			//right
+			if len(stack) == 0 {
+				return false
+			}
+
+			if stack[len(stack)-1] != c {
+				return false
+			}
+
+			stack = stack[:len(stack)-1]
+		}
+
+	}
+
+	if len(stack) == 0 {
+		return true
+	}
+
+	return false
+}
+
+func (*Ref) MissingNumber() {
+	log.Printf("%v", missingNumber([]int{0, 1}))
+
+}
+
+func missingNumber(nums []int) int {
+	m := make(map[int]struct{}, len(nums))
+	for i := 0; i <= len(nums); i++ {
+		m[i] = struct{}{}
+	}
+
+	log.Printf("%v", m)
+
+	for _, num := range nums {
+		if _, ok := m[num]; ok {
+			delete(m, num)
+		}
+	}
+
+	for missingNum := range m {
+		return missingNum
+	}
+
+	return 0
+}
