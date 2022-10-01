@@ -132,6 +132,48 @@ func pivotIndex(nums []int) int {
 
 		left += v
 	}
-	
+
 	return -1
+}
+
+// target = 2
+// [1,3,5,6]
+//  0 1 2 3
+
+func (*Ref) SearchInsert() {
+	searchInsert([]int{1, 3, 5, 6}, 2)
+}
+
+func searchInsert(nums []int, target int) int {
+	if len(nums) <= 0 {
+		return 0
+	}
+
+	return searchInsert1(nums, target, 0, len(nums)-1)
+}
+
+func searchInsert1(nums []int, target int, start, end int) int {
+	if start == end {
+		if target == nums[start] {
+			return start
+		}
+
+		if target < nums[start] {
+			return start
+		}
+
+		start++
+		return start
+	}
+
+	mid := (start + end) / 2
+	if target == nums[mid] {
+		return mid
+	}
+
+	if target < nums[mid] {
+		return searchInsert1(nums, target, start, mid)
+	}
+
+	return searchInsert1(nums, target, mid+1, end)
 }
