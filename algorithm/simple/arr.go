@@ -5,6 +5,7 @@ import (
 	"log"
 	"math"
 	"math/rand"
+	"sort"
 	"time"
 )
 
@@ -12,7 +13,6 @@ func (*Ref) HW() {
 	log.Printf("%v", 1<<10)
 	log.Printf("%v", hammingWeight(00000000000000000000000000001011))
 }
-
 
 //&: 1 1 = 1
 //^: 异或 不同为1
@@ -193,3 +193,108 @@ func (this *MinStack) GetMin() int {
  * param_3 := obj.Top();
  * param_4 := obj.GetMin();
  */
+
+//[1,2,3]
+//[-,2,3,4,5,6]
+//如何取交集?
+
+//[[1,3],[2,6]]
+//[1,6]
+
+func (*Ref) Merge() {
+
+	// [[5,5],[1,2],[2,4],[2,3],[4,4],[5,5],[2,3],[5,6],[0,0],[5,6]]
+
+	log.Printf("%v", merge1([][]int{
+		{5, 5},
+		{1, 2},
+		{2, 4},
+		{2, 3},
+		{4, 4},
+		{5, 5},
+		{2, 3},
+		{5, 6},
+		{0, 0},
+		{5, 6},
+	}))
+
+}
+
+type I struct {
+	intervals [][]int
+}
+
+func (i1 *I) Len() int {
+	return len(i1.intervals)
+}
+
+func (i1 *I) Less(i, j int) bool {
+	return i1.intervals[i][0]-i1.intervals[j][1] < 0
+}
+
+func (i1 *I) Swap(i, j int) {
+	i1.intervals[i], i1.intervals[j] = i1.intervals[j], i1.intervals[i]
+}
+
+// [[1,4],[0,2],[3,5]]
+func merge1(intervals [][]int) [][]int {
+	i := &I{
+		intervals: intervals,
+	}
+	sort.Sort(i)
+
+	newIntervals := make([][]int, 0)
+
+	hasJ := false
+	for i := 0; i < len(intervals); {
+		interval := intervals[i]
+		newInterval := make([]int, 0)
+		newInterval = append(newInterval, interval...)
+
+		if i+1 < len(intervals) {
+			nextInterval := intervals[i+1]
+			if J(interval, nextInterval) {
+				newInterval[0] = interval[0]
+				newInterval[1] = interval[1]
+
+				if nextInterval[0] < newInterval[0] {
+					newInterval[0] = nextInterval[0]
+				}
+
+				if nextInterval[1] > newInterval[1] {
+					newInterval[1] = nextInterval[1]
+				}
+
+				i += 2
+				newIntervals = append(newIntervals, newInterval)
+				hasJ = true
+				continue
+			}
+
+		}
+
+		newIntervals = append(newIntervals, newInterval)
+		i++
+	}
+
+	if hasJ {
+		return merge1(newIntervals)
+	}
+
+	return newIntervals
+}
+
+func J(a, b []int) bool {
+	m1 := make(map[int]struct{})
+	for i := a[0]; i <= a[1]; i++ {
+		m1[i] = struct{}{}
+	}
+
+	for i := b[0]; i <= b[1]; i++ {
+		if _, ok := m1[i]; ok {
+			return ok
+		}
+	}
+
+	return false
+}
