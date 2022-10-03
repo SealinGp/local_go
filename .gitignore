@@ -3,3 +3,4 @@ debugger.*
 .idea
 *.out
 .DS_Store
+bin/

@@ -1,7 +1,6 @@
 https://draveness.me/whys-the-design-tcp-three-way-handshake/
 
 1. 定义 TCP 连接
-
 - socket: ip+port
 - 序列号(SEQ): 跟踪包的传递
 - 窗口大小: 流控制
@@ -15,4 +14,12 @@ https://draveness.me/whys-the-design-tcp-three-way-handshake/
    A收到第二次握手后,将历史连接通过RST标志位中止连接,将非历史连接通过 ACK 回应第3次握手,创建连接成功
    3次握手+RST标志位控制连接的生命周期,将控制权交给发送方,发送方有足够的上下文来判断连接的最终创建
 
-3.
+3. 4次挥手
+FIN_WAIT1 -> CLOSE_WAIT
+FIN_WAIT2 <- ACK
+
+TIME_WAIT <- FIN LAST_ACK
+    ACK   -> CLOSED
+
+2MSL
+CLOSED
