@@ -23,3 +23,20 @@ TIME_WAIT <- FIN LAST_ACK
 
 2MSL
 CLOSED
+
+4. 网络协议
+// application  HTTP、HTTPS、FTP、Telnet、SSH、SMTP、POP3
+// transport   tcp/udp
+// network      ip
+// data link layer
+// physical 
+
+//应用
+//表现
+//会话
+//传输      tcp/udp
+//网络      IP
+//数据链路 以太网
+//物理    网卡接口
+
+5. TCP粘包问题

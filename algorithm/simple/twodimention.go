@@ -1,5 +1,69 @@
 package simple
 
+import "log"
+
+//编写一种算法，若M × N矩阵中某个元素为0，则将其所在的行与列清零。
+
+// {0, 1, 2, 0},
+// {3, 4, 5, 2},
+// {1, 3, 1, 5},
+
+//3x4
+//a[0][0] = 0
+
+// col
+// a[0][0]...a[2][0]
+
+// row
+// a[0][0]...a[0][3] 
+func (*Ref) SetZeroes() {
+	matrix := [][]int{
+		{0, 1, 2, 0},
+		{3, 4, 5, 2},
+		{1, 3, 1, 5},
+	}
+	setZeroes(matrix)
+	log.Printf("%v", matrix)
+}
+
+func setZeroes(matrix [][]int) {
+	x := len(matrix)
+	if x == 0 {
+		return
+	}
+
+	tmp := make([][]int, len(matrix))
+	for i := range matrix {
+		tmp[i] = make([]int, len(matrix[i]))
+		copy(tmp[i], matrix[i])
+	}
+
+	y := 0
+
+	for i := 0; i < x; i++ {
+		if i == 0 {
+			y = len(tmp[i])
+		}
+
+		for j := 0; j < y; j++ {
+			if tmp[i][j] == 0 {
+				//col
+				for i1 := 0; i1 < x; i1++ {
+					matrix[i1][j] = 0
+				}
+
+				//row
+				for j1 := 0; j1 < y; j1++ {
+					matrix[i][j1] = 0
+				}
+			}
+
+		}
+	}
+
+	return
+}
+
 func (*Ref) Rotate90() {
 	rotate1(
 		[][]int{
