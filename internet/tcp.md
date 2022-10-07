@@ -40,3 +40,7 @@ CLOSED
 //物理    网卡接口
 
 5. TCP粘包问题
+
+
+6. [tcp/ip协议分段传输](https://draveness.me/whys-the-design-tcp-segment-ip-packet/)
+    

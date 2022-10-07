@@ -2,6 +2,108 @@ package simple
 
 import "log"
 
+//https://leetcode.cn/leetbook/read/array-and-string/cuxq3/
+
+// m x n
+// 3 x 3
+
+// 1 2 3
+// 4 5 6
+// 7 8 9
+
+// 3x3
+
+//0 m[0][0]
+//1 m[0][1],m[1][0]
+//2 m[2][0],m[0][2]
+
+//3 m[1][2],m[2][1]
+//4 m[2][2]
+
+
+//0,1,2
+//0,1,1
+//a[2]=2
+//a[2]=1
+//a[1]=1
+
+//奇数=up
+//偶数=down
+func (*Ref) FindDiagonalOrder() {
+	mat := [][]int{
+		{1, 2, 3},
+		{4, 5, 6},
+		{7, 8, 9},
+	}
+
+	log.Printf("%v", findDiagonalOrder(mat))
+}
+
+func findDiagonalOrder(mat [][]int) []int {
+	m := make([]int, 0, len(mat))
+	if len(mat) <= 0 {
+		return m
+	}
+
+	x := len(mat) - 1
+	y := len(mat[0]) - 1
+	line := len(mat) + len(mat[0]) - 1
+	r, c := 0, 0
+
+	for i := 0; i < line; i++ {
+
+		down := true
+		if i > 0 {
+			down = i%2 == 0
+		}
+
+		if down {
+			for {
+				if i == 2 {
+					log.Printf("r:%v, c:%v", r, c)
+				}
+
+				if r < 0 || c > y {
+					r++
+					c--
+					break
+				}
+
+				m = append(m, mat[r][c])
+				r--
+				c++
+			}
+
+			if c+1 <= y {
+				c++
+			} else {
+				r++
+			}
+			continue
+		}
+
+		for {
+			if r > x || c < 0 {
+				r--
+				c++
+				break
+			}
+
+			m = append(m, mat[r][c])
+			r++
+			c--
+		}
+
+		if r+1 <= x {
+			r++
+		} else {
+			c++
+		}
+	}
+
+	return m
+}
+
 //编写一种算法，若M × N矩阵中某个元素为0，则将其所在的行与列清零。
 
 // {0, 1, 2, 0},
@@ -15,7 +117,7 @@ import "log"
 // a[0][0]...a[2][0]
 
 // row
-// a[0][0]...a[0][3] 
+// a[0][0]...a[0][3]
 func (*Ref) SetZeroes() {
 	matrix := [][]int{
 		{0, 1, 2, 0},
