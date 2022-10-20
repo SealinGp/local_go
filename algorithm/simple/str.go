@@ -1,28 +1,34 @@
 package simple
 
 func longestPalindrome(s string) string {
-	if len(s) <= 1 {
-		return ""
+	if len(s) < 2 {
+		return s
 	}
 
-	if len(s) == 2 {
-		if s[0] == s[1] {
-			return s
+	isPa := func(substr string, i, j int) bool {
+		for i < j {
+			if substr[i] != substr[j] {
+				return false
+			}
+			i++
+			j--
 		}
-		return ""
+
+		return true
 	}
 
-	//abc 3/2=1
-	//ab 3/2=1
-	
-	//P(i,j)  s[i:j+1]
-	//p(i,j) = p(i+1,j-1) && s[i] == s[j]
-
-	isPa := func(substr string) bool {
-		j := 
-
+	begin := 0
+	maxLen := 1
+	for i := 0; i < len(s)-1; i++ {
+		for j := i + 1; j < len(s); j++ {
+			if j-i+1 > maxLen && isPa(s, i, j) {
+				maxLen = j - i + 1
+				begin = i
+			}
+		}
 	}
 
+	return s[begin : begin+maxLen]
 }
 
 // [1, 7, 3, 6, 5, 6]
