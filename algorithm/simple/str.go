@@ -1,5 +1,30 @@
 package simple
 
+func longestPalindrome(s string) string {
+	if len(s) <= 1 {
+		return ""
+	}
+
+	if len(s) == 2 {
+		if s[0] == s[1] {
+			return s
+		}
+		return ""
+	}
+
+	//abc 3/2=1
+	//ab 3/2=1
+	
+	//P(i,j)  s[i:j+1]
+	//p(i,j) = p(i+1,j-1) && s[i] == s[j]
+
+	isPa := func(substr string) bool {
+		j := 
+
+	}
+
+}
+
 // [1, 7, 3, 6, 5, 6]
 
 // 1.sum[left] -sum[right] = 0
