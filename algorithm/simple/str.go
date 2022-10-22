@@ -1,5 +1,38 @@
 package simple
 
+import "strings"
+
+func (*Ref) ReverseWords() {
+	reverseWords("the sky is blue")
+}
+
+func reverseWords(s string) string {
+	rw := make([]string, 0)
+	sl := make([]byte, 0)
+	for i := 0; i < len(s); i++ {
+		if s[i] == ' ' {
+			if len(sl) > 0 {
+				rw = append(rw, string(sl))
+				sl = sl[:0]
+			}
+			continue
+		}
+
+		sl = append(sl, s[i])
+	}
+
+	if len(sl) > 0 {
+		rw = append(rw, string(sl))
+	}
+
+	for i := 0; i < len(rw)/2; i++ {
+		j := len(rw) - i - 1
+		rw[i], rw[j] = rw[j], rw[i]
+	}
+
+	return strings.Join(rw, " ")
+}
+
 func longestPalindrome(s string) string {
 	if len(s) < 2 {
 		return s
