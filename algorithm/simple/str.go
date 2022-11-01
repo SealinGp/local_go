@@ -1,6 +1,8 @@
 package simple
 
-import "strings"
+import (
+	"strings"
+)
 
 func (*Ref) ReverseWords() {
 	reverseWords("the sky is blue")

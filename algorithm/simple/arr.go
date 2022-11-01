@@ -9,6 +9,48 @@ import (
 	"time"
 )
 
+func (*Ref) M2() {
+	nums1 := []int{0}
+	nums2 := []int{1}
+	m := 0
+	n := 1
+
+	merge(nums1, m, nums2, n)
+	log.Printf("%v", nums1)
+}
+
+func merge(nums1 []int, m int, nums2 []int, n int) {
+	i := m - 1 //0
+	j := n - 1 //0
+
+	for x := m + n - 1; x >= 0; x-- {
+		if x == i {
+			break
+		}
+
+		if i < 0 {
+			nums1[x] = nums2[j]
+			j--
+			continue
+		}
+
+		if j < 0 {
+			nums1[x] = nums1[i]
+			i--
+			continue
+		}
+
+		l, r := nums1[i], nums2[j]
+		if l > r {
+			nums1[x] = l
+			i--
+		} else {
+			nums1[x] = r
+			j--
+		}
+	}
+}
+
 func (*Ref) HW() {
 	log.Printf("%v", 1<<10)
 	log.Printf("%v", hammingWeight(00000000000000000000000000001011))

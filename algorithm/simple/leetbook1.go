@@ -490,6 +490,7 @@ func strStr(haystack string, needle string) int {
 	if needle == "" {
 		return 0
 	}
+
 	findI := -1
 	nL := len(needle)
 	hL := len(haystack)
