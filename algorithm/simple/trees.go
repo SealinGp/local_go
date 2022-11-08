@@ -8,6 +8,41 @@ import (
 	"strconv"
 )
 
+//
+
+func (*Ref) RebuildTree() {
+	buildTree([]int{1, 2, 4, 7, 3, 5, 6, 8}, []int{4, 7, 2, 1, 5, 3, 8, 6})
+
+}
+
+/*
+1.根据preorder找到root value
+2.根据inorder找到leftArr,rightArr
+3.
+*/
+func buildTree(preorder []int, inorder []int) *TreeNode {
+	if len(preorder) == 0 || len(inorder) == 0 {
+		return nil
+	}
+
+	rootVal := preorder[0]
+	root := &TreeNode{
+		Val: rootVal,
+	}
+
+	rootIndex := 0
+	for i, v := range inorder {
+		if v == rootVal {
+			rootIndex = i
+			break
+		}
+	}
+
+	root.Left = buildTree(preorder[1:rootIndex+1], inorder[:rootIndex])
+	root.Right = buildTree(preorder[rootIndex+1:], inorder[rootIndex+1:])
+	return root
+}
+
 func (this *TreeNode) DepthLevel() int {
 	return depth1(this)
 }

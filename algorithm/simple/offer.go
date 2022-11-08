@@ -2,6 +2,45 @@ package simple
 
 import "log"
 
+func numWays(n int) int {
+	if n <= 2 {
+		return n
+	}
+
+	f1 := 1
+	f2 := 2
+	for i := 2; i <= n; i++ {
+		current := (f1 + f2) % mod
+		f1 = f2
+		f2 = current
+	}
+
+	return f2
+}
+
+func (*Ref) Fib() {
+	log.Printf("%v", fib(45))
+	log.Printf("134903163")
+}
+
+const mod int = 1e9 + 7
+
+func fib(n int) int {
+	if n <= 1 {
+		return n
+	}
+
+	j1 := 1
+	j2 := 0
+	for i := 2; i <= n; i++ {
+		current := (j1 + j2) % mod
+		j2 = j1
+		j1 = current
+	}
+
+	return j1
+}
+
 /**
  * Definition for singly-linked list.
  * type ListNode struct {
