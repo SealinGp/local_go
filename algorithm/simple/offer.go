@@ -1,6 +1,117 @@
 package simple
 
-import "log"
+import (
+	"log"
+)
+
+//1.不可重复访问
+//2.返回访问
+//3.可访问条件
+
+func (*Ref) MovingCount() {
+	log.Printf("%v", movingCount(2, 3, 1))
+}
+
+//回溯法
+func movingCount(m int, n int, k int) int {
+	if m <= 0 || n <= 0 {
+		return 0
+	}
+
+	isMoved := make([][]bool, m)
+	for i := range isMoved {
+		isMoved[i] = make([]bool, n)
+	}
+
+	return movingCountCore(0, m, 0, n, k, isMoved)
+}
+
+func movingCountCore(row, rows, col, cols, k int, isMoved [][]bool) int {
+	count := 0
+	if row >= 0 && row < rows && col >= 0 && col < cols && !isMoved[row][col] && shuweihe1(row, col) <= k {
+		isMoved[row][col] = true
+		count += 1
+
+		count += movingCountCore(row, rows, col-1, cols, k, isMoved)
+		count += movingCountCore(row-1, rows, col, cols, k, isMoved)
+		count += movingCountCore(row, rows, col+1, cols, k, isMoved)
+		count += movingCountCore(row+1, rows, col, cols, k, isMoved)
+	}
+
+	return count
+}
+
+func shuweihe1(row, col int) int {
+	return shuweihe(row) + shuweihe(col)
+}
+
+func shuweihe(num int) int {
+	sum := 0
+
+	for num > 0 {
+		sum += num % 10
+		num /= 10
+	}
+
+	return sum
+}
+
+func (*Ref) Exist() {
+	board := [][]byte{
+		{'A', 'B', 'C', 'E'},
+		{'S', 'F', 'C', 'S'},
+		{'A', 'D', 'E', 'E'},
+	}
+	word := "ABCCED"
+	log.Printf("%v", exist(board, word))
+}
+
+func exist(board [][]byte, word string) bool {
+	if len(board) == 0 || len(board[0]) == 0 {
+		return false
+	}
+
+	rows := len(board)
+	cols := len(board[0])
+	visited := make([][]bool, rows)
+	for row := range visited {
+		visited[row] = make([]bool, cols)
+	}
+
+	pathLen := 0
+	for row := 0; row < rows; row++ {
+		for col := 0; col < cols; col++ {
+			if hasPathCore(board, row, rows, col, cols, word, pathLen, visited) {
+				return true
+			}
+		}
+	}
+
+	return false
+}
+
+func hasPathCore(matrix [][]byte, row, rows, col, cols int, str string, pathLen int, visited [][]bool) bool {
+	if pathLen == len(str) {
+		return true
+	}
+
+	hasPath := false
+
+	if row >= 0 && row < rows && col >= 0 && col < cols && matrix[row][col] == str[pathLen] && !visited[row][col] {
+		pathLen++
+		visited[row][col] = true
+
+		hasPath = hasPathCore(matrix, row, rows, col-1, cols, str, pathLen, visited) || hasPathCore(matrix, row-1, rows, col, cols, str, pathLen, visited) ||
+			hasPathCore(matrix, row, rows, col+1, cols, str, pathLen, visited) || hasPathCore(matrix, row+1, rows, col, cols, str, pathLen, visited)
+
+		if !hasPath {
+			pathLen--
+			visited[row][col] = false
+		}
+	}
+
+	return hasPath
+}
 
 func numWays(n int) int {
 	if n <= 2 {
