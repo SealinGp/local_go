@@ -4,6 +4,34 @@ import (
 	"log"
 )
 
+/**
+ * Definition for singly-linked list.
+ * type ListNode struct {
+ *     Val int
+ *     Next *ListNode
+ * }
+ */
+func deleteNode(head *ListNode, val int) *ListNode {
+	if head == nil {
+		return nil	
+	}
+
+}
+
+func printNumbers(n int) []int {
+	count := 1
+	for i := 0; i < n; i++ {
+		count = count * 10
+	}
+
+	arr := make([]int, count-1, count)
+	for i := 1; i < count; i++ {
+		arr[i-1] = i
+	}
+
+	return arr
+}
+
 //1.不可重复访问
 //2.返回访问
 //3.可访问条件
