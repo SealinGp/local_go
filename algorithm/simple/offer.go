@@ -4,6 +4,115 @@ import (
 	"log"
 )
 
+func detectCycle(head *ListNode) *ListNode {
+	meetingNode := MeetingNode(head)
+	if meetingNode == nil {
+		return nil
+	}
+
+	ringLen := 1
+	pNode1 := meetingNode
+	for pNode1.Next != meetingNode {
+		pNode1 = pNode1.Next
+		ringLen++
+	}
+
+	pNode1 = head
+	for i := 0; i < ringLen; i++ {
+		pNode1 = pNode1.Next
+	}
+
+	pNode2 := head
+	for pNode1 != pNode2 {
+		pNode1 = pNode1.Next
+		pNode2 = pNode2.Next
+	}
+
+	return pNode1
+}
+
+func MeetingNode(head *ListNode) *ListNode {
+	if head == nil {
+		return nil
+	}
+
+	slow := head.Next
+	if slow == nil {
+		return nil
+	}
+
+	fast := slow.Next
+	for slow != nil && fast != nil {
+		if slow == fast {
+			return fast
+		}
+
+		slow = slow.Next
+		fast = fast.Next
+		if fast != nil {
+			fast = fast.Next
+		}
+	}
+
+	return nil
+}
+
+func getKthFromEnd(head *ListNode, k int) *ListNode {
+	if head == nil || k <= 0 {
+		return nil
+	}
+
+	fast := head
+	for x := 0; x < k-1; x++ {
+		if fast.Next == nil {
+			return nil
+		}
+
+		fast = fast.Next
+	}
+
+	slow := head
+	for {
+		if fast.Next == nil {
+			break
+		}
+
+		fast = fast.Next
+		slow = slow.Next
+	}
+
+	return fast
+}
+
+func exchange(nums []int) []int {
+	if len(nums) == 0 {
+		return nums
+	}
+
+	isOdd := func(a int) bool {
+		return a&0x1 != 0
+	}
+
+	i := 0
+	j := len(nums) - 1
+	for i < j {
+
+		if isOdd(nums[i]) {
+			i++
+		}
+
+		if !isOdd(nums[j]) {
+			j--
+		}
+
+		if i < j {
+			nums[i], nums[j] = nums[j], nums[i]
+		}
+	}
+
+	return nums
+}
+
 /**
  * Definition for singly-linked list.
  * type ListNode struct {
@@ -13,9 +122,10 @@ import (
  */
 func deleteNode(head *ListNode, val int) *ListNode {
 	if head == nil {
-		return nil	
+		return nil
 	}
 
+	return nil
 }
 
 func printNumbers(n int) []int {
