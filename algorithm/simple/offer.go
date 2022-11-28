@@ -4,6 +4,76 @@ import (
 	"log"
 )
 
+func mergeTwoLists1(l1 *ListNode, l2 *ListNode) *ListNode {
+	if l1 == nil {
+		return l2
+	}
+
+	if l2 == nil {
+		return l1
+	}
+
+	var pHead *ListNode
+
+	if l1.Val < l2.Val {
+		pHead = l1
+		l1.Next = mergeTwoLists1(l1.Next, l2)
+	} else {
+		pHead = l2
+		l2.Next = mergeTwoLists1(l1, l2.Next)
+	}
+
+	return pHead
+}
+
+// func m1(l1 *ListNode, l2 *ListNode) *ListNode {
+// 	if l1 == nil {
+// 		return l2
+// 	}
+
+// 	if l2 == nil {
+// 		return l1
+// 	}
+
+// 	var pHead *ListNode
+
+// 	if l1.Val < l2.Val {
+// 		pHead = l1
+// 		l1.Next =
+// 	}
+
+// 	return pHead
+// }
+
+/**
+ * Definition for singly-linked list.
+ * type ListNode struct {
+ *     Val int
+ *     Next *ListNode
+ * }
+ */
+func reverseList1(head *ListNode) *ListNode {
+	if head == nil {
+		return nil
+	}
+
+	var pReverseHead *ListNode
+	var pPreNode *ListNode
+	pNode := head
+	for pNode != nil {
+		pNext := pNode.Next
+		if pNext == nil {
+			pReverseHead = pNode
+		}
+
+		pNode.Next = pPreNode
+		pPreNode = pNode
+		pNode = pNext
+	}
+
+	return pReverseHead
+}
+
 func detectCycle(head *ListNode) *ListNode {
 	meetingNode := MeetingNode(head)
 	if meetingNode == nil {
