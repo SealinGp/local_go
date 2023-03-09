@@ -4,16 +4,29 @@ import (
 	"log"
 )
 
+func (*Ref) VSS() {
+	pushed := []int{1, 2, 3, 4, 5}
+	popped := []int{4, 5, 3, 2, 1}
+	validateStackSequences(pushed, popped)
+}
+
 func validateStackSequences(pushed []int, popped []int) bool {
 	st := []int{}
 	j := 0
-	for _, x := range pushed {
-		st = append(st, x)
-		for len(st) > 0 && st[len(st)-1] == popped[j] {
+	for i := 0; i < len(pushed); i++ {
+		for len(st) > 0 && j < len(popped) && st[len(st)-1] == popped[j] {
 			st = st[:len(st)-1]
 			j++
 		}
+
+		st = append(st, pushed[i])
 	}
+
+	for len(st) > 0 && j < len(popped) && st[len(st)-1] == popped[j] {
+		st = st[:len(st)-1]
+		j++
+	}
+
 	return len(st) == 0
 }
 
