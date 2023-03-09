@@ -4,6 +4,202 @@ import (
 	"log"
 )
 
+func validateStackSequences(pushed []int, popped []int) bool {
+	st := []int{}
+	j := 0
+	for _, x := range pushed {
+		st = append(st, x)
+		for len(st) > 0 && st[len(st)-1] == popped[j] {
+			st = st[:len(st)-1]
+			j++
+		}
+	}
+	return len(st) == 0
+}
+
+type MinStackX struct {
+	arr    []int
+	minArr []int
+}
+
+/** initialize your data structure here. */
+func ConstructorX() MinStackX {
+	return MinStackX{
+		arr:    make([]int, 0),
+		minArr: make([]int, 0),
+	}
+}
+
+func (this *MinStackX) Push(x int) {
+	this.arr = append(this.arr, x)
+
+	xTmp := x
+	if len(this.minArr) > 0 && this.minArr[len(this.minArr)-1] < xTmp {
+		xTmp = this.minArr[len(this.minArr)-1]
+	}
+
+	this.minArr = append(this.minArr, xTmp)
+}
+
+func (this *MinStackX) Pop() {
+	if len(this.arr) > 0 {
+		this.arr = this.arr[:len(this.arr)-1]
+	}
+
+	if len(this.minArr) > 0 {
+		this.minArr = this.minArr[:len(this.minArr)-1]
+	}
+}
+
+func (this *MinStackX) Top() int {
+	val := 0
+	if len(this.arr) > 0 {
+		val = this.arr[len(this.arr)-1]
+	}
+
+	return val
+}
+
+func (this *MinStackX) Min() int {
+	val := 0
+	if len(this.minArr) > 0 {
+		val = this.minArr[len(this.minArr)-1]
+	}
+
+	return val
+}
+
+func spiralOrder(matrix [][]int) []int {
+	printArr := make([]int, 0)
+	if len(matrix) == 0 {
+		return printArr
+	}
+
+	row := len(matrix)
+	col := len(matrix[0])
+	start := 0
+
+	for col > start*2 && row > start*2 {
+		printArr = append(printArr, printMatrixInCircle(matrix, col, row, start)...)
+		start++
+	}
+
+	return printArr
+}
+
+func printMatrixInCircle(matrix [][]int, col, row, start int) []int {
+	printArr := make([]int, 0)
+	endX := col - start - 1
+	endY := row - start - 1
+
+	//(0,0) -> (0,2)
+	for x := start; x <= endX; x++ {
+		printArr = append(printArr, matrix[start][x])
+	}
+
+	if start < endY {
+		//(0,3) -> (3,3)
+		for y := start + 1; y <= endY; y++ {
+			printArr = append(printArr, matrix[y][endX])
+		}
+
+		if start < endX {
+			//(3,3) -> (3,0)
+			for z := endX - 1; z >= start; z-- {
+				printArr = append(printArr, matrix[endY][z])
+			}
+
+			if start < endY-1 {
+				//(3,0) -> (0,0)
+				for h := endY - 1; h >= start+1; h-- {
+					printArr = append(printArr, matrix[h][start])
+				}
+			}
+		}
+	}
+
+	return printArr
+}
+
+func isSymmetric1(root *TreeNode) bool {
+	return isSymmetricial(root, root)
+}
+
+func isSymmetricial(node1 *TreeNode, node2 *TreeNode) bool {
+	if node1 == nil && node2 == nil {
+		return true
+	}
+
+	if node1 == nil || node2 == nil {
+		return false
+	}
+
+	if node1.Val != node2.Val {
+		return false
+	}
+
+	return isSymmetricial(node1.Left, node2.Right) && isSymmetricial(node1.Right, node2.Left)
+}
+
+func mirrorTree(root *TreeNode) *TreeNode {
+	return exchange1(root)
+}
+
+func exchange1(node *TreeNode) *TreeNode {
+	if node == nil {
+		return nil
+	}
+
+	tmp := node.Left
+	node.Left = exchange1(node.Right)
+	node.Right = exchange1(tmp)
+	return node
+}
+
+/**
+ * Definition for a binary tree node.
+ * type TreeNode struct {
+ *     Val int
+ *     Left *TreeNode
+ *     Right *TreeNode
+ * }
+ */
+func isSubStructure(A *TreeNode, B *TreeNode) bool {
+	isSubTree := false
+
+	if A != nil && B != nil {
+		if A.Val == B.Val {
+			isSubTree = DoesTree1HasTree2(A, B)
+		}
+
+		if !isSubTree {
+			isSubTree = isSubStructure(A.Left, B)
+		}
+
+		if !isSubTree {
+			isSubTree = isSubStructure(A.Right, B)
+		}
+	}
+
+	return isSubTree
+}
+
+func DoesTree1HasTree2(A *TreeNode, B *TreeNode) bool {
+	if B == nil {
+		return true
+	}
+
+	if A == nil {
+		return false
+	}
+
+	if A.Val != B.Val {
+		return false
+	}
+
+	return DoesTree1HasTree2(A.Left, B.Left) && DoesTree1HasTree2(A.Right, B.Right)
+}
+
 func mergeTwoLists1(l1 *ListNode, l2 *ListNode) *ListNode {
 	if l1 == nil {
 		return l2
@@ -183,21 +379,6 @@ func exchange(nums []int) []int {
 	return nums
 }
 
-/**
- * Definition for singly-linked list.
- * type ListNode struct {
- *     Val int
- *     Next *ListNode
- * }
- */
-func deleteNode(head *ListNode, val int) *ListNode {
-	if head == nil {
-		return nil
-	}
-
-	return nil
-}
-
 func printNumbers(n int) []int {
 	count := 1
 	for i := 0; i < n; i++ {
@@ -220,7 +401,7 @@ func (*Ref) MovingCount() {
 	log.Printf("%v", movingCount(2, 3, 1))
 }
 
-//回溯法
+// 回溯法
 func movingCount(m int, n int, k int) int {
 	if m <= 0 || n <= 0 {
 		return 0

@@ -207,7 +207,7 @@ var body string = `{
   }
 }`
 
-//sha1
+// sha1
 func enc1() {
 	//github
 	//69d7d753e0ca7c448afa10f10a8c09d8638ce38d
@@ -239,7 +239,8 @@ func enc1() {
 	//fmt.Println(hmac.Equal(b,[]byte(checksum1)))
 }
 
-/**
+/*
+*
 https://studygolang.com/articles/2283
 md5加密
 */
