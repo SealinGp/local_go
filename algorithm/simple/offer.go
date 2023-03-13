@@ -4,6 +4,44 @@ import (
 	"log"
 )
 
+/**
+ * Definition for a binary tree node.
+ * type TreeNode struct {
+ *     Val int
+ *     Left *TreeNode
+ *     Right *TreeNode
+ * }
+ */
+func levelOrder4(root *TreeNode) []int {
+	if root == nil {
+		return make([]int, 0)
+	}
+
+	lo := make([]int, 0)
+	queue := make([]*TreeNode, 0)
+	queue = append(queue, root)
+
+	for {
+		if len(queue) == 0 {
+			break
+		}
+
+		head := queue[0]
+		queue = queue[1:]
+		lo = append(lo, head.Val)
+
+		if head.Left != nil {
+			queue = append(queue, head.Left)
+		}
+
+		if head.Right != nil {
+			queue = append(queue, head.Right)
+		}
+	}
+
+	return lo
+}
+
 func (*Ref) VSS() {
 	pushed := []int{1, 2, 3, 4, 5}
 	popped := []int{4, 5, 3, 2, 1}
