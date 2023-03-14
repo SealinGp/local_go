@@ -12,6 +12,73 @@ import (
  *     Right *TreeNode
  * }
  */
+//https://leetcode.cn/problems/cong-shang-dao-xia-da-yin-er-cha-shu-iii-lcof/
+func levelOrder5(root *TreeNode) [][]int {
+	if root == nil {
+		return make([][]int, 0)
+	}
+
+	lo := make([][]int, 0)
+	queue := make([]*TreeNode, 0)
+	queue = append(queue, root)
+	next := 0
+	current := 1
+	currentNodes := make([]int, 0, next)
+	level := 1
+
+	for {
+		if len(queue) == 0 {
+			break
+		}
+
+		head := queue[0]
+		queue = queue[1:]
+		currentNodes = append(currentNodes, head.Val)
+
+		if head.Left != nil {
+			queue = append(queue, head.Left)
+			next++
+		}
+
+		if head.Right != nil {
+			queue = append(queue, head.Right)
+			next++
+		}
+
+		current--
+		if current == 0 {
+			if level%2 == 0 {
+				nodesTmp := make([]int, 0, len(currentNodes))
+				for i := len(currentNodes) - 1; i >= 0; i-- {
+					nodesTmp = append(nodesTmp, currentNodes[i])
+				}
+				lo = append(lo, nodesTmp)
+
+			} else {
+
+				lo = append(lo, currentNodes)
+			}
+
+			currentNodes = make([]int, 0, next)
+
+			current = next
+			next = 0
+			level++
+		}
+
+	}
+
+	return lo
+}
+
+/**
+ * Definition for a binary tree node.
+ * type TreeNode struct {
+ *     Val int
+ *     Left *TreeNode
+ *     Right *TreeNode
+ * }
+ */
 func levelOrder4(root *TreeNode) []int {
 	if root == nil {
 		return make([]int, 0)
