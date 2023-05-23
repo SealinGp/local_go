@@ -9,6 +9,40 @@ import (
 	"time"
 )
 
+func getCommon(nums1 []int, nums2 []int) int {
+	minCommon := -1
+	nums1Len := len(nums1)
+	nums2Len := len(nums2)
+	if nums1Len == 0 || nums2Len == 0 {
+		return minCommon
+	}
+
+	minLen := nums1Len
+	if nums2Len < minLen {
+		minLen = nums2Len
+	}
+
+	i := 0
+	j := 0
+	for i < nums1Len && j < nums2Len {
+		iVal := nums1[i]
+		jVal := nums2[j]
+
+		if iVal == jVal {
+			return iVal
+		}
+
+		if iVal < jVal {
+			i++
+			continue
+		}
+
+		j++
+	}
+
+	return minCommon
+}
+
 func (*Ref) M2() {
 	nums1 := []int{0}
 	nums2 := []int{1}
@@ -56,10 +90,10 @@ func (*Ref) HW() {
 	log.Printf("%v", hammingWeight(00000000000000000000000000001011))
 }
 
-//&: 1 1 = 1
-//^: 异或 不同为1
-//|: 有1则1
-//1<<n: 1*2^n
+// &: 1 1 = 1
+// ^: 异或 不同为1
+// |: 有1则1
+// 1<<n: 1*2^n
 func hammingWeight(num uint32) int {
 	s := 0
 	for i := 0; i < 32; i++ {
@@ -99,10 +133,10 @@ func (r *Ref) MaxProfit() {
 	log.Printf("%v", maxProfit([]int{7, 1, 5, 3, 6, 4}))
 }
 
-//对于每组i,j 求max(prices[i], prices[j]) j > i
-//假设历史最低价格minPrice
-//假设我们在第i天卖出股票
-//profit = prices[i] - minPrice
+// 对于每组i,j 求max(prices[i], prices[j]) j > i
+// 假设历史最低价格minPrice
+// 假设我们在第i天卖出股票
+// profit = prices[i] - minPrice
 func maxProfit(prices []int) int {
 	minPrice := math.MaxInt
 	maxProfit := 0

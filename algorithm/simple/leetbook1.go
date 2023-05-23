@@ -71,7 +71,7 @@ func maxDepth(root *TreeNode) int {
 	return depth
 }
 
-//https://leetcode-cn.com/leetbook/read/top-interview-questions-easy/x2gy9m/
+// https://leetcode-cn.com/leetbook/read/top-interview-questions-easy/x2gy9m/
 func (*Ref) Nums() {
 	nums := []int{0, 1, 1, 2, 2}
 
@@ -104,12 +104,7 @@ func removeDuplicates(nums []int) int {
 	return left + 1
 }
 
-//https://leetcode-cn.com/leetbook/read/top-interview-questions-easy/x2zsx1/
-func (*Ref) Mp2() {
-
-}
-
-//https://leetcode-cn.com/leetbook/read/top-interview-questions-easy/x21ib6/
+// https://leetcode-cn.com/leetbook/read/top-interview-questions-easy/x21ib6/
 func (*Ref) SN() {
 	nums := []int{2, 2, 1}
 
@@ -120,7 +115,7 @@ func (*Ref) SN() {
 	fmt.Println(s)
 }
 
-//https://leetcode-cn.com/problems/combination-sum/
+// https://leetcode-cn.com/problems/combination-sum/
 func (*Ref) S1() {
 	candidates := []int{2, 3, 5}
 	target := 8
@@ -136,7 +131,7 @@ func combinationSum(candidates []int, target int) [][]int {
 	return results
 }
 
-//深度优先搜索
+// 深度优先搜索
 func dfs1(candidates []int, index int, current *list.List, remainTarget int, fun func(a []int)) {
 	if remainTarget < 0 {
 		return
@@ -159,7 +154,7 @@ func dfs1(candidates []int, index int, current *list.List, remainTarget int, fun
 	}
 }
 
-//https://leetcode-cn.com/leetbook/read/top-interview-questions-easy/x2y0c2/
+// https://leetcode-cn.com/leetbook/read/top-interview-questions-easy/x2y0c2/
 func (*Ref) Intersect() {
 	fmt.Println(intersect([]int{7, 2, 2, 4, 7, 0, 3, 4, 5}, []int{3, 9, 8, 6, 1, 9}))
 	fmt.Println(intersect1([]int{7, 2, 2, 4, 7, 0, 3, 4, 5}, []int{3, 9, 8, 6, 1, 9}))
@@ -210,7 +205,7 @@ func intersect1(nums1 []int, nums2 []int) []int {
 	return arr
 }
 
-//https://leetcode-cn.com/leetbook/read/top-interview-questions-easy/x2cv1c/
+// https://leetcode-cn.com/leetbook/read/top-interview-questions-easy/x2cv1c/
 func (*Ref) PlusOne() {
 	fmt.Println(plusOne([]int{9}))
 }
@@ -339,7 +334,7 @@ func reverStr(s []byte, left, right int) {
 	reverStr(s, left+1, right-1)
 }
 
-//https://leetcode-cn.com/leetbook/read/top-interview-questions-easy/xnx13t/
+// https://leetcode-cn.com/leetbook/read/top-interview-questions-easy/xnx13t/
 func (*Ref) Reverse1() {
 	reverse(-123)
 }
@@ -361,7 +356,7 @@ func reverse(x int) int {
 	return x1
 }
 
-//https://leetcode-cn.com/leetbook/read/top-interview-questions-easy/xn5z8r/
+// https://leetcode-cn.com/leetbook/read/top-interview-questions-easy/xn5z8r/
 func (*Ref) FirstUniqChar() {
 	fmt.Println(firstUniqChar("leetcode"))
 }
@@ -379,7 +374,7 @@ func firstUniqChar(s string) int {
 	return -1
 }
 
-//https://leetcode-cn.com/problems/valid-anagram/
+// https://leetcode-cn.com/problems/valid-anagram/
 func (*Ref) IsAnagram() {
 	fmt.Println(isAnagram("rat", "car"))
 }
@@ -482,7 +477,7 @@ func isNum(rune2 uint8) (int, bool) {
 	return int(rune2 - '0'), true
 }
 
-//https://leetcode-cn.com/leetbook/read/top-interview-questions-easy/xnr003/
+// https://leetcode-cn.com/leetbook/read/top-interview-questions-easy/xnr003/
 func (*Ref) Strstr() {
 	fmt.Println(strStr("a", "a"))
 }
@@ -502,7 +497,7 @@ func strStr(haystack string, needle string) int {
 	return findI
 }
 
-//https://leetcode-cn.com/leetbook/read/top-interview-questions-easy/xnpvdm/
+// https://leetcode-cn.com/leetbook/read/top-interview-questions-easy/xnpvdm/
 func (*Ref) CountAndSay() {
 	fmt.Println(countAndSay(6))
 }
@@ -639,7 +634,7 @@ func removeNthFromEnd(head *ListNode, n int) *ListNode {
 	return head
 }
 
-//https://leetcode-cn.com/leetbook/read/top-interview-questions-easy/xnnhm6/
+// https://leetcode-cn.com/leetbook/read/top-interview-questions-easy/xnnhm6/
 func (*Ref) RL() {
 }
 func reverseList(head *ListNode) *ListNode {
@@ -662,8 +657,8 @@ func reverseList(head *ListNode) *ListNode {
 	return left
 }
 
-//https://leetcode-cn.com/leetbook/read/top-interview-questions-easy/xnnbp2/
-//双指针
+// https://leetcode-cn.com/leetbook/read/top-interview-questions-easy/xnnbp2/
+// 双指针
 func mergeTwoLists(l1 *ListNode, l2 *ListNode) *ListNode {
 	newN := &ListNode{
 		Val:  -1,
@@ -693,7 +688,7 @@ func mergeTwoLists(l1 *ListNode, l2 *ListNode) *ListNode {
 	return head.Next
 }
 
-//递归
+// 递归
 func mtl(l1 *ListNode, l2 *ListNode) *ListNode {
 	if l1 != nil && l2 != nil {
 		if l1.Val < l2.Val {
@@ -711,7 +706,7 @@ func mtl(l1 *ListNode, l2 *ListNode) *ListNode {
 	return l2
 }
 
-//https://leetcode-cn.com/leetbook/read/top-interview-questions-easy/xnv1oc/
+// https://leetcode-cn.com/leetbook/read/top-interview-questions-easy/xnv1oc/
 func isPalindromeL(head *ListNode) bool {
 	if head == nil || head.Next == nil {
 		return true
@@ -744,7 +739,7 @@ func isPalindromeL(head *ListNode) bool {
 	return true
 }
 
-//https://leetcode-cn.com/leetbook/read/top-interview-questions-easy/xnwzei/
+// https://leetcode-cn.com/leetbook/read/top-interview-questions-easy/xnwzei/
 func hasCycle(head *ListNode) bool {
 	slow := head
 	fast := head

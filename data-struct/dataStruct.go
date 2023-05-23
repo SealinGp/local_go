@@ -17,7 +17,7 @@ var structFuncs = map[string]func(){
 	"ds2":       ds2,
 }
 
-//栈-数组实现-----------------------------------
+// 栈-数组实现-----------------------------------
 type stack1 struct {
 	arr []interface{}
 }
@@ -40,20 +40,20 @@ func (this *stack1) Len() int {
 	return len(this.arr)
 }
 
-//单向链表
+// 单向链表
 type Node struct {
 	Data int   //数据域
 	Next *Node //指针域
 }
 
-//双向链表
+// 双向链表
 type DNode struct {
 	Data  int
 	Left  *DNode
 	Right *DNode
 }
 
-//链表 https://oi-wiki.org/ds/linked-list/
+// 链表 https://oi-wiki.org/ds/linked-list/
 func linkTable() {
 	//单向链表插入数据
 	SNode := &Node{
@@ -91,7 +91,7 @@ func linkTable() {
 
 }
 
-//栈: https://oi-wiki.org/ds/stack/ 规律: 坐电梯
+// 栈: https://oi-wiki.org/ds/stack/ 规律: 坐电梯
 func stack() {
 	//sta := []int{}
 	//sta  = append(sta,1,2,3)
@@ -109,7 +109,7 @@ func stack() {
 	fmt.Println(sta1)
 }
 
-//队列: https://oi-wiki.org/ds/queue/ 规律: 排队
+// 队列: https://oi-wiki.org/ds/queue/ 规律: 排队
 func queue() {
 	que := []int{}
 	que = append(que, 1, 2, 3)
@@ -160,12 +160,12 @@ func dsu() {
 	//log.Println(findSet(3),findSet(2),"?")
 }
 
-//新增一个集合,根节点的值为-1
+// 新增一个集合,根节点的值为-1
 func makeSet(i int) {
 	set[i] = i
 }
 
-//查找集合的根节点
+// 查找集合的根节点
 func findSet(i int) int {
 	if set[i] == i {
 		return i
@@ -173,7 +173,7 @@ func findSet(i int) int {
 	return findSet(set[i])
 }
 
-//合并集合
+// 合并集合
 func Union(i, j int) {
 	i = findSet(i)
 	j = findSet(j)
@@ -189,7 +189,7 @@ func Union(i, j int) {
 // 中序遍历:  左子树 ——> 根节点 ——> 右子树
 // 后序遍历:  左子树 ——> 右子树 ——> 根节点
 
-//大根二叉树(从上->下,从右->左,从大->小) 排序二叉树
+// 大根二叉树(从上->下,从右->左,从大->小) 排序二叉树
 type Leaf struct {
 	Key   int   //节点的大小 ?
 	Value int   //节点值
@@ -236,7 +236,7 @@ func insertNode(currentLeaf, newLeaf *Leaf) {
 	}
 }
 
-//最小的节点在二叉树的最左边
+// 最小的节点在二叉树的最左边
 func (t *T1) Min() int {
 	n := t.Root
 	if n == nil {
@@ -281,7 +281,7 @@ func search(currentLeaf *Leaf, key int) bool {
 	return true
 }
 
-//深度优先遍历-中序-递归实现
+// 深度优先遍历-中序-递归实现
 func (t *T1) InOrderTraverse(f func(value int)) {
 	inOrderTraver(t.Root, f)
 }
@@ -293,7 +293,7 @@ func inOrderTraver(currentLeaf *Leaf, f func(value int)) {
 	}
 }
 
-//深度优先遍历-前序-递归实现
+// 深度优先遍历-前序-递归实现
 func (t *T1) PreOrderTraverse(f func(value int)) {
 	preOrderTraver(t.Root, f)
 }
@@ -305,7 +305,7 @@ func preOrderTraver(currentLeaf *Leaf, f func(value int)) {
 	}
 }
 
-//深度优先遍历-前序-栈实现
+// 深度优先遍历-前序-栈实现
 func (t *T1) PreOrderTraverseStack(f func(value int)) {
 	stack := NewStack()
 	node := t.Root
@@ -323,7 +323,7 @@ func (t *T1) PreOrderTraverseStack(f func(value int)) {
 	}
 }
 
-//深度优先遍历-后序-递归实现
+// 深度优先遍历-后序-递归实现
 func (t *T1) PostOrderTraverse(f func(value int)) {
 	postOrderTraver(t.Root, f)
 }
@@ -335,7 +335,7 @@ func postOrderTraver(currentLeaf *Leaf, f func(value int)) {
 	}
 }
 
-//广度优先遍历-队列实现
+// 广度优先遍历-队列实现
 func (t *T1) LevelOrderTraversal(f func(value int)) {
 	l := list.New()
 	l.PushBack(t.Root)
@@ -352,7 +352,7 @@ func (t *T1) LevelOrderTraversal(f func(value int)) {
 	}
 }
 
-//广度优先遍历-递归实现 ?
+// 广度优先遍历-递归实现 ?
 func (t *T1) LevelOrderTraversal1(f func(value int)) {
 	levelOrderTraversal1(t.Root, f)
 }
@@ -429,8 +429,8 @@ func ds2() {
 	})
 }
 
-//二叉堆 = 最大堆(顶点>左>右) + 最小堆(顶点<左<右) = 基于数组结构实现
-//下面以小顶堆为例 讲述堆的弹出,新增节点
+// 二叉堆 = 最大堆(顶点>左>右) + 最小堆(顶点<左<右) = 基于数组结构实现
+// 下面以小顶堆为例 讲述堆的弹出,新增节点
 type heapType struct {
 	arr []int
 }
@@ -455,7 +455,13 @@ func NewHeap(ar []int) heapType {
 	return ht
 }
 
-//插入底部,向上调整
+// 3
+//2 1
+
+//[3,2,1]
+//
+
+// 插入底部,向上调整
 func (h *heapType) upAdjust() {
 	childIndex := len(h.arr) - 1        //最后一个节点索引
 	parentIndex := (childIndex - 1) / 2 //左节点 = 2*parent+1 ,右节点 = 2*parent+2 => parent = (子节点-1)/2
@@ -470,7 +476,7 @@ func (h *heapType) upAdjust() {
 	h.arr[childIndex] = tmp
 }
 
-//移除节点,把需要删除的节点跟顶部交换删除,然后把最后一个节点移动到顶部,然后做向下调整
+// 移除节点,把需要删除的节点跟顶部交换删除,然后把最后一个节点移动到顶部,然后做向下调整
 func (h *heapType) downAdjust(parentIndex int) {
 	childIndex := 2*parentIndex + 1
 	len1 := len(h.arr)
@@ -513,7 +519,7 @@ func (h *heapType) Pop() int {
 	return last
 }
 
-//最小堆
+// 最小堆
 type miniHeap struct {
 	arr []int
 }

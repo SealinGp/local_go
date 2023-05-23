@@ -2,6 +2,7 @@ package simple
 
 import (
 	"fmt"
+	"math"
 )
 
 //本文件全为动态规划(dynamic-programming)相关的题目
@@ -36,7 +37,7 @@ func rob(nums []int) int {
 	return max(d00, d01)
 }
 
-//https://leetcode-cn.com/problems/range-sum-query-immutable/
+// https://leetcode-cn.com/problems/range-sum-query-immutable/
 func (*Ref) CS() {
 	arr := NewArr([]int{-2, 0, 3, -5, 2, -1})
 	fmt.Println(arr.SumRange3(0, 2))
@@ -66,7 +67,7 @@ func (this *NumArray) SumRange3(i int, j int) int {
 	return this.Nums[j+1] - this.Nums[i]
 }
 
-//https://leetcode-cn.com/problems/contiguous-sequence-lcci/
+// https://leetcode-cn.com/problems/contiguous-sequence-lcci/
 func (*Ref) MSA() {
 	nums := []int{-2, 1, -3, 4, -1, 2, 1, -5, 4}
 	dp := make([]int, len(nums))
@@ -96,7 +97,7 @@ func (*Ref) MSA() {
 	fmt.Println(max)
 }
 
-//https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock/
+// https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock/
 func (*Ref) MP() {
 	//1 - 4 +
 	prices := []int{2, 4, 2}
@@ -130,6 +131,23 @@ func max(i, j int) int {
 	}
 	return i
 }
+
+func maxProfit1(prices []int) int {
+	minprice := math.MaxInt
+	maxProfit := 0
+
+	for i := 0; i < len(prices); i++ {
+
+		if prices[i] < minprice {
+			minprice = prices[i]
+		} else if maxProfit < prices[i]-minprice {
+			maxProfit = prices[i] - minprice
+		}
+	}
+	return maxProfit
+
+}
+
 func mp(arr []int, i, ma int) int {
 	if len(arr) <= 1 || i > len(arr)-1 {
 		return 0
@@ -189,7 +207,7 @@ func mp4(arr []int) int {
 	return maxProfit
 }
 
-//https://leetcode-cn.com/problems/maximum-subarray/
+// https://leetcode-cn.com/problems/maximum-subarray/
 func (*Ref) Msa() {
 	nums := []int{-2, 1, -3, 4, -1, 2, 1, -5, 4}
 	tmp := make([]int, len(nums))
@@ -211,7 +229,7 @@ func (*Ref) Msa() {
 	fmt.Println(maxA)
 }
 
-//https://leetcode-cn.com/problems/climbing-stairs/
+// https://leetcode-cn.com/problems/climbing-stairs/
 func min(i, j int) int {
 	if j < i {
 		i = j
@@ -266,7 +284,7 @@ func (*Ref) Wts() {
 	fmt.Println(c)
 }
 
-//https://leetcode-cn.com/problems/counting-bits/
+// https://leetcode-cn.com/problems/counting-bits/
 func (*Ref) Cb() {
 	num := 5
 	arr := make([]int, num+1)
@@ -287,7 +305,7 @@ func (*Ref) Cb() {
 	fmt.Println(arr)
 }
 
-//https://leetcode-cn.com/problems/count-square-submatrices-with-all-ones/
+// https://leetcode-cn.com/problems/count-square-submatrices-with-all-ones/
 func (*Ref) CountS() {
 	matrix := [][]int{
 		{0, 1, 1, 1},
@@ -330,7 +348,7 @@ func (*Ref) CountS() {
 	fmt.Println(answer)
 }
 
-//https://leetcode-cn.com/problems/stone-game/
+// https://leetcode-cn.com/problems/stone-game/
 type pair struct {
 	first  int
 	second int

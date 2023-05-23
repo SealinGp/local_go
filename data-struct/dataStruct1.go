@@ -3,6 +3,7 @@ package main
 import (
 	"container/list"
 	"fmt"
+	"log"
 	"sort"
 	"strconv"
 )
@@ -23,8 +24,8 @@ var struct1Funcs = map[string]func(){
 	"ds15": ds15,
 }
 
-//优先级队列的实现 = 二叉堆 + 队列 (逻辑结构) = 数组 (物理结构)
-//这里大顶堆为例
+// 优先级队列的实现 = 二叉堆 + 队列 (逻辑结构) = 数组 (物理结构)
+// 这里大顶堆为例
 func ds3() {
 	ds3 := priorityQueue{}
 	ds3.EnQueue(3)
@@ -86,20 +87,20 @@ func (pq *priorityQueue) downAdjust() {
 }
 
 func ds4() {
-	a := []int{4, 7, 6, 5, 3, 2, 8, 1}
-	FastSortDouble(a, 0, len(a)-1)
-	fmt.Println(a)
+	// a := []int{4, 7, 6, 5, 3, 2, 8, 1}
+	// FastSortDouble(a, 0, len(a)-1)
+	// fmt.Println(a)
 
-	b := []int{4, 7, 3, 5, 6, 2, 8, 1}
+	b := []int{2, 1, 0}
 	FastSortSingle(b, 0, len(b)-1)
 	fmt.Println(b)
 
-	c := []int{4, 7, 3, 5, 6, 2, 8, 1}
-	FastSortStack(c, 0, len(c)-1)
-	fmt.Println(c)
+	// c := []int{4, 7, 3, 5, 6, 2, 8, 1}
+	// FastSortStack(c, 0, len(c)-1)
+	// fmt.Println(c)
 }
 
-//快排(小->大)的双边循环交换法-递归实现-左右两个指针,左找比基准元素大的,右找币基准元素小的,然后交换直到左右指针重合,然后吧基准元素跟左指针对应的元素交换
+// 快排(小->大)的双边循环交换法-递归实现-左右两个指针,左找比基准元素大的,右找币基准元素小的,然后交换直到左右指针重合,然后吧基准元素跟左指针对应的元素交换
 func FastSortDouble(arr []int, startIndex, endIndex int) {
 	if startIndex >= endIndex {
 		return
@@ -132,7 +133,7 @@ func partition(arr []int, startIndex, endIndex int) int {
 	return left
 }
 
-//快排(小->大)的单边循环法-递归实现
+// 快排(小->大)的单边循环法-递归实现
 func FastSortSingle(arr []int, startIndex, endIndex int) {
 	if startIndex >= endIndex {
 		return
@@ -142,6 +143,13 @@ func FastSortSingle(arr []int, startIndex, endIndex int) {
 	FastSortSingle(arr, startIndex, privotIndex-1)
 	FastSortSingle(arr, privotIndex+1, endIndex)
 }
+
+// [4, 7, 6, 5, 3, 2, 8, 1]
+// [4, 3, 6, 5, 7, 2, 8, 1]
+// [4, 3, 2, 5, 7, 6, 8, 1]
+// [4, 3, 2, 1, 7, 6, 8, 5]
+// [1, 3, 2, 4] [7, 6, 8, 5]
+// mark是边界
 func partition1(arr []int, startIndex, endIndex int) int {
 	privot := arr[startIndex]
 	mark := startIndex
@@ -149,6 +157,8 @@ func partition1(arr []int, startIndex, endIndex int) int {
 	for i := startIndex + 1; i <= endIndex; i++ {
 		if arr[i] < privot {
 			mark++
+
+			log.Printf("i:%v mark:%v", i, mark)
 			arr[mark], arr[i] = arr[i], arr[mark]
 		}
 	}
@@ -157,7 +167,7 @@ func partition1(arr []int, startIndex, endIndex int) int {
 	return mark
 }
 
-//快排(小->大)的栈实现
+// 快排(小->大)的栈实现
 func FastSortStack(arr []int, startIndex, endIndex int) {
 	stack := list.New()
 	ma := make(map[string]int)
@@ -186,8 +196,8 @@ func FastSortStack(arr []int, startIndex, endIndex int) {
 	}
 }
 
-//计数排序(稳定排序=基于计数排序的优化版本)-适用场景:1.已知数组范围 2.最大值和最小值间隔不大 3.整数数组
-//n = 数组长度, m = 数组最大值和最小值的间隔,时间复杂度O(n) = 3n+m = n + m 空间复杂度O(n) = m
+// 计数排序(稳定排序=基于计数排序的优化版本)-适用场景:1.已知数组范围 2.最大值和最小值间隔不大 3.整数数组
+// n = 数组长度, m = 数组最大值和最小值的间隔,时间复杂度O(n) = 3n+m = n + m 空间复杂度O(n) = m
 func CountSort(arr []int) []int {
 	//找出数组最大值
 	max := arr[0]
@@ -245,7 +255,7 @@ func ds5() {
 	fmt.Println(BucketSort(arr2))
 }
 
-//桶排序
+// 桶排序
 func BucketSort(arr []float64) []float64 {
 	if len(arr) < 1 {
 		return arr
@@ -294,7 +304,7 @@ func BucketSort(arr []float64) []float64 {
 	return sortedArr
 }
 
-//链表环的问题
+// 链表环的问题
 type SingleList struct {
 	Root *Node1
 	Last *Node1
@@ -316,7 +326,7 @@ func NewSL(root *Node1) *SingleList {
 	return s
 }
 
-//单向链表关于环的问题
+// 单向链表关于环的问题
 func ds6() {
 	two := &Node1{Val: 2}
 
@@ -334,7 +344,7 @@ func ds6() {
 	fmt.Println(CycleEntry(sl), two)
 }
 
-//是否有环
+// 是否有环
 func isCycle(l *SingleList) bool {
 	first := l.Root
 	next := first
@@ -352,7 +362,7 @@ func isCycle(l *SingleList) bool {
 	return false
 }
 
-//延伸问题-环长度是多少 => 首次相遇后开始计数,第二次相遇时计数的长度 = 环长度
+// 延伸问题-环长度是多少 => 首次相遇后开始计数,第二次相遇时计数的长度 = 环长度
 func CycleLen(l *SingleList) int {
 	first := l.Root
 	next := first
@@ -378,7 +388,7 @@ func CycleLen(l *SingleList) int {
 	return lLen
 }
 
-//延伸问题-入环点在哪里 => p1(速度v1)和p2(速度v2 = 2*v1) => 在首次相遇后,将两者速度均调整为1,将p1移动到首节点,p2继续在环内行走,后续相遇的位置则为入环点
+// 延伸问题-入环点在哪里 => p1(速度v1)和p2(速度v2 = 2*v1) => 在首次相遇后,将两者速度均调整为1,将p1移动到首节点,p2继续在环内行走,后续相遇的位置则为入环点
 func CycleEntry(l *SingleList) *Node1 {
 	p1 := l.Root
 	p2 := p1
@@ -413,7 +423,7 @@ func CycleEntry(l *SingleList) *Node1 {
 	return entry
 }
 
-//最小栈的实现
+// 最小栈的实现
 type minStack struct {
 	l    *list.List
 	minL *list.List
@@ -454,7 +464,7 @@ func (this *minStack) GetMin() int {
 	return 0
 }
 
-//最小栈面试题
+// 最小栈面试题
 func ds7() {
 	minS := NewStack1()
 	minS.Push(4)
@@ -468,14 +478,14 @@ func ds7() {
 	minS.Pop()
 }
 
-//求最大公约数解法
+// 求最大公约数解法
 func ds8() {
 	fmt.Println(MaxYue(12, 16))
 	fmt.Println(MaxYue1(12, 16))
 	fmt.Println(MaxYue2(12, 16))
 }
 
-//辗转相除法
+// 辗转相除法
 func MaxYue(a, b int) int {
 	if a < b {
 		a, b = b, a
@@ -487,7 +497,7 @@ func MaxYue(a, b int) int {
 	return MaxYue(y, b)
 }
 
-//辗转相减法
+// 辗转相减法
 func MaxYue1(a, b int) int {
 	if a == b {
 		return a
@@ -519,7 +529,7 @@ func MaxYue2(a, b int) int {
 	return 1
 }
 
-//求给定一个正整数n,判断是否是2的整数次幂
+// 求给定一个正整数n,判断是否是2的整数次幂
 func ds9() {
 	fmt.Println(Mi(1))
 	fmt.Println(Mi(2))
@@ -530,13 +540,13 @@ func Mi(n int) bool {
 	return n&(n-1) == 0
 }
 
-//无序数组排序后的最大相邻差
+// 无序数组排序后的最大相邻差
 func ds10() {
 	arr := []int{2, 6, 3, 4, 5, 10, 9}
 	fmt.Println(BucketMaxGap(arr))
 }
 
-//利用桶排序的思想
+// 利用桶排序的思想
 type bucket struct {
 	min int
 	max int
@@ -585,7 +595,7 @@ func BucketMaxGap(arr []int) int {
 	return maxGap
 }
 
-//用栈实现队列
+// 用栈实现队列
 type BaseStack []int
 
 func (this *BaseStack) Push(ele int) {
@@ -633,10 +643,10 @@ func ds11() {
 	fmt.Println(ds3.Out())
 }
 
-//寻找全排列的下一个数 = 在一个整数包含的数字的全部组合中,找出一个大于且仅大于原数的新整数
-//https://leetcode-cn.com/problems/next-permutation/
-//12345 -> 12354
-//12435 -> 12453
+// 寻找全排列的下一个数 = 在一个整数包含的数字的全部组合中,找出一个大于且仅大于原数的新整数
+// https://leetcode-cn.com/problems/next-permutation/
+// 12345 -> 12354
+// 12435 -> 12453
 func ds12() {
 	nums := []int{1, 2, 4, 3, 2}
 
@@ -672,7 +682,7 @@ func ds12() {
 	fmt.Println(nums)
 }
 
-//删除k个数字后的最小值
+// 删除k个数字后的最小值
 func ds13() {
 	nums := []int{3, 0, 2, 0, 0}
 	k := 1
@@ -685,7 +695,7 @@ func ds13() {
 	fmt.Println(DelKMin1(nums1, k1))
 }
 
-//实现方法1
+// 实现方法1
 func DelKMin(nums []int, k int) []int {
 	if len(nums) == k {
 		nums = []int{0}
@@ -728,7 +738,7 @@ func DelKMin(nums []int, k int) []int {
 	return nums
 }
 
-//实现方法2 -- 栈实现
+// 实现方法2 -- 栈实现
 func DelKMin1(nums []int, k int) []int {
 	if len(nums) == k {
 		return []int{0}
@@ -755,7 +765,7 @@ func DelKMin1(nums []int, k int) []int {
 	return stack
 }
 
-//两个整数相加
+// 两个整数相加
 func ds14() {
 	fmt.Println(Sum("1234", "12345"))
 }
@@ -802,7 +812,7 @@ func Sum(a, b string) string {
 	return s
 }
 
-//动态规划
+// 动态规划
 func ds15() {
 	w := 10 //工人个数
 	//金矿含金量
@@ -858,11 +868,11 @@ func Wa(w, n int, p, g []int) int {
 	return Ma(a, b)
 }
 
-//动态规划-自底向上-空间换时间
-//i : 金矿数量
-//j : 工人数量
-//时间复杂度O(nw)
-//空间复杂度O(nw)
+// 动态规划-自底向上-空间换时间
+// i : 金矿数量
+// j : 工人数量
+// 时间复杂度O(nw)
+// 空间复杂度O(nw)
 func Wa1(w, n int, p, g []int) int {
 	table := make([][]int, len(g)+1)
 	for i := range table {
@@ -885,8 +895,8 @@ func Wa1(w, n int, p, g []int) int {
 	return table[len(g)][w]
 }
 
-//时间复杂度O(nw)
-//空间复杂度O(w)
+// 时间复杂度O(nw)
+// 空间复杂度O(w)
 func Wa3(w, n int, p, g []int) int {
 	result := make([]int, w+1)
 	for i := 1; i < len(g); i++ {
