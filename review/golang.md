@@ -13,21 +13,25 @@ goroutine:
 编译过程: 
   1.词法/语法分析 
   2.类型检查 
-  3.中间码生成(AST 语法树) 
+  3.中间码生成
   4.机器码生成
 
 数据类型:
   - 字符串:
   - 数组:
-  - 切片:
+  - 切片: 
+
+  if newCap > oldCap*2 {
+    wantCap = newCap
+  }
   - map
 
   ```go
   type hmap struct {
     count int
-    B     uint8
-    buckets unsafe.Pointer
-    oldbuckets  unsafe.Pointer
+    B int
+    buckets unintptr
+    oldBuckets uintptr
     extra *mapextra
   }
 
