@@ -3,7 +3,6 @@ package main
 import (
 	"container/list"
 	"fmt"
-	"log"
 	"sort"
 	"strconv"
 )
@@ -158,7 +157,6 @@ func partition1(arr []int, startIndex, endIndex int) int {
 		if arr[i] < privot {
 			mark++
 
-			log.Printf("i:%v mark:%v", i, mark)
 			arr[mark], arr[i] = arr[i], arr[mark]
 		}
 	}
