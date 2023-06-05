@@ -3,11 +3,45 @@ package main
 import "log"
 
 func main() {
+	nums := []int{1, 1, 0, 1, 1, 1}
+	l := findMaxConsecutiveOnes(nums)
+	log.Printf("slow:%v", l)
+}
 
-	nums := []int{2, 7, 11, 15}
-	target := 9
-	log.Printf("%v", twoSum(nums, target))
+func findMaxConsecutiveOnes(nums []int) int {
+	max := 0
+	tmp := 0
+	for _, v := range nums {
+		if v == 1 {
+			tmp++
+		}
 
+		if v == 0 {
+			if max < tmp {
+				max = tmp
+			}
+
+			tmp = 0
+		}
+	}
+
+	if max < tmp {
+		max = tmp
+	}
+
+	return max
+}
+
+func removeElement(nums []int, val int) int {
+	slow := 0
+	for fast := range nums {
+		if nums[fast] != val {
+			nums[slow] = nums[fast]
+			slow++
+		}
+	}
+
+	return slow
 }
 
 func twoSum(numbers []int, target int) []int {
