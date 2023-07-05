@@ -1,11 +1,7 @@
 package main
 
-import "log"
-
 func main() {
-	nums := []int{1, 1, 0, 1, 1, 1}
-	l := findMaxConsecutiveOnes(nums)
-	log.Printf("slow:%v", l)
+
 }
 
 func findMaxConsecutiveOnes(nums []int) int {

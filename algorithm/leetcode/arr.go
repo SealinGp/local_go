@@ -2,6 +2,11 @@ package main
 
 func main() {}
 
+func getRow(rowIndex int) []int {
+	rows := generate(rowIndex + 1)
+	return rows[rowIndex]
+}
+
 func generate(numRows int) [][]int {
 	trangle := make([][]int, 0, numRows)
 	for row := 0; row < numRows; row++ {
