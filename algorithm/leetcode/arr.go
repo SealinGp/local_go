@@ -29,3 +29,41 @@ func generate(numRows int) [][]int {
 
 	return trangle
 }
+
+func reverseWords(s string) string {
+	arr := make([]byte, 0)
+	newStr := make([]byte, 0, len(s))
+	for _, v := range s {
+		switch v {
+		case ' ':
+			newStr = append(newStr, ' ')
+			newStr = append(newStr, reverseArr(arr)...)
+			arr = arr[:0]
+		default:
+			arr = append(arr, byte(v))
+		}
+	}
+
+	if len(arr) > 0 {
+		newStr = append(newStr, ' ')
+		newStr = append(newStr, reverseArr(arr)...)
+	}
+
+	return string(newStr[1:])
+}
+
+func reverseArr(arr []byte) []byte {
+	if len(arr) == 0 {
+		return arr
+	}
+
+	i := 0
+	end := len(arr) - 1
+	for i < end {
+		arr[i], arr[end] = arr[end], arr[i]
+		i++
+		end--
+	}
+
+	return arr
+}
