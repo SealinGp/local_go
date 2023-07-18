@@ -1,6 +1,46 @@
 package main
 
-func main() {}
+func main() {
+	var x = []int{0, 5: 1, 2}
+	println(len(x))
+}
+
+func moveZeroes(nums []int) {
+	if len(nums) == 0 || len(nums) == 1 {
+		return
+	}
+
+	slow := 0
+	for i := 0; i < len(nums); i++ {
+		if nums[i] != 0 {
+			nums[slow], nums[i] = nums[i], nums[slow]
+			slow++
+		}
+	}
+}
+
+func removeDuplicates(nums []int) int {
+	if len(nums) == 0 {
+		return 0
+	}
+
+	if len(nums) == 1 {
+		return nums[0]
+	}
+
+	i := 0
+	j := 1
+	for j < len(nums) {
+		if nums[i] != nums[j] {
+			i++
+			nums[i], nums[j] = nums[j], nums[i]
+		}
+
+		j++
+	}
+
+	return i + 1
+}
 
 func findMin(nums []int) int {
 	if len(nums) == 0 {
