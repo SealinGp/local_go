@@ -4,3 +4,4 @@ debugger.*
 *.out
 .DS_Store
 bin/
+.vscode
